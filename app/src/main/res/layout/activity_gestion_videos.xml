@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activitysParaVendedores.GestionVideos">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.EnVivoApp.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Url del streaming" />
+
+    <EditText
+        android:id="@+id/txtUrlCuadroStreaming"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Ingrese url del streaming"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha de inicio del streaming" />
+
+    <EditText
+        android:id="@+id/txtFechaCuadroStreaming"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Fecha"
+
+        android:inputType="date"
+        android:focusable="false"
+        android:clickable="true"/>
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora de incio del streaming" />
+
+    <EditText
+        android:id="@+id/txtHoraCuadroStreaming"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Ingrese la hora de inicio del streaming"
+        android:inputType="time"
+        android:focusable="false"
+        android:clickable="true"/>
+
+    <Button
+        android:id="@+id/btnGuardarEdicionStreaming"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="guardar" />
+
+    <ListView
+        android:id="@+id/listStreaming"
+        android:layout_width="match_parent"
+        android:layout_height="401dp" />
+
+
+</LinearLayout>

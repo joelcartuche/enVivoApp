@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout5"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".activityParaClientes.MensajeriaCliente">
+
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="VIDEO EN VIVO" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mensajeria" />
+
+    <ListView
+        android:id="@+id/listMensajeriaCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="384dp">
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/txtMensajeCliente"
+            android:layout_width="316dp"
+            android:layout_height="match_parent"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/btnEnviarMensajeCliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            app:icon="@android:drawable/ic_menu_send" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "449200850807",
+    "firebase_url": "https://envivoapp-20845-default-rtdb.firebaseio.com",
+    "project_id": "envivoapp-20845",
+    "storage_bucket": "envivoapp-20845.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449200850807:android:7c0174f8d569c6d89dc372",
+        "android_client_info": {
+          "package_name": "com.aplicacion.envivoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449200850807-fpho0ad418aai6tit2l08462ebvoagep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aplicacion.envivoapp",
+            "certificate_hash": "0e2bec08bec716e9f7c16da4c963203c7d1c25c1"
+          }
+        },
+        {
+          "client_id": "449200850807-cudg1to1cugc7r0leehd2tokg25joj10.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3f6W-o1PG5v75GA9cev4o3ZIwBPuqUU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449200850807-cudg1to1cugc7r0leehd2tokg25joj10.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

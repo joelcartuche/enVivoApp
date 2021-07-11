@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class CuadroEditarStraming {
     public interface resultadoDialogo{
-        void resultado(Boolean isEliminado);
+        void resultado(Boolean isEliminado,Boolean isIrStreaming,VideoStreaming videoStreaming);
     }
     private resultadoDialogo interfaceResultadoDialogo;
 
@@ -47,8 +47,9 @@ public class CuadroEditarStraming {
         EditText txtEditarFechaVideo = dialog.findViewById(R.id.txtFechaCuadroStreaming);
         EditText txtEditarHoraVideo = dialog.findViewById(R.id.txtHoraCuadroStreaming);
         Button btnGuardarVideo = dialog.findViewById(R.id.btnGuardarEdicionStreaming);
-        Button btnEliminarVideo = dialog.findViewById(R.id.btnIrStreamingCuadroStreraming);
+        Button btnEliminarVideo = dialog.findViewById(R.id.btnEliminarStreamingCuadroStreraming);
         Button btnCancelarVideo = dialog.findViewById(R.id.btnCancelarCuadroStreamings);
+        Button btnIrVideo = dialog.findViewById(R.id.btnIrStreamingCuadroStreraming);
 
         txtEditarUrlVideo.setText(videoStreaming.getUrlVideoStreaming());
         txtEditarFechaVideo.setText(fecha);
@@ -102,7 +103,7 @@ public class CuadroEditarStraming {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(context, "Datos eliminados con exito", Toast.LENGTH_LONG).show();
-                        interfaceResultadoDialogo.resultado(true);
+                        interfaceResultadoDialogo.resultado(true,false,null);
                         dialog.dismiss();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -111,6 +112,14 @@ public class CuadroEditarStraming {
                         Toast.makeText(context, "No se pudo eliminar el dato intentelo de nuevo", Toast.LENGTH_LONG).show();
                     }
                 });
+            }
+        });
+
+        btnIrVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                interfaceResultadoDialogo.resultado(false,true,videoStreaming);
+                dialog.dismiss();
             }
         });
 
@@ -133,6 +142,5 @@ public class CuadroEditarStraming {
             }
         });
         dialog.show();
-
     }
 }

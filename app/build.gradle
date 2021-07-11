@@ -47,6 +47,4 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
-
-
 }

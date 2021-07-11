@@ -79,11 +79,19 @@
         tools:layout_editor_absoluteX="12dp" />
 
     <Button
-        android:id="@+id/btnIrStreamingCuadroStreraming"
+        android:id="@+id/btnEliminarStreamingCuadroStreraming"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Eliminar"
         app:layout_constraintTop_toBottomOf="@+id/btnGuardarEdicionStreaming"
+        tools:layout_editor_absoluteX="12dp" />
+
+    <Button
+        android:id="@+id/btnIrStreamingCuadroStreraming"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ir a Streaming"
+        app:layout_constraintTop_toBottomOf="@+id/btnEliminarStreamingCuadroStreraming"
         tools:layout_editor_absoluteX="12dp" />
 
     <Button

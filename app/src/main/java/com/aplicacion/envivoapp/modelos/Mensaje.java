@@ -9,8 +9,35 @@ public class Mensaje {
     private String idcliente;
     private String idvendedor;
     private String idStreaming;
+    private Boolean pedidoAceptado;
+    private Boolean pedidoCancelado;
+    private Boolean esVededor;
 
     public Mensaje() {
+    }
+
+    public Boolean getEsVededor() {
+        return esVededor;
+    }
+
+    public void setEsVededor(Boolean esVededor) {
+        this.esVededor = esVededor;
+    }
+
+    public Boolean getPedidoCancelado() {
+        return pedidoCancelado;
+    }
+
+    public void setPedidoCancelado(Boolean pedidoCancelado) {
+        this.pedidoCancelado = pedidoCancelado;
+    }
+
+    public Boolean getPedidoAceptado() {
+        return pedidoAceptado;
+    }
+
+    public void setPedidoAceptado(Boolean pedidoAceptado) {
+        this.pedidoAceptado = pedidoAceptado;
     }
 
     public String getIdStreaming() {

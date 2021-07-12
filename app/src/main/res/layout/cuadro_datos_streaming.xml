@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="Url del streaming"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -34,6 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Fecha de inicio del streaming"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/txtUrlCuadroStreaming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -54,6 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hora de incio del streaming"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/txtFechaCuadroStreaming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -73,6 +76,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ir a Streaming"
+        app:backgroundTint="#3949AB"
+        app:icon="@android:drawable/ic_menu_slideshow"
+        app:iconTint="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/txtHoraCuadroStreaming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -80,7 +86,10 @@
         android:id="@+id/btnCancelarCuadroStreamings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFFFFF"
         android:text="Atras"
+        app:backgroundTint="#F4511E"
+        app:icon="?attr/actionModeCloseDrawable"
         app:layout_constraintTop_toBottomOf="@+id/btnIrStreamingCuadroStreraming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -90,6 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:text="Datos del Streaming"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView15"
         app:layout_constraintEnd_toEndOf="parent"

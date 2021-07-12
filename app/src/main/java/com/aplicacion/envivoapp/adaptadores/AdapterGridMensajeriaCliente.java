@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,30 +63,53 @@ public class AdapterGridMensajeriaCliente extends BaseAdapter {
         TextView fechaClienteMensaje  = convertView.findViewById(R.id.txtItemFechaMensajeCliente);
         TextView mensajeClienteMensaje = convertView.findViewById(R.id.txtItemMensajeCliente);
 
-        databaseReference.child("Cliente").child(mensaje.getIdcliente()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+        if (mensaje.getEsVededor()){//En caso de que el mensaje sea departe del vendedor
+            databaseReference.child("Vendedor").child(mensaje.getIdvendedor()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
 
-                    Cliente cliente = snapshot.getValue(Cliente.class); //instanciamos el cliente
-                    nombreClienteMensaje.setText(cliente.getNombre());
-                    fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
-                            mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
-                            mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
-                            mensaje.getFecha().getSeconds());
-                    mensajeClienteMensaje.setText(mensaje.getTexto());
-
-
-                }else{
-                    Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
+                        Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
+                        nombreClienteMensaje.setText(vendedor.getNombre());
+                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                                mensaje.getFecha().getSeconds());
+                        mensajeClienteMensaje.setText(mensaje.getTexto());
+                    }else{
+                        Log.d("ERROR","error en encontrar el vendedor para AdapterMensajeriaCliente");
+                    }
                 }
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }else{//En caso de que elmensaje sea departe del cliente
+            databaseReference.child("Cliente").child(mensaje.getIdcliente()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        Cliente cliente = snapshot.getValue(Cliente.class); //instanciamos el cliente
+                        nombreClienteMensaje.setText(cliente.getNombre());
+                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                                mensaje.getFecha().getSeconds());
+                        mensajeClienteMensaje.setText(mensaje.getTexto());
 
-            }
-        });
+
+                    }else{
+                        Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
 
         return convertView;
     }

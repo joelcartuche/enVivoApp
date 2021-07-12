@@ -52,31 +52,54 @@ public class AdapterMensajeriaCliente extends ArrayAdapter<Mensaje> {
         TextView fechaClienteMensaje  = view.findViewById(R.id.txtItemFechaMensajeCliente);
         TextView mensajeClienteMensaje = view.findViewById(R.id.txtItemMensajeCliente);
 
+        if (mensaje.getEsVededor()){//En caso de que el mensaje sea departe del vendedor
+            databaseReference.child("Vendedor").child(mensaje.getIdvendedor()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
 
-        databaseReference.child("Cliente").child(mensaje.getIdcliente()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-
-                        Cliente cliente = snapshot.getValue(Cliente.class); //instanciamos el cliente
-                            nombreClienteMensaje.setText(cliente.getNombre());
-                            fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
-                                    mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
-                                    mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
-                                    mensaje.getFecha().getSeconds());
-                            mensajeClienteMensaje.setText(mensaje.getTexto());
-
-
-                }else{
-                    Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
+                        Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
+                        nombreClienteMensaje.setText(vendedor.getNombre());
+                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                                mensaje.getFecha().getSeconds());
+                        mensajeClienteMensaje.setText(mensaje.getTexto());
+                    }else{
+                        Log.d("ERROR","error en encontrar el vendedor para AdapterMensajeriaCliente");
+                    }
                 }
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }else{//En caso de que elmensaje sea departe del cliente
+            databaseReference.child("Cliente").child(mensaje.getIdcliente()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        Cliente cliente = snapshot.getValue(Cliente.class); //instanciamos el cliente
+                        nombreClienteMensaje.setText(cliente.getNombre());
+                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                                mensaje.getFecha().getSeconds());
+                        mensajeClienteMensaje.setText(mensaje.getTexto());
 
-            }
-        });
+
+                    }else{
+                        Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
         return view; //retornamos la vista
     }
 }

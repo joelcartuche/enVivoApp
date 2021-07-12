@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ListAdapter;
+import android.widget.Toast;
+
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaCliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
@@ -31,14 +32,11 @@ public class MensajeriaCliente extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
-    private List<Mensaje> listMensaje = new ArrayList<>();
-    private ListAdapter adapterListMensaje;
-
-
-    private Button enviarMensaje;
+    private Button enviarMensaje,quieroComprar;
     private EditText textoMensaje;
     private  String idVendedor,idCliente,idStreaming,urlStreaming;
 
+    private List<Mensaje> listMensaje = new ArrayList<>();
     private GridView gridViewMensaje;
     private AdapterGridMensajeriaCliente gridAdapterMensaje;
 
@@ -52,11 +50,10 @@ public class MensajeriaCliente extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
 
         //incializaoms las variables
-
-        enviarMensaje = findViewById(R.id.btnEnviarMensajeVendedor);
-        textoMensaje = findViewById(R.id.txtMensajeVendedor);
-        gridViewMensaje = findViewById(R.id.gridMensajeVendedor);
-
+        enviarMensaje = findViewById(R.id.btnEnviarMensajeCliente);
+        textoMensaje = findViewById(R.id.txtMensajeCliente);
+        gridViewMensaje = findViewById(R.id.gridMensajeCliente);
+        quieroComprar = findViewById(R.id.btnQuieroComprarMensajeCliente);
 
         //fin de incializacion de variables
 
@@ -66,15 +63,26 @@ public class MensajeriaCliente extends AppCompatActivity {
         urlStreaming = vendedor.getString("url"); //recogemos los datos del vendedor
         idStreaming = vendedor.getString("streaming");
 
-        listarMensajes();
+
+        listarMensajes();//listamos los mensajes del cliente
+
+        //en caso de que el cliente desee comprar
+        quieroComprar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textoMensaje.setText("Quiero comprar: ");
+                Toast.makeText(MensajeriaCliente.this,"Ingrese el nombre o código y la cantidad del producto que desea",Toast.LENGTH_LONG).show();
+            }
+        });
+
         enviarMensaje.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                Mensaje mensaje = new Mensaje();
+                Mensaje mensaje = new Mensaje(); //instanciamos el mensaje
 
-                LocalDateTime tiempoActual = LocalDateTime.now();
-
+                LocalDateTime tiempoActual = LocalDateTime.now(); //obtenemos la hora y fecha actual
+                // creamos la fecha
                 Date fecha = new Date();
                 fecha.setDate(tiempoActual.getDayOfMonth());
                 fecha.setMonth(tiempoActual.getMonth().getValue());
@@ -83,7 +91,7 @@ public class MensajeriaCliente extends AppCompatActivity {
                 fecha.setMinutes(tiempoActual.getMinute());
                 fecha.setSeconds(tiempoActual.getSecond());
 
-
+                //creamo el mensaje
                 mensaje.setFecha(fecha);
                 String idMensaje = databaseReference.push().getKey();
                 mensaje.setIdMensaje(idMensaje);
@@ -91,6 +99,9 @@ public class MensajeriaCliente extends AppCompatActivity {
                 mensaje.setIdcliente(idCliente);
                 mensaje.setIdvendedor(idVendedor);
                 mensaje.setIdStreaming(idStreaming);
+                mensaje.setPedidoAceptado(false);
+                mensaje.setPedidoCancelado(false);
+                mensaje.setEsVededor(false);
                 databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje);
 
             }
@@ -105,13 +116,10 @@ public class MensajeriaCliente extends AppCompatActivity {
                     listMensaje.clear();//borramos en caso de quedar algo en la cache
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                         Mensaje mensaje = ds.getValue(Mensaje.class);
-                        if(mensaje != null){
-                        if(mensaje.getIdcliente().equals(idCliente) && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensades que sean del cliente y de el streaming actual
+                        if(mensaje.getIdcliente() != null){
+                        if(mensaje.getIdcliente().equals(idCliente)
+                                && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensades que sean del cliente y de el streaming actual
                             listMensaje.add(mensaje);
-                            //Inicialisamos el adaptador
-                          //  adapterListMensaje = new AdapterMensajeriaCliente(MensajeriaCliente.this,R.layout.item_list_mensajeria_cliente,listMensaje,databaseReference);
-                           // listaMensajeView.setAdapter(adapterListMensaje);//configuramos el view
-
                             gridAdapterMensaje = new AdapterGridMensajeriaCliente(MensajeriaCliente.this,listMensaje,databaseReference);
                             gridViewMensaje.setAdapter(gridAdapterMensaje);
 
@@ -119,13 +127,8 @@ public class MensajeriaCliente extends AppCompatActivity {
                     }
                 }else{
                     listMensaje.clear();//borramos los datos ya que no hay nada en la base
-                    //Inicialisamos el adaptador
-                    //adapterListMensaje = new AdapterMensajeriaCliente(MensajeriaCliente.this,R.layout.item_list_mensajeria_cliente,listMensaje,databaseReference);
-                    //listaMensajeView.setAdapter(adapterListMensaje); //configuramos el view
-
                     gridAdapterMensaje = new AdapterGridMensajeriaCliente(MensajeriaCliente.this,listMensaje,databaseReference);
                     gridViewMensaje.setAdapter(gridAdapterMensaje);
-
                 }
             }
 

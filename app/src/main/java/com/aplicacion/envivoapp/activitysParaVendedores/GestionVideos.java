@@ -1,7 +1,10 @@
 package com.aplicacion.envivoapp.activitysParaVendedores;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.aplicacion.envivoapp.activityParaClientes.ListarStreamingsVendedor;
+import com.aplicacion.envivoapp.activityParaClientes.MensajeriaCliente;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroEditarStraming;
 import com.aplicacion.envivoapp.adaptadores.AdapterVideoStreaming;
 import com.aplicacion.envivoapp.modelos.Vendedor;
@@ -39,9 +42,6 @@ import java.util.UUID;
 
 
 public class GestionVideos extends AppCompatActivity implements CuadroEditarStraming.resultadoDialogo {
-
-
-
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
@@ -84,7 +84,7 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if(snapshot.exists()){
                                 for(DataSnapshot ds:snapshot.getChildren()){
-                                    Vendedor vendedor = ds.child("uidUsuario").getValue(Vendedor.class);
+                                    Vendedor vendedor = ds.getValue(Vendedor.class);
                                     if (vendedor.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
                                         VideoStreaming videoStreaming = new VideoStreaming();//inicializamos la variable que va a contener a la clase VideoStreaming
                                         videoStreaming.setUrlVideoStreaming(urlVideoStreaming.getText().toString()); //setiamos el url del video
@@ -111,6 +111,7 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
                                         videoStreaming.setIdVendedor(vendedor.getIdVendedor()); //seteamos el uid del vendedor
                                         databaseReference.child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).setValue(videoStreaming);
                                         Toast.makeText(GestionVideos.this, "Datos guardados con exito", Toast.LENGTH_LONG).show();
+                                        idVendedor=vendedor.getIdVendedor(); //almacenamos el id del vendedor
                                         listarStreamings();
                                     }
 
@@ -158,37 +159,58 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
     }
 
     public void listarStreamings(){
-            databaseReference.child("VideoStreaming").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        listStreaming.clear();//borramos en caso de quedar algo en la cache
-                        for (final DataSnapshot ds : snapshot.getChildren()) {
-                            if(ds.child("idVendedor").getValue() != null){
-                            if (ds.child("idVendedor").getValue().toString().equals(firebaseAuth.getCurrentUser().getUid())) {
-                                VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);//obtenemos el objeto video streaming
-                                listStreaming.add(videoStreaming);
-                                //Inicialisamos el adaptador
-                                adapterListStreaming = new AdapterVideoStreaming(GestionVideos.this, R.layout.item_list_video_streaming, listStreaming);
-                                listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
-                            }}
+
+        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (final DataSnapshot ds1 : snapshot.getChildren()) {
+                        if (ds1.child("idVendedor").getValue() != null) {//en caso de no existir vendedor
+                            if (ds1.child("uidUsuario").getValue().toString().equals(firebaseAuth.getCurrentUser().getUid())) {//en caso de que el uid del usuario es igual al usuario actual
+                                idVendedor = ds1.child("idVendedor").getValue().toString(); //almacenamos el id del vendedor
+
+                                //incio de listado de streamings
+                                databaseReference.child("VideoStreaming").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+                                            listStreaming.clear();//borramos en caso de quedar algo en la cache
+                                            for (final DataSnapshot ds : snapshot.getChildren()) {
+                                                if(ds.child("idVendedor").getValue() != null){
+                                                    if (ds.child("idVendedor").getValue().toString().equals(idVendedor)) {
+                                                        VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);//obtenemos el objeto video streaming
+                                                        listStreaming.add(videoStreaming);
+                                                        //Inicialisamos el adaptador
+                                                        adapterListStreaming = new AdapterVideoStreaming(GestionVideos.this, R.layout.item_list_video_streaming, listStreaming);
+                                                        listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
+                                                    }}
+                                            }
+                                        }else{
+                                            listStreaming.clear();//borramos los datos ya que no hay nada en la base
+                                            //Inicialisamos el adaptador
+                                            adapterListStreaming = new AdapterVideoStreaming(GestionVideos.this, R.layout.item_list_video_streaming, listStreaming);
+                                            listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                    }
+                                });
+                                //fin de listado de streamings
+                            }
                         }
-                    }else{
-                        listStreaming.clear();//borramos los datos ya que no hay nada en la base
-                        //Inicialisamos el adaptador
-                        adapterListStreaming = new AdapterVideoStreaming(GestionVideos.this, R.layout.item_list_video_streaming, listStreaming);
-                        listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
                     }
                 }
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
 
     }
-
-
 
 
 
@@ -198,11 +220,18 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
     }
 
     @Override
-    public void resultado(Boolean isEliminado) {
+    public void resultado(Boolean isEliminado, Boolean isIrStreaming, VideoStreaming videoStreaming) {
         if (isEliminado){
             listarStreamings();
         }
+        if (isIrStreaming){
+            Bundle parametros = new Bundle();
+            parametros.putString("vendedor",idVendedor);
+            parametros.putString("url",videoStreaming.getUrlVideoStreaming());
+            parametros.putString("streaming",videoStreaming.getIdVideoStreaming());
+            Intent streamingsIntent = new Intent(GestionVideos.this, MensajeriaVendedor.class);
+            streamingsIntent.putExtras(parametros);
+            startActivity(streamingsIntent);
+        }
     }
-
-
 }

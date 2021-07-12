@@ -83,10 +83,6 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
                 if (snapshot.exists()) {
                     listStreaming.clear();//borramos en caso de quedar algo en la cache
                     for (final DataSnapshot ds : snapshot.getChildren()) {
-                        Log.d("video Streaming","+/+*/+*-/+-/**/+-*/+-*/+-/*+/+-/+-/");
-                        Log.d("video Streaming",ds.child("idVendedor").getValue().toString());
-                        Log.d("video Streaming",idVendedor);
-                        Log.d("video Streaming","+/+*/+*-/+-/**/+-*/+-*/+-/*+/+-/+-/");
                         if (ds.child("idVendedor").getValue().toString().equals(idVendedor)) {
                             VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);//obtenemos el objeto video streaming
                             listStreaming.add(videoStreaming);

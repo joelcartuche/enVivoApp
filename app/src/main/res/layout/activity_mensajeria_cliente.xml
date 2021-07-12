@@ -1,53 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="2dp"
     tools:context=".activityParaClientes.MensajeriaCliente">
 
 
     <TextView
         android:id="@+id/textView40"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="VIDEO EN VIVO" />
+        android:text="VIDEO EN VIVO"
+        app:layout_constraintBottom_toTopOf="@+id/videoView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView41"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Mensajeria" />
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:text="Mensajeria"
+        app:layout_constraintBottom_toTopOf="@+id/gridMensajeCliente"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
     <GridView
-        android:id="@+id/gridMensajeVendedor"
-        android:layout_width="match_parent"
-        android:layout_height="444dp"
+        android:id="@+id/gridMensajeCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="225dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
         android:gravity="center"
         android:horizontalSpacing="0dp"
         android:numColumns="1"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp" />
+        android:verticalSpacing="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnQuieroComprarMensajeCliente"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView41" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/txtMensajeCliente"
+        android:layout_width="336dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnEnviarMensajeCliente"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnQuieroComprarMensajeCliente" />
 
-        <EditText
-            android:id="@+id/txtMensajeVendedor"
-            android:layout_width="316dp"
-            android:layout_height="match_parent"
-            android:inputType="textPersonName" />
+    <Button
+        android:id="@+id/btnEnviarMensajeCliente"
+        android:layout_width="64dp"
+        android:layout_height="51dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:background="#FFFFFF"
+        app:backgroundTint="#E91E63"
+        app:icon="@android:drawable/ic_menu_send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtMensajeCliente"
+        app:layout_constraintTop_toBottomOf="@+id/btnQuieroComprarMensajeCliente" />
 
-        <Button
-            android:id="@+id/btnEnviarMensajeVendedor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            app:icon="@android:drawable/ic_menu_send" />
-    </LinearLayout>
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="386dp"
+        android:layout_height="199dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView41"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.44"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView40" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/btnQuieroComprarMensajeCliente"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:text="Quiero Comprar"
+        app:backgroundTint="#00BCD4"
+        app:layout_constraintBottom_toTopOf="@+id/txtMensajeCliente"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridMensajeCliente" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

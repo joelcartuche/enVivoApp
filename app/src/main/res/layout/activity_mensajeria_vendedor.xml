@@ -1,50 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout6"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activitysParaVendedores.MensajeriaVendedor">
 
 
     <TextView
-        android:id="@+id/textView40"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="VIDEO EN VIVO" />
-
-    <TextView
         android:id="@+id/textView41"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Mensajeria" />
+        android:text="Mensajeria"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/videoView2" />
 
     <GridView
         android:id="@+id/gridMensajeVendedor"
-        android:layout_width="match_parent"
-        android:layout_height="444dp"
+        android:layout_width="392dp"
+        android:layout_height="260dp"
         android:gravity="center"
         android:horizontalSpacing="0dp"
         android:numColumns="1"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp" />
+        android:verticalSpacing="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtMensajeVendedor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/txtMensajeVendedor"
+        android:layout_width="296dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnEnviarMensajeVendedor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gridMensajeVendedor" />
 
-        <EditText
-            android:id="@+id/txtMensajeVendedor"
-            android:layout_width="316dp"
-            android:layout_height="match_parent"
-            android:inputType="textPersonName" />
+    <Button
+        android:id="@+id/btnEnviarMensajeVendedor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#FFFFFF"
+        app:icon="@android:drawable/ic_menu_send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtMensajeVendedor"
+        app:layout_constraintTop_toBottomOf="@+id/gridMensajeVendedor" />
 
-        <Button
-            android:id="@+id/btnEnviarMensajeVendedor"
+    <VideoView
+        android:id="@+id/videoView2"
+        android:layout_width="360dp"
+        android:layout_height="147dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView41"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView36" />
+
+    <TextView
+        android:id="@+id/textView36"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Video en vivo"
+        app:layout_constraintBottom_toTopOf="@+id/videoView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="376dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/gridMensajeVendedor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView41">
+
+        <TextView
+            android:id="@+id/textView37"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            app:icon="@android:drawable/ic_menu_send" />
-    </LinearLayout>
-</LinearLayout>
+            android:text="Filtrar por" />
+
+        <RadioButton
+            android:id="@+id/radioFiltrarPedidoMensajeriaVendedor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pedido" />
+
+        <RadioButton
+            android:id="@+id/radioFiltrarTodosMensajeriaVendedor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Todos" />
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

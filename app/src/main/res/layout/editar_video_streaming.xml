@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="Url del streaming"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -33,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Fecha de inicio del streaming"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/txtUrlCuadroStreaming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -54,6 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hora de incio del streaming"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/txtFechaCuadroStreaming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -75,6 +78,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="guardar"
+        app:backgroundTint="#FF5722"
+        app:icon="@android:drawable/ic_menu_save"
         app:layout_constraintTop_toBottomOf="@+id/txtHoraCuadroStreaming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -83,6 +88,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Eliminar"
+        app:backgroundTint="#F44336"
+        app:icon="@android:drawable/ic_menu_delete"
         app:layout_constraintTop_toBottomOf="@+id/btnGuardarEdicionStreaming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -91,6 +98,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ir a Streaming"
+        app:backgroundTint="#3949AB"
+        app:icon="@android:drawable/ic_menu_slideshow"
         app:layout_constraintTop_toBottomOf="@+id/btnEliminarStreamingCuadroStreraming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -99,6 +108,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Cancelar"
+        app:backgroundTint="#C61818"
+        app:icon="@android:drawable/ic_menu_close_clear_cancel"
         app:layout_constraintTop_toBottomOf="@+id/btnIrStreamingCuadroStreraming"
         tools:layout_editor_absoluteX="12dp" />
 
@@ -108,6 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:text="Edite los datos del Streaming"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView15"
         app:layout_constraintEnd_toEndOf="parent"

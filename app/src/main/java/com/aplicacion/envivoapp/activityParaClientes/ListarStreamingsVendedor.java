@@ -20,6 +20,7 @@ import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
 import com.aplicacion.envivoapp.adaptadores.AdapterVideoStreaming;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroDatosStreaming;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,41 +80,12 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
 
         //Damos funcionalidad al menu
         Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_listar_streaming);
-        btnListarVendedore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent streamingsIntent = new Intent(ListarStreamingsVendedor.this,ListarVendedores.class);
-                startActivity(streamingsIntent);
-
-            }
-        });
         Button btnPerfil = findViewById(R.id.btn_perfil_listar_streaming_vendedor);
-        btnPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent streamingsIntent = new Intent(ListarStreamingsVendedor.this,DataCliente.class);
-                startActivity(streamingsIntent);
-
-            }
-        });
         Button btnPedido = findViewById(R.id.btn_carrito_listar_streaming_vendedor);
-        btnPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent streamingsIntent = new Intent(ListarStreamingsVendedor.this,ProductoCliente.class);
-                startActivity(streamingsIntent);
-
-            }
-        });
         Button btnSalir = findViewById(R.id.btn_perfil_listar_streaming_vendedor);
-        btnSalir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (authStateListener != null){
-                    firebaseAuth.signOut();
-                }
-            }
-        });
+
+        new Utilidades().cargarToolbar(btnListarVendedore,
+                btnPerfil,btnPedido,btnSalir,ListarStreamingsVendedor.this,firebaseAuth);
     }
 
     public void listarStreamings(){

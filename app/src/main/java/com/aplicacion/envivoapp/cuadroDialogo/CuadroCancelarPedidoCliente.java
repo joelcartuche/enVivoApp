@@ -19,7 +19,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -46,7 +49,7 @@ public class CuadroCancelarPedidoCliente {
 
         //incializamos las variables
         EditText mensajeCancelacion = dialog.findViewById(R.id.txtMensajeCacelarPedido);
-        Button enviarPedido = dialog.findViewById(R.id.btnAtrasCuadroCancelarPedido);
+        Button enviarPedido = dialog.findViewById(R.id.btnEnviarCuadroCancelarPedido);
         Button cancelarPedido = dialog.findViewById(R.id.btnAtrasCuadroCancelarPedido);
 
         enviarPedido.setOnClickListener(new View.OnClickListener() {
@@ -54,10 +57,10 @@ public class CuadroCancelarPedidoCliente {
             @Override
             public void onClick(View v) {
                 //creamos el pedido
-                reference.child(pedido.getIdPedido()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                reference.child("Pedido").child(pedido.getIdPedido()).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
                             //creamos el mensaje
                             Mensaje  mensaje = new Mensaje();
                             String idMensaje = reference.push().getKey();
@@ -91,8 +94,8 @@ public class CuadroCancelarPedidoCliente {
 
                             //Actualizamos el estado del mensaje
                             Map<String,Object> mensajeCliente = new HashMap<>(); //almacena los datos que van a ser editados
-                            mensajeCliente.put("pedidoAceptado",true);//actualizamos el pedido aceptado
-                            mensajeCliente.put("pedidoCancelado",false);//actualizamos el pedido cancelado
+                            mensajeCliente.put("aceptado",false);//actualizamos el pedido aceptado
+                            mensajeCliente.put("cancelado",true);//actualizamos el pedido cancelado
                             reference.child("Pedido").child(pedido.getIdPedido()).updateChildren(mensajeCliente).addOnSuccessListener(new OnSuccessListener<Void>() {//enviamos la cancelacion
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -104,15 +107,18 @@ public class CuadroCancelarPedidoCliente {
                                     Toast.makeText(context, "A ocurrido un error al cancelar el pedido", Toast.LENGTH_LONG).show();
                                 }
                             });
-
+                            interfaceResultadoDialogo.resultado(true,false);
+                            dialog.dismiss();
                         }else{
                             Toast.makeText(context,"No se a podido eliminar el pedido",Toast.LENGTH_LONG).show();
                         }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
                 });
-                interfaceResultadoDialogo.resultado(true,false);
-                dialog.dismiss();
             }
         });
 

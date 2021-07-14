@@ -1,6 +1,7 @@
 package com.aplicacion.envivoapp.activityParaClientes;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.aplicacion.envivoapp.adaptadores.AdapterListarVendedores;
@@ -9,22 +10,27 @@ import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
 
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toolbar;
 
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.utilidades.RetornoParametroCliente;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.common.api.Api;
+import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,6 +53,7 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
     private  Boolean irStreaming=false;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +75,9 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
                 new CuadroListarVendedor(ListarVendedores.this,listVendedor.get(position),ListarVendedores.this);
             }
         });
+
+
+
     }
 
     public void listarVendedores(){

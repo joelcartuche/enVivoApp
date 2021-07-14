@@ -17,6 +17,8 @@ public class Pedido {
     private String idStreaming;
 
     public Pedido() {
+        this.aceptado=false;
+        this.cancelado=false;
     }
 
     public String getIdStreaming() {

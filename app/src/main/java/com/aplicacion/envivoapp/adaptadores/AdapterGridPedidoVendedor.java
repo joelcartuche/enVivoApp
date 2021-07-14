@@ -8,11 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
+import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.google.firebase.database.DataSnapshot;
@@ -22,27 +22,28 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCancelarPedidoCliente.resultadoDialogo {
+public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCancelarPedidoCliente.resultadoDialogo{
+
     private Context context;
-    private List<Pedido> listaPedidoCliente;
+    private List<Pedido> listaPedidoVendedor;
     private DatabaseReference databaseReference;
 
-    public AdapterGridPedidoCliente(Context context,
-                                    List<Pedido> listaPedidoCliente,
+    public AdapterGridPedidoVendedor(Context context,
+                                    List<Pedido> listaPedidoVendedor,
                                     DatabaseReference databaseReference){
         this.context = context;
-        this.listaPedidoCliente = listaPedidoCliente;
+        this.listaPedidoVendedor = listaPedidoVendedor;
         this.databaseReference = databaseReference;
     }
 
     @Override
     public int getCount() {
-        return listaPedidoCliente.size();
+        return listaPedidoVendedor.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listaPedidoCliente.get(position);
+        return listaPedidoVendedor.get(position);
     }
 
     @Override
@@ -54,21 +55,21 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
             LayoutInflater layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_list_pedido_cliente,null);
+            convertView = layoutInflater.inflate(R.layout.item_list_pedido_vendedor,null);
         }
 
-        Pedido pedido = listaPedidoCliente.get(position);//para manejar que elemento estamos clickeando
+        Pedido pedido = listaPedidoVendedor.get(position);//para manejar que elemento estamos clickeando
         //inicializamos las variables
-        TextView codigo =  convertView.findViewById(R.id.txtCodigoItemPedidoCliente);
-        TextView nombre = convertView.findViewById(R.id.txtNombreProductoItemPedidoCliente);
-        TextView cantidad = convertView.findViewById(R.id.txtCantidadItemPedidoCliente);
-        TextView precio= convertView.findViewById(R.id.txtPrecioItemPedidoCliente);
-        TextView descripcion = convertView.findViewById(R.id.txtDescripcionItemPedidoCliente);
-        TextView nombreVendedor = convertView.findViewById(R.id.txtNombreVendedorItemPedidoCliente);
-        Button btnCambiarPedido = convertView.findViewById(R.id.btnCambiarPedidoCliente);
-        Button btnCancelarPedido = convertView.findViewById(R.id.btnCancelarItemPedidoCliente);
+        TextView codigo =  convertView.findViewById(R.id.txtCodigoItemPedidoVendedor);
+        TextView nombre = convertView.findViewById(R.id.txtNombreProductoItemPedidoVendedor);
+        TextView cantidad = convertView.findViewById(R.id.txtCantidadItemPedidoVendedor);
+        TextView precio= convertView.findViewById(R.id.txtPrecioItemPedidoVendedor);
+        TextView descripcion = convertView.findViewById(R.id.txtDescripcionItemPedidoVendedor);
+        TextView nombreCliente = convertView.findViewById(R.id.txtNombreClienteItemPedidoVendedor);
+        Button btnCambiarPedido = convertView.findViewById(R.id.btnCambiarPedidoVendedor);
+        Button btnCancelarPedido = convertView.findViewById(R.id.btnCancelarItemPedidoVendedor);
 
-        databaseReference.child("Vendedor").child(pedido.getIdVendedor()).addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Cliente").child(pedido.getIdCliente()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
@@ -77,11 +78,9 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
                     cantidad.setText(pedido.getCantidadProducto()+"");
                     precio.setText(pedido.getPrecioProducto()+"");
                     descripcion.setText(pedido.getDescripcionProducto());
-                    nombreVendedor.setText(snapshot.getValue(Vendedor.class).getNombre());
+                    nombreCliente.setText(snapshot.getValue(Cliente.class).getNombre());
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -90,12 +89,14 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
 
         //Le damos funcionalidad a los botones
         btnCancelarPedido.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {/*
                 new CuadroCancelarPedidoCliente(context,
                         pedido,
                         databaseReference,
-                       AdapterGridPedidoCliente.this);//inciamos el cuadro de dialogo cancelar
+                        AdapterGridPedidoVendedor.this);//inciamos el cuadro de dialogo cancelar
+                        */
             }
         });
 

@@ -10,9 +10,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activityParaClientes.DataCliente;
 import com.aplicacion.envivoapp.activityParaClientes.ListarStreamingsVendedor;
 import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
+import com.aplicacion.envivoapp.activityParaClientes.ProductoCliente;
 import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
+import com.aplicacion.envivoapp.activitysParaVendedores.PedidoVendedor;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 
@@ -52,5 +57,91 @@ public class Utilidades {
             }
         }, hora, minuto, true);
         timePickerDialog.show();
+    }
+
+    public void cargarToolbar(Button listarVendedores,
+                              Button perfil,
+                              Button pedido,
+                              Button salir,
+                              Context context,
+                              FirebaseAuth firebaseAuth){
+        //Damos funcionalidad al menu
+        Button btnListarVendedore = listarVendedores;
+        btnListarVendedore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(context,ListarVendedores.class);
+                context.startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnPerfil = perfil;
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(context, DataCliente.class);
+                context.startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnPedido = pedido;
+        btnPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(context, ProductoCliente.class);
+                context.startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnSalir = salir;
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+            }
+        });
+    }
+
+    public void cargarToolbarVendedor(Button listarVendedores,
+                              Button perfil,
+                              Button pedido,
+                              Button salir,
+                              Context context,
+                              FirebaseAuth firebaseAuth){
+        //Damos funcionalidad al menu
+        Button btnListarVendedore = listarVendedores;
+        btnListarVendedore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(context,PedidoVendedor.class);
+                context.startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnPerfil = perfil;
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(context, PedidoVendedor.class);
+                context.startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnPedido = pedido;
+        btnPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pedidoIntent = new Intent(context, PedidoVendedor.class);
+                context.startActivity(pedidoIntent);
+
+            }
+        });
+        Button btnSalir = salir;
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+            }
+        });
     }
 }

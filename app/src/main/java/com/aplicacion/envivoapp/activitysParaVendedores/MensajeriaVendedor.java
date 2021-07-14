@@ -19,6 +19,7 @@ import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaCliente;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaVendedor;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoMensajeCliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -87,6 +88,15 @@ public class MensajeriaVendedor extends AppCompatActivity {
             }
         });
 
+        //Damos funcionalidad al menu
+        Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_mensajeria_vendedor);
+        Button btnPerfil = findViewById(R.id.btn_perfil_listar_mensajeria_vendedor);
+        Button btnPedido = findViewById(R.id.btn_carrito_listar_mensajeria_vendedor);
+        Button btnSalir = findViewById(R.id.btn_perfil_listar_mensajeria_vendedor);
+
+        new Utilidades().cargarToolbarVendedor(btnListarVendedore,
+                btnPerfil,btnPedido,btnSalir, MensajeriaVendedor.this,firebaseAuth);
+
     }
 
 
@@ -101,7 +111,7 @@ public class MensajeriaVendedor extends AppCompatActivity {
                         Mensaje mensaje = ds.getValue(Mensaje.class);
                         if(mensaje != null){
                             if(mensaje.getIdvendedor().equals(idVendedor)
-                                    && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensades que sean del cliente y de el streaming actual
+                                    && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensajes que sean del cliente y de el streaming actual
                                 if (filtrarPedido.isChecked()){
                                     if (mensaje.getTexto().indexOf("Quiero comprar:") == 0){
                                         listMensaje.add(mensaje);
@@ -110,6 +120,7 @@ public class MensajeriaVendedor extends AppCompatActivity {
                                 }
                                 if (filtrarTodos.isChecked()){
                                     listMensaje.add(mensaje);
+                                    contPedido+=1;
                                 }
                                 //Inicialisamos el adaptador
                                 gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,

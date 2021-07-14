@@ -102,6 +102,8 @@ public class MensajeriaCliente extends AppCompatActivity {
                 mensaje.setPedidoAceptado(false);
                 mensaje.setPedidoCancelado(false);
                 mensaje.setEsVededor(false);
+                mensaje.setPedidoCancelado(false);
+                mensaje.setPedidoAceptado(false);
                 databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje);
 
             }

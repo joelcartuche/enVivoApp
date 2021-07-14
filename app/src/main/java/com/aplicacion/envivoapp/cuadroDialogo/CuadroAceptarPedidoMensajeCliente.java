@@ -72,6 +72,8 @@ public class CuadroAceptarPedidoMensajeCliente {
                 pedido.setIdCliente(idCliente);
                 pedido.setIdVendedor(idVendedor);
                 pedido.setIdStreaming(idStreaming);
+                pedido.setCancelado(false);
+                pedido.setAceptado(true);
 
 
                 //creamos el mensaje
@@ -84,6 +86,8 @@ public class CuadroAceptarPedidoMensajeCliente {
                 mensaje.setPedidoAceptado(true);
                 mensaje.setPedidoCancelado(false);
                 mensaje.setEsVededor(true);
+                mensaje.setPedidoCancelado(false);
+                mensaje.setPedidoAceptado(true);
                 mensaje.setTexto("Su pedido a sido aceptado porfavor revise su carrito de compra");
 
                 //creamos el date en base la hora actual
@@ -102,20 +106,6 @@ public class CuadroAceptarPedidoMensajeCliente {
                 Toast.makeText(context,"Pedido guardado",Toast.LENGTH_LONG).show();
                 interfaceResultadoDialogo.resultado(true,false,position);
 
-                //Actualizamos el estado del mensaje
-                Map<String,Object> mensajeCliente = new HashMap<>(); //almacena los datos que van a ser editados
-                mensajeCliente.put("pedidoAceptado",true);
-                reference.child("Mensaje").child(mensajeDado.getIdMensaje()).updateChildren(mensajeCliente).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(context, "Pedido Aceptado", Toast.LENGTH_LONG).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "A ocurrido un error al actualizar los datos", Toast.LENGTH_LONG).show();
-                    }
-                });
                 dialog.dismiss();
             }
         });

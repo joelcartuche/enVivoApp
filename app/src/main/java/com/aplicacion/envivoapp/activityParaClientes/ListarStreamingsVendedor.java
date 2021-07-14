@@ -2,12 +2,15 @@ package com.aplicacion.envivoapp.activityParaClientes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,11 +35,13 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private  FirebaseAuth.AuthStateListener authStateListener;
 
     private List<VideoStreaming> listStreaming = new ArrayList<>();
     private ListAdapter adapterListStreaming;
     private ListView listaStreamingView;
     private  String idVendedor,idCliente;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +56,6 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
         Bundle vendedor = ListarStreamingsVendedor.this.getIntent().getExtras();
         idVendedor = vendedor.getString("vendedor"); //recogemos los datos del vendedor
         idCliente = vendedor.getString("cliente");
-
 
         listarStreamings();
 
@@ -73,6 +77,43 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
             }
         });
 
+        //Damos funcionalidad al menu
+        Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_listar_streaming);
+        btnListarVendedore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(ListarStreamingsVendedor.this,ListarVendedores.class);
+                startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnPerfil = findViewById(R.id.btn_perfil_listar_streaming_vendedor);
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(ListarStreamingsVendedor.this,DataCliente.class);
+                startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnPedido = findViewById(R.id.btn_carrito_listar_streaming_vendedor);
+        btnPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(ListarStreamingsVendedor.this,ProductoCliente.class);
+                startActivity(streamingsIntent);
+
+            }
+        });
+        Button btnSalir = findViewById(R.id.btn_perfil_listar_streaming_vendedor);
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (authStateListener != null){
+                    firebaseAuth.signOut();
+                }
+            }
+        });
     }
 
     public void listarStreamings(){

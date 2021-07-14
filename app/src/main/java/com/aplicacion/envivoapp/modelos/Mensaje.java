@@ -12,8 +12,26 @@ public class Mensaje {
     private Boolean pedidoAceptado;
     private Boolean pedidoCancelado;
     private Boolean esVededor;
+    private Boolean canceloPedido;
+    private Boolean cambioPedido;
 
     public Mensaje() {
+    }
+
+    public Boolean getCanceloPedido() {
+        return canceloPedido;
+    }
+
+    public void setCanceloPedido(Boolean canceloPedido) {
+        this.canceloPedido = canceloPedido;
+    }
+
+    public Boolean getCambioPedido() {
+        return cambioPedido;
+    }
+
+    public void setCambioPedido(Boolean cambioPedido) {
+        this.cambioPedido = cambioPedido;
     }
 
     public Boolean getEsVededor() {

@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="2dp"
+    android:orientation="vertical"
+
     tools:context=".activityParaClientes.MensajeriaCliente">
 
+    <include android:id="@+id/toolbar_mensajeria_cliente"
+        layout="@layout/toolbar_menu_cliente"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="2dp"
+        tools:context=".activityParaClientes.MensajeriaCliente">
     <TextView
         android:id="@+id/textView40"
         android:layout_width="0dp"
@@ -50,8 +60,8 @@
 
     <EditText
         android:id="@+id/txtMensajeCliente"
-        android:layout_width="336dp"
-        android:layout_height="48dp"
+        android:layout_width="311dp"
+        android:layout_height="46dp"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginEnd="1dp"
@@ -69,7 +79,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
         android:background="#FFFFFF"
-        app:backgroundTint="#E91E63"
+        app:backgroundTint="#52E38C"
         app:icon="@android:drawable/ic_menu_send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,12 +101,12 @@
         android:layout_width="0dp"
         android:layout_height="44dp"
         android:text="Quiero Comprar"
-        app:backgroundTint="#00BCD4"
+        app:backgroundTint="#E37452"
         app:layout_constraintBottom_toTopOf="@+id/txtMensajeCliente"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.304"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gridMensajeCliente" />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -54,7 +54,6 @@ public class AdapterGridMensajeriaCliente extends BaseAdapter {
         if(convertView == null){
             LayoutInflater layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.item_list_mensajeria_cliente,null);
-
         }
 
         Mensaje mensaje = listaMensajeCliente.get(position);//para manejar que elemento estamos clickeando

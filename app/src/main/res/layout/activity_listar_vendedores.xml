@@ -5,37 +5,37 @@
     android:id="@+id/linearLayout4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
+    android:background="#FFFFFF"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:theme="@style/Theme.EnVivoApp"
     tools:context=".activityParaClientes.ListarVendedores">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout3"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/toolbar_listar_vendedores"
+            layout="@layout/toolbar_menu_cliente" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.EnVivoApp.PopupOverlay" />
+            android:text="Lista de vendedores"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <ListView
+            android:id="@+id/listVendedores"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Lista de vendedores"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        </ListView>
+    </LinearLayout>
 
-    <ListView
-        android:id="@+id/listVendedores"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 
 </LinearLayout>

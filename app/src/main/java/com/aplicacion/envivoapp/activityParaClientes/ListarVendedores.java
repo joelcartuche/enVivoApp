@@ -9,12 +9,18 @@ import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.utilidades.RetornoParametroCliente;
@@ -30,8 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListarVendedores extends AppCompatActivity implements CuadroListarVendedor.resultadoDialogo{
-
-
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;

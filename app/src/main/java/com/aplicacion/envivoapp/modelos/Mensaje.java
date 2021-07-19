@@ -14,8 +14,23 @@ public class Mensaje {
     private Boolean esVededor;
     private Boolean canceloPedido;
     private Boolean cambioPedido;
+    private Boolean esGlobal;
 
     public Mensaje() {
+        this.pedidoAceptado = false;
+        this.pedidoCancelado = false;
+        this.esVededor = false;
+        this.canceloPedido = false;
+        this.cambioPedido = false;
+        this.esGlobal = false;
+    }
+
+    public Boolean getEsGlobal() {
+        return esGlobal;
+    }
+
+    public void setEsGlobal(Boolean esGlobal) {
+        this.esGlobal = esGlobal;
     }
 
     public Boolean getCanceloPedido() {

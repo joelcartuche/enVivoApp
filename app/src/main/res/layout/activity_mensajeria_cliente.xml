@@ -8,8 +8,100 @@
 
     tools:context=".activityParaClientes.MensajeriaCliente">
 
-    <include android:id="@+id/toolbar_mensajeria_cliente"
-        layout="@layout/toolbar_menu_cliente"/>
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStart="0dp">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout3"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnMensajeriaGlobalMensajeriaCliente"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_listar_vendedores_MensajeriaCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_listar_vendedores"
+                        android:text="Vendedores"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_perfil_listar_MensajeriaCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_persona"
+                        android:text="Perfil"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_carrito_listar_MensajeriaCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_carrito_compra"
+                        android:text="Carrito"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_salir_MensajeriaCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_persona_salir"
+                        android:text="Salir"
+                        android:textSize="8sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

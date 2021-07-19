@@ -9,7 +9,6 @@
     tools:context=".activityParaClientes.ListarStreamingsVendedor">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_listar_streamings_vendedor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:contentInsetStart="0dp">
@@ -25,23 +24,36 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/textView38"
-                        android:layout_width="321dp"
-                        android:layout_height="51dp"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
                         android:gravity="center"
-                        android:text="En vivoApp" />
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/button6"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        app:icon="@android:drawable/ic_menu_send" />
-                </LinearLayout>
+                        android:id="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,7 +111,7 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <ListView
+    <GridView
         android:id="@+id/listListarStreamingsVendedor"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

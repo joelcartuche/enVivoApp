@@ -5,58 +5,80 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="12dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="20dp">
+    android:padding="24dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txtItemUrlVideoStreaming"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:textSize="16sp"
+            android:layout_margin="12dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="10dp"
+            app:contentPadding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/txtItemFechaVideoStreaming"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="2dp"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/txtItemHoraVideoStreaming"
-            app:layout_constraintEnd_toEndOf="@+id/txtItemUrlVideoStreaming"
-            app:layout_constraintStart_toStartOf="@+id/txtItemUrlVideoStreaming"
-            app:layout_constraintTop_toBottomOf="@+id/txtItemUrlVideoStreaming" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txtItemHoraVideoStreaming"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="478dp"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txtItemFechaVideoStreaming"
-            app:layout_constraintStart_toStartOf="@+id/txtItemFechaVideoStreaming" />
+                <TextView
+                    android:id="@+id/txtItemUrlVideoStreaming"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtItemFechaVideoStreaming"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtItemHoraVideoStreaming"
+                    app:layout_constraintEnd_toEndOf="@+id/txtItemUrlVideoStreaming"
+                    app:layout_constraintStart_toStartOf="@+id/txtItemUrlVideoStreaming"
+                    app:layout_constraintTop_toBottomOf="@+id/txtItemUrlVideoStreaming" />
+
+                <TextView
+                    android:id="@+id/txtItemHoraVideoStreaming"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/txtItemFechaVideoStreaming"
+                    app:layout_constraintStart_toStartOf="@+id/txtItemFechaVideoStreaming" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

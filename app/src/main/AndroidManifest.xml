@@ -12,8 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnVivoApp">
-        <activity android:name=".activitysParaVendedores.PedidoVendedor"></activity>
-        <activity android:name=".activityParaClientes.ProductoCliente" />
+        <activity android:name=".activitysParaVendedores.MensajeriaGlobalVendedor"></activity>
+        <activity android:name=".activitysParaVendedores.ListarClientes" />
+        <activity android:name=".activityParaClientes.MensajeriaGlobal" />
+        <activity android:name=".activitysParaVendedores.PedidoVendedor" />
+        <activity android:name=".activityParaClientes.PedidoCliente" />
         <activity android:name=".activitysParaVendedores.MensajeriaVendedor" />
         <activity android:name=".activityParaClientes.ListarStreamingsVendedor" />
         <activity android:name=".activityParaClientes.MensajeriaCliente" />

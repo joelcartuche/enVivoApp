@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaCliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,6 +66,20 @@ public class MensajeriaCliente extends AppCompatActivity {
 
 
         listarMensajes();//listamos los mensajes del cliente
+
+        //Damos funcionalidad al menu
+        Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_MensajeriaCliente);
+        Button btnPerfil = findViewById(R.id.btn_perfil_listar_MensajeriaCliente);
+        Button btnPedido = findViewById(R.id.btn_carrito_listar_MensajeriaCliente);
+        Button btnSalir = findViewById(R.id.btn_salir_MensajeriaCliente);
+        Button btnMensje = findViewById(R.id.btnMensajeriaGlobalMensajeriaCliente);
+
+        new Utilidades().cargarToolbar(btnListarVendedore,
+                btnPerfil,
+                btnPedido,
+                btnSalir,
+                btnMensje,
+                MensajeriaCliente.this,firebaseAuth,databaseReference);
 
         //en caso de que el cliente desee comprar
         quieroComprar.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +133,7 @@ public class MensajeriaCliente extends AppCompatActivity {
                     listMensaje.clear();//borramos en caso de quedar algo en la cache
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                         Mensaje mensaje = ds.getValue(Mensaje.class);
-                        if(mensaje.getIdcliente() != null){
+                        if(mensaje.getIdcliente() != null && mensaje.getIdStreaming() !=null){
                         if(mensaje.getIdcliente().equals(idCliente)
                                 && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensades que sean del cliente y de el streaming actual
                             listMensaje.add(mensaje);

@@ -1,59 +1,81 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
+import com.aplicacion.envivoapp.activityParaClientes.MensajeriaGlobal;
+import com.aplicacion.envivoapp.modelos.Local;
 import com.aplicacion.envivoapp.modelos.Vendedor;
-import com.aplicacion.envivoapp.modelos.VideoStreaming;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterListarVendedores extends ArrayAdapter<Vendedor> {
-    private List<Vendedor> mList;
+public class AdapterListarVendedores extends BaseAdapter {
+    private List<Vendedor> listaVendedor;
     private Context mContext;
-    private int resourceLayout;
+    private DatabaseReference reference;
 
-    public AdapterListarVendedores(@NonNull Context context, int resource, @NonNull List<Vendedor> objects) {
-        super(context, resource, objects);
-        this.mList = objects;
+    private List<Local> listLocal = new ArrayList<>();
+    private AdapterListarLocal gridAdapterLocal;
+
+    public AdapterListarVendedores(Context context, List<Vendedor> objects, DatabaseReference reference) {
+        this.listaVendedor = objects;
         this.mContext = context;
-        this.resourceLayout = resource;
+        this.reference = reference;
+
     }
 
-    @NonNull
+
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public int getCount() {
+        return listaVendedor.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return listaVendedor.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    public View getView(int position,  View convertView,  ViewGroup parent) {
         View view = convertView;
         if(view == null){ //adaptamos y pasamos el inflate
             view = LayoutInflater.from(mContext).inflate(R.layout.item_list_vendedores,null); //null como view grup
         }
 
 
-        Vendedor vendedor = mList.get(position);//para manejar que elemento estamos clickeando
+        Vendedor vendedor = listaVendedor.get(position);//para manejar que elemento estamos clickeando
         //inicializamos las variables
         TextView nombreVendedor = view.findViewById(R.id.txtItemListVendedoresNombreVendedor);
         TextView telefonoVendedor = view.findViewById(R.id.txtItemListarVendedoresTelefonoVendedor);
         TextView celularVendedor = view.findViewById(R.id.txtItemListarVendedoresCelularVendedor);
-        TextView tineLocalVendedor = view.findViewById(R.id.txtItemListarVendedoresTieneLocalVendedor);
 
 
         nombreVendedor.setText(vendedor.getNombre());
         telefonoVendedor.setText(vendedor.getTelefono());
         celularVendedor.setText(vendedor.getCelular());
 
-        if(vendedor.isTieneTienda()){
-            tineLocalVendedor.setText("Si");
-        }else{
-            tineLocalVendedor.setText("No");
-        }
 
 
         return view; //retornamos la vista

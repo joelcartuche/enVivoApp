@@ -7,77 +7,144 @@
     android:orientation="vertical"
     tools:context=".activitysParaVendedores.GestionVideos">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+        app:contentInsetStart="0dp">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout3"
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.EnVivoApp.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Url del streaming" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/txtUrlCuadroStreaming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese url del streaming"
-        android:inputType="textPersonName" />
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fecha de inicio del streaming" />
+                    <Button
+                        android:id="@+id/btnMensajeriaGlobalGestionVideos"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
-        android:id="@+id/txtFechaCuadroStreaming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Fecha"
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-        android:inputType="date"
-        android:focusable="false"
-        android:clickable="true"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hora de incio del streaming" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/txtHoraCuadroStreaming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese la hora de inicio del streaming"
-        android:inputType="time"
-        android:focusable="false"
-        android:clickable="true"/>
+                            <Button
+                                android:id="@+id/btnListarLocalGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:text="Local"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnPerfilVendedorGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona"
+                                android:text="Perfil"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnPedidoGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_carrito_compra"
+                                android:text="Pedidos"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnVideosGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:drawableTop="@android:drawable/presence_video_online"
+                                android:text="Videos"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnClientesGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Clientes"
+                                android:textSize="8sp" />
+
+
+                            <Button
+                                android:id="@+id/btnSalirGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Salir"
+                                android:textSize="8sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <Button
-        android:id="@+id/btnGuardarEdicionStreaming"
+        android:id="@+id/btnAgregarStreaming"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="guardar" />
+        android:text="Agregar Streaming"
+        app:backgroundTint="#FF6D00"
+        app:icon="@android:drawable/ic_menu_add" />
 
-    <ListView
+    <GridView
         android:id="@+id/listStreaming"
         android:layout_width="match_parent"
-        android:layout_height="401dp" />
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

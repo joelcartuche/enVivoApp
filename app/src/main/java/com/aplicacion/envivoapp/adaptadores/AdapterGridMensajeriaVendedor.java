@@ -22,6 +22,7 @@ import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoMensajeCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -41,7 +42,7 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
     private List<Mensaje> listaMensajeVendedor;
     private DatabaseReference databaseReference;
 
-    private  Button aceptar,cancelar;
+    private  Button aceptar,cancelar,bloquearCliente;
     private Boolean filtrarTodos;
 
     public AdapterGridMensajeriaVendedor(Context context,
@@ -85,14 +86,15 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
         TextView mensajeClienteMensaje = convertView.findViewById(R.id.txtItemMensajeVendedor);
         aceptar = convertView.findViewById(R.id.btnAceptarMensajeVendedor);
         cancelar = convertView.findViewById(R.id.btnCancelarMensajeVendedor);
-
+        bloquearCliente = convertView.findViewById(R.id.btnBloquearClienteMensajeriaVendedor);
 
         //en caso de que el usuario tenga ya un pedido cancelado o aceptado
 
         if(mensaje.getPedidoAceptado()||mensaje.getPedidoCancelado() || filtrarTodos){
-            aceptar.setVisibility(View.INVISIBLE);
-            cancelar.setVisibility(View.INVISIBLE);
+            aceptar.setVisibility(View.GONE);
+            cancelar.setVisibility(View.GONE);
         }
+
 
         aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,8 +166,37 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                     }
                 });
                 dialogo1.show();
+            }
+        });
 
 
+        bloquearCliente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String titulo = "Bloqueo de usuario";
+                String mensaje="¿Desea bloquear al cliente?";
+                DialogInterface.OnClickListener confirmar= new DialogInterface.OnClickListener() {//creamos la funcion para la confirmacion del vendedor
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Map<String,Object> bloqueo = new HashMap<>();
+                        bloqueo.put("bloqueado",true);//actualizamos el estado bloqueado del cliente
+                        databaseReference.child("Cliente").child(listaMensajeVendedor.get(position).getIdcliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(context,"El cliente fue bloqueado con éxito",Toast.LENGTH_LONG).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context,"A ocurrido un error al bloquear el clinte",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }
+                };
+
+                new Utilidades().cuadroDialogo(context,confirmar,titulo,mensaje);
             }
         });
 

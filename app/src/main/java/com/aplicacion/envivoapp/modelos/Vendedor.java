@@ -7,7 +7,6 @@ public class Vendedor {
     private String celular;
     private String telefono;
     private Integer diasEperaCancelacion;
-    private boolean tieneTienda;
     private String uidUsuario;
 
     public Vendedor() {
@@ -59,14 +58,6 @@ public class Vendedor {
 
     public void setDiasEperaCancelacion(Integer diasEperaCancelacion) {
         this.diasEperaCancelacion = diasEperaCancelacion;
-    }
-
-    public boolean isTieneTienda() {
-        return tieneTienda;
-    }
-
-    public void setTieneTienda(boolean tieneTienda) {
-        this.tieneTienda = tieneTienda;
     }
 
     public String getUidUsuario() {

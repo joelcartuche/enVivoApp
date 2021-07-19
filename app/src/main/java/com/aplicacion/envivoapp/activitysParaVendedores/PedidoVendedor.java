@@ -10,16 +10,10 @@ import android.widget.GridView;
 import android.widget.RadioButton;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activityParaClientes.ListarStreamingsVendedor;
-import com.aplicacion.envivoapp.activityParaClientes.ProductoCliente;
-import com.aplicacion.envivoapp.adaptadores.AdapterGridPedidoCliente;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridPedidoVendedor;
-import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -84,6 +78,25 @@ public class PedidoVendedor extends AppCompatActivity {
                 listarFiltroTodos();
             }
         });
+
+        //le damos funcionalidad al toolbar
+        Button mensajeria = findViewById(R.id.btnMensajeriaGlobalPedidoVendedor);
+        Button listarLocal = findViewById(R.id.btnListarLocalPedidoVendedor);
+        Button perfil = findViewById(R.id.btnPerfilVendedorPedidoVendedor);
+        Button pedido = findViewById(R.id.btnPedidoPedidoVendedor);
+        Button videos = findViewById(R.id.btnVideosPedidoVendedor);
+        Button salir = findViewById(R.id.btnSalirPedidoVendedor);
+        Button clientes = findViewById(R.id.btnClientesPedidoVendedo);
+
+        new Utilidades().cargarToolbarVendedor(listarLocal,
+                perfil,
+                pedido,
+                mensajeria,
+                salir,
+                videos,
+                clientes,
+                PedidoVendedor.this,
+                firebaseAuth);
     }
 
 
@@ -94,38 +107,60 @@ public class PedidoVendedor extends AppCompatActivity {
         gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
     }
     private void listarFiltroTodos() {
-        borrarGrid();
-        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+        borrarGrid();//borramos los datos del grid
+        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    listPedido.clear();//borramos en caso de quedar algo en la cache
-                    for (final DataSnapshot ds : snapshot.getChildren()) {
-                        Pedido pedido = ds.getValue(Pedido.class);//obtenemos el objeto pedido
-
-                            databaseReference.child("Vendedor").child(pedido.getIdVendedor()).addValueEventListener(new ValueEventListener() {//buscamos el vendedor actual
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        Vendedor vendedor = snapshot.getValue(Vendedor.class);
-                                        if (vendedor.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())) { //si el id es igual al uid del usuario actual y si el pedido esta aceptado
+                if (snapshot.exists()){
+                    Vendedor vendedor = null;
+                    for (DataSnapshot ds:snapshot.getChildren()){
+                        Vendedor vendedorAux = ds.getValue(Vendedor.class);
+                        if (vendedorAux!=null){
+                            if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
+                                vendedor=vendedorAux;
+                                break;
+                            }
+                        }
+                    }
+                    if (vendedor!= null){
+                        Vendedor finalVendedor = vendedor;
+                        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    for (DataSnapshot ds:snapshot.getChildren()){
+                                        Pedido pedido = ds.getValue(Pedido.class);
+                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())){
                                             listPedido.add(pedido);
-                                            //Inicialisamos el adaptador
-                                            gridAdapterPedido = new AdapterGridPedidoVendedor(PedidoVendedor.this, listPedido, databaseReference);
-                                            gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
                                         }
                                     }
-                                }
+                                    if (listPedido.size()==0){
+                                        borrarGrid();
+                                    }else{
+                                        //Inicialisamos el adaptador
+                                        gridAdapterPedido = new AdapterGridPedidoVendedor(PedidoVendedor.this, listPedido,databaseReference);
+                                        gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
+                                    }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                }else{
+                                    borrarGrid();
                                 }
-                            });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                borrarGrid();
+                            }
+                        });
+                    }else{
+                        borrarGrid();
                     }
+
                 }else{
                     borrarGrid();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -134,88 +169,133 @@ public class PedidoVendedor extends AppCompatActivity {
     }
 
     private void listarFiltroEliminados() {
-        borrarGrid();
-        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+        borrarGrid();//borramos los datos del grid
+        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    listPedido.clear();//borramos en caso de quedar algo en la cache
-                    for (final DataSnapshot ds : snapshot.getChildren()) {
-                        Pedido pedido = ds.getValue(Pedido.class);//obtenemos el objeto pedido
-                        databaseReference.child("Vendedor").child(pedido.getIdVendedor()).addValueEventListener(new ValueEventListener() {//buscamos el vendedor actual
+                if (snapshot.exists()){
+                    Vendedor vendedor = null;
+                    for (DataSnapshot ds:snapshot.getChildren()){
+                        Vendedor vendedorAux = ds.getValue(Vendedor.class);
+                        if (vendedorAux!=null){
+                            if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
+                                vendedor=vendedorAux;
+                                break;
+                            }
+                        }
+                    }
+                    if (vendedor!= null){
+                        Vendedor finalVendedor = vendedor;
+                        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
-                                    Vendedor vendedor = snapshot.getValue(Vendedor.class);
-                                    if(vendedor.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())
-                                            && filtrarEliminados.isChecked() &&
-                                            pedido.getAceptado()==false
-                                            &&pedido.getCancelado()==true){ //si el id es igual al uid del usuario actual y si el pedido esta aceptado
-                                        listPedido.add(pedido);
+                                    for (DataSnapshot ds:snapshot.getChildren()){
+                                        Pedido pedido = ds.getValue(Pedido.class);
+                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())
+                                                && filtrarEliminados.isChecked()
+                                                && !pedido.getAceptado()
+                                                && pedido.getCancelado()){
+                                            listPedido.add(pedido);
+                                        }
+                                    }
+                                    if (listPedido.size()==0){
+                                        borrarGrid();
+                                    }else{
                                         //Inicialisamos el adaptador
                                         gridAdapterPedido = new AdapterGridPedidoVendedor(PedidoVendedor.this, listPedido,databaseReference);
                                         gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
                                     }
+
+                                }else{
+                                    borrarGrid();
                                 }
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
+                                borrarGrid();
                             }
                         });
+                    }else{
+                        borrarGrid();
                     }
+
                 }else{
-                    listPedido.clear();//borramos en caso de quedar algo en la cache
-                    //Inicialisamos el adaptador
-                    gridAdapterPedido = new AdapterGridPedidoVendedor(PedidoVendedor.this, listPedido,databaseReference);
-                    gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
+                    borrarGrid();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                borrarGrid();
             }
         });
     }
 
 
     private void listarFiltroAceptados() {
-        borrarGrid();
-        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+        borrarGrid();//borramos los datos del grid
+        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    listPedido.clear();//borramos en caso de quedar algo en la cache
-                    for (final DataSnapshot ds : snapshot.getChildren()) {
-                        Pedido pedido = ds.getValue(Pedido.class);//obtenemos el objeto pedido
-                        databaseReference.child("Vendedor").child(pedido.getIdVendedor()).addValueEventListener(new ValueEventListener() {//buscamos el vendedor actual
+                if (snapshot.exists()){
+                    Vendedor vendedor = null;
+                    for (DataSnapshot ds:snapshot.getChildren()){
+                        Vendedor vendedorAux = ds.getValue(Vendedor.class);
+                        if (vendedorAux!=null){
+                            if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
+                                vendedor=vendedorAux;
+                                break;
+                            }
+                        }
+                    }
+                    if (vendedor!= null){
+                        Vendedor finalVendedor = vendedor;
+                        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
-                                    Vendedor vendedor = snapshot.getValue(Vendedor.class);
-                                    if(vendedor.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())
-                                            && pedido.getAceptado()
-                                            &&filtrarAceptados.isChecked()){ //si el id es igual al uid del usuario actual y si el pedido esta aceptado
-                                        listPedido.add(pedido);
+                                    for (DataSnapshot ds:snapshot.getChildren()){
+                                        Pedido pedido = ds.getValue(Pedido.class);
+                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())
+                                                && pedido.getAceptado()
+                                                &&filtrarAceptados.isChecked()){
+                                            listPedido.add(pedido);
+                                        }
+                                    }
+                                    if (listPedido.size()==0){
+                                        borrarGrid();
+                                    }else{
                                         //Inicialisamos el adaptador
                                         gridAdapterPedido = new AdapterGridPedidoVendedor(PedidoVendedor.this, listPedido,databaseReference);
                                         gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
                                     }
+
+                                }else{
+                                    borrarGrid();
                                 }
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
+                                borrarGrid();
                             }
                         });
+                    }else{
+                        borrarGrid();
                     }
+
                 }else{
-                    listPedido.clear();//borramos en caso de quedar algo en la cache
-                    //Inicialisamos el adaptador
-                    gridAdapterPedido = new AdapterGridPedidoVendedor(PedidoVendedor.this, listPedido,databaseReference);
-                    gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
+                    borrarGrid();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                borrarGrid();
             }
         });
+
     }
 }

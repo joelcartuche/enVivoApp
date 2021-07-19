@@ -13,11 +13,15 @@
         <ImageView
             android:id="@+id/imgItemMensajeVendedor"
             android:layout_width="48dp"
-            android:layout_height="47dp"
-            android:layout_marginBottom="18dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toTopOf="@+id/btnCancelarMensajeVendedor"
-            app:layout_constraintEnd_toStartOf="@+id/txtItemNombreMensajeVendedor"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/txtItemMensajeVendedor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,22 +29,21 @@
             android:id="@+id/txtItemFechaMensajeVendedor"
             android:layout_width="129dp"
             android:layout_height="33dp"
+            android:layout_marginTop="2dp"
             android:textSize="10sp"
             app:layout_constraintBottom_toTopOf="@+id/txtItemMensajeVendedor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/txtItemNombreMensajeVendedor"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnCancelarMensajeVendedor"
-            android:layout_width="211dp"
+            android:layout_width="0dp"
             android:layout_height="31dp"
             android:layout_weight="1"
             android:text="Cancelar"
             android:textSize="10sp"
             app:backgroundTint="#F44336"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btnBloquearClienteMensajeriaVendedor"
             app:layout_constraintEnd_toStartOf="@+id/btnAceptarMensajeVendedor"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,23 +51,31 @@
 
         <Button
             android:id="@+id/btnAceptarMensajeVendedor"
-            android:layout_width="203dp"
+            android:layout_width="0dp"
             android:layout_height="32dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="3dp"
             android:layout_weight="1"
             android:text="Aceptar"
             android:textSize="10sp"
             app:backgroundTint="#4CAF50"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/btnBloquearClienteMensajeriaVendedor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btnCancelarMensajeVendedor"
             app:layout_constraintTop_toBottomOf="@+id/txtItemMensajeVendedor" />
 
+        <Button
+            android:id="@+id/btnBloquearClienteMensajeriaVendedor"
+            android:layout_width="0dp"
+            android:layout_height="31dp"
+            android:text="Bloquear cliente"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnCancelarMensajeVendedor" />
+
         <TextView
             android:id="@+id/txtItemNombreMensajeVendedor"
-            android:layout_width="210dp"
+            android:layout_width="0dp"
             android:layout_height="31dp"
 
             android:textSize="10sp"
@@ -76,12 +87,12 @@
 
         <TextView
             android:id="@+id/txtItemMensajeVendedor"
-            android:layout_width="355dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
             app:layout_constraintBottom_toTopOf="@+id/btnCancelarMensajeVendedor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.964"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/imgItemMensajeVendedor"
             app:layout_constraintTop_toBottomOf="@+id/txtItemNombreMensajeVendedor"
             tools:text="asdfasdfasdf" />
     </androidx.constraintlayout.widget.ConstraintLayout>

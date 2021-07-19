@@ -8,26 +8,39 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.adaptadores.AdapterListarLocal;
+import com.aplicacion.envivoapp.modelos.Local;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CuadroListarVendedor {
+
+    List<Local> listLocal = new ArrayList<>(); //lista que contendra los locales del vendedor
+    AdapterListarLocal gridAdapterLocal; //iniciamos el adaptador del gridView
+
     public interface resultadoDialogo{
         void resultado(Boolean isVerStreamings,Vendedor vendedor);
     }
@@ -35,6 +48,7 @@ public class CuadroListarVendedor {
 
     public CuadroListarVendedor(Context context,
                                 Vendedor vendedor,
+                                DatabaseReference reference,
                                 CuadroListarVendedor.resultadoDialogo result){
         interfaceResultadoDialogo = result;
         final Dialog dialog = new Dialog(context);
@@ -47,7 +61,8 @@ public class CuadroListarVendedor {
         TextView nombreVendedor = dialog.findViewById(R.id.txtCuadroListaVendedorNombreVendedor);
         TextView telefonoVendedor = dialog.findViewById(R.id.txtCuadroListaVendedorTelefonoVendedor);
         TextView celularVendedor = dialog.findViewById(R.id.txtItemCuadroListaVendedorCelularVendedor);
-        TextView tieneLocalVendedor = dialog.findViewById(R.id.txtCuadroListaVendedorTieneLocalVendedor);
+        GridView localVendedorView = dialog.findViewById(R.id.gridCuadroListaVendedorTieneLocalVendedor);
+
 
         Button verStreamings = dialog.findViewById(R.id.btnCuadroListaVendedorVerStreamings);
         Button atras = dialog.findViewById(R.id.btnCuadroListaVendedorCancelar);
@@ -69,14 +84,40 @@ public class CuadroListarVendedor {
             }
         });
 
+        //cargamos los locales del vendedor en el grid
+        reference.child("Local").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listLocal.clear();
+                if (snapshot.exists()){
+                    for (DataSnapshot ds:snapshot.getChildren()){
+                        Local local = ds.getValue(Local.class);
+                        if (local!=null){
+                            if(local.getIdVendedor().equals(vendedor.getIdVendedor())){
+                                listLocal.add(local);
+                            }
+                        }
+                    }
+
+
+
+                    gridAdapterLocal = new AdapterListarLocal(context, listLocal, reference);
+                    localVendedorView.setAdapter(gridAdapterLocal); //configuramos el view
+                }else{
+                    gridAdapterLocal = new AdapterListarLocal(context, listLocal, reference);
+                    localVendedorView.setAdapter(gridAdapterLocal); //configuramos el view
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         nombreVendedor.setText(vendedor.getNombre());
         telefonoVendedor.setText(vendedor.getTelefono());
         celularVendedor.setText(vendedor.getCelular());
-        if(vendedor.isTieneTienda()){
-            tieneLocalVendedor.setText("Si");
-        }else{
-            tieneLocalVendedor.setText("No");
-        }
 
         dialog.show();
 

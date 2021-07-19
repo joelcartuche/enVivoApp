@@ -21,8 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 
@@ -49,9 +51,8 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
 
     private List<Vendedor> listVendedor = new ArrayList<>();
     private ListAdapter adapterListVendedor;
-    private ListView listaVendedorView;
-    private  Boolean irStreaming=false;
-
+    private GridView listaVendedorView;
+    private String   esMensajeGlobal=null;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -66,18 +67,46 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
 
         listaVendedorView = findViewById(R.id.listVendedores);
 
+        Bundle vendedor = ListarVendedores.this.getIntent().getExtras(); //recogemos si es o no un mensaje global
+        esMensajeGlobal = vendedor!=null?vendedor.getString("global"):null; //recogemos los datos del vendedor
+
+        if (esMensajeGlobal != null && esMensajeGlobal.equals("1")) {
+            listaVendedorView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Bundle parametros = new Bundle();
+                    parametros.putString("vendedor", listVendedor.get(position).getIdVendedor());
+                    Intent streamingsIntent = new Intent(ListarVendedores.this, MensajeriaGlobal.class);
+                    streamingsIntent.putExtras(parametros);
+                    startActivity(streamingsIntent);
+                }
+            });
+        }else{
+            listaVendedorView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    new CuadroListarVendedor(ListarVendedores.this, listVendedor.get(position),databaseReference,ListarVendedores.this);
+                }
+            });
+        }
+
+
+
+        //Damos funcionalidad al menu
+        Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_ListarVendedor);
+        Button btnPerfil = findViewById(R.id.btn_perfil_listar_ListarVendedor);
+        Button btnPedido = findViewById(R.id.btn_carrito_listar_ListarVendedor);
+        Button btnSalir = findViewById(R.id.btn_salir_ListarVendedor);
+        Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarVendedor);
+
+        new Utilidades().cargarToolbar(btnListarVendedore,
+                btnPerfil,
+                btnPedido,
+                btnSalir,
+                btnMensje,
+                ListarVendedores.this,firebaseAuth,databaseReference);
 
         listarVendedores();
-
-        listaVendedorView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                new CuadroListarVendedor(ListarVendedores.this,listVendedor.get(position),ListarVendedores.this);
-            }
-        });
-
-
-
     }
 
     public void listarVendedores(){
@@ -90,13 +119,13 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
                         Vendedor vendedor = ds.getValue(Vendedor.class);//obtenemos el objeto video streaming
                         listVendedor.add(vendedor);
                         //Inicialisamos el adaptador
-                        adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this, R.layout.item_list_vendedores, listVendedor);
+                        adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this,listVendedor,databaseReference);
                         listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
                     }
                 }else{
                     listVendedor.clear();//borramos los datos ya que no hay nada en la base
                     //Inicialisamos el adaptador
-                    adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this, R.layout.item_list_vendedores, listVendedor);
+                    adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this, listVendedor,databaseReference);
                     listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
                 }
             }

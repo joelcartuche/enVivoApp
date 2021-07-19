@@ -8,8 +8,18 @@ public class Cliente {
     private String telefono;
     private String direccion;
     private String uidUsuario;
+    private Boolean bloqueado;
 
     public Cliente() {
+        this.bloqueado = false;
+    }
+
+    public Boolean getBloqueado() {
+        return bloqueado;
+    }
+
+    public void setBloqueado(Boolean bloqueado) {
+        this.bloqueado = bloqueado;
     }
 
     public String getUidUsuario() {

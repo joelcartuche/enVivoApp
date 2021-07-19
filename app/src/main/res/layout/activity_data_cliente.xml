@@ -4,123 +4,197 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:padding="12dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activityParaClientes.DataCliente">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout2"
-        android:layout_width="0dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbaeDataCliente"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+        app:contentInsetStart="0dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout3"
+
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.EnVivoApp.PopupOverlay" />
+            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView27"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnMensajeriaGlobalDataCliente"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_listar_vendedores_DataCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_listar_vendedores"
+                        android:text="Vendedores"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_perfil_DataClienter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_persona"
+                        android:text="Perfil"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_carrito_DataCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_carrito_compra"
+                        android:text="Carrito"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_salir_DataCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_persona_salir"
+                        android:text="Salir"
+                        android:textSize="8sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ingrese sus datos personales"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nombres:" />
+        <TextView
+            android:id="@+id/textView27"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edite sus datos personales"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/txtNombreCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese sus nombres"
-        android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombres y apellidos:" />
 
-    <TextView
-        android:id="@+id/textView28"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Apellidos:" />
+        <EditText
+            android:id="@+id/txtNombreCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese sus nombres"
+            android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/txtApellidoCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese sus apellidos"
-        android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cédula:" />
 
-    <TextView
-        android:id="@+id/textView23"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cédula:" />
+        <EditText
+            android:id="@+id/txtCedulaCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese su número de cédula"
+            android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/txtCedulaCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese su número de cédula"
-        android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Celular:" />
 
-    <TextView
-        android:id="@+id/textView24"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Celular:" />
+        <EditText
+            android:id="@+id/txtCelularCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese su número de celular"
+            android:inputType="phone" />
 
-    <EditText
-        android:id="@+id/txtCelularCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese su número de celular"
-        android:inputType="phone" />
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Teléfono:" />
 
-    <TextView
-        android:id="@+id/textView25"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Teléfono:" />
+        <EditText
+            android:id="@+id/txtTelefonoCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese su número de teléfono"
+            android:inputType="phone" />
 
-    <EditText
-        android:id="@+id/txtTelefonoCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese su número de teléfono"
-        android:inputType="phone" />
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dirección:" />
 
-    <TextView
-        android:id="@+id/textView26"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Dirección:" />
+        <EditText
+            android:id="@+id/txtDireccionCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese su dirección"
+            android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/txtDireccionCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese su dirección"
-        android:inputType="textPersonName" />
+        <Button
+            android:id="@+id/btnGuardarCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar" />
 
-    <Button
-        android:id="@+id/btnGuardarCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Guardar" />
+    </LinearLayout>
 
 
 </LinearLayout>

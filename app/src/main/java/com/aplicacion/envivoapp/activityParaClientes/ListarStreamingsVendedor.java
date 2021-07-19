@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
 
     private List<VideoStreaming> listStreaming = new ArrayList<>();
     private ListAdapter adapterListStreaming;
-    private ListView listaStreamingView;
+    private GridView listaStreamingView;
     private  String idVendedor,idCliente;
 
     @Override
@@ -59,7 +60,6 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
         idCliente = vendedor.getString("cliente");
 
         listarStreamings();
-
 
         listaStreamingView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,9 +83,14 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
         Button btnPerfil = findViewById(R.id.btn_perfil_listar_streaming_vendedor);
         Button btnPedido = findViewById(R.id.btn_carrito_listar_streaming_vendedor);
         Button btnSalir = findViewById(R.id.btn_perfil_listar_streaming_vendedor);
+        Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarStremingsVendedor);
 
         new Utilidades().cargarToolbar(btnListarVendedore,
-                btnPerfil,btnPedido,btnSalir,ListarStreamingsVendedor.this,firebaseAuth);
+                btnPerfil,
+                btnPedido,
+                btnSalir,
+                btnMensje,
+                ListarStreamingsVendedor.this,firebaseAuth,databaseReference);
     }
 
     public void listarStreamings(){
@@ -100,14 +105,14 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
                             VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);//obtenemos el objeto video streaming
                             listStreaming.add(videoStreaming);
                             //Inicialisamos el adaptador
-                            adapterListStreaming = new AdapterVideoStreaming(ListarStreamingsVendedor.this, R.layout.item_list_video_streaming, listStreaming);
+                            adapterListStreaming = new AdapterVideoStreaming(ListarStreamingsVendedor.this,listStreaming,databaseReference);
                             listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
                         }
                     }
                 }else{
                     listStreaming.clear();//borramos los datos ya que no hay nada en la base
                     //Inicialisamos el adaptador
-                    adapterListStreaming = new AdapterVideoStreaming(ListarStreamingsVendedor.this, R.layout.item_list_video_streaming, listStreaming);
+                    adapterListStreaming = new AdapterVideoStreaming(ListarStreamingsVendedor.this, listStreaming,databaseReference);
                     listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
                 }
             }

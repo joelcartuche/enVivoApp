@@ -7,81 +7,149 @@
     android:orientation="vertical"
     tools:context=".activitysParaVendedores.DataLocal">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+        app:contentInsetStart="0dp">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout3"
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.EnVivoApp.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView6"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnMensajeriaGlobalDataLocal"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnListarLocalDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:text="Local"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnPerfilVendedorDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona"
+                                android:text="Perfil"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnPedidoDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_carrito_compra"
+                                android:text="Pedidos"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnVideosDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:drawableTop="@android:drawable/presence_video_online"
+                                android:text="Videos"
+                                android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btnClientesDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Clientes"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnSalirDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Salir"
+                                android:textSize="8sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nombre del local:" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp">
 
-    <EditText
-        android:id="@+id/txtNombreLocal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese nombre del local"
-        android:inputType="textPersonName" />
+        <Button
+            android:id="@+id/btnAgregarLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Añadir local"
+            app:backgroundTint="#FF6D00"
+            app:icon="@android:drawable/ic_menu_add" />
 
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Dirección del local" />
-
-    <EditText
-        android:id="@+id/txtDireccionLocal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese la dirección del local"
-        android:inputType="textPersonName" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Telefono" />
-
-    <EditText
-        android:id="@+id/txtTelefonoLocal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese el telénono del local"
-        android:inputType="phone" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Celular" />
-
-    <EditText
-        android:id="@+id/txtCelularLocal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Ingrese celular del local"
-        android:inputType="phone" />
-
-    <Button
-        android:id="@+id/btnGuardarLocal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Guardar" />
+        <GridView
+            android:id="@+id/gridLocal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 
 </LinearLayout>

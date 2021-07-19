@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#64DD17"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="Edite los datos del Local"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre del local"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="12dp" />
+
+        <EditText
+            android:id="@+id/txtNombreLocalCuadroLocal"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="1dp"
+            android:ems="10"
+            android:hint="Ingrese el nombre del local"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Direccion del local"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtDireccionLocalCuadroLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="auto"
+            android:hint="Ingrese la direccion del local" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Teléfono"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/txtFechaCuadroStreaming"
+            tools:layout_editor_absoluteX="12dp" />
+
+        <EditText
+            android:id="@+id/txtTelefonoCuadroLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="auto"
+            android:hint="Ingrese su numero de telefono"
+            android:inputType="text|time"
+            app:layout_constraintTop_toBottomOf="@+id/textView17"
+            tools:layout_editor_absoluteX="12dp" />
+
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Celular"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtCelularCuadroLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese su  numero de celular"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/btnGuardarCuadroEditarLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shadowColor="#304FFE"
+            android:text="Guardar"
+            app:backgroundTint="#00C853"
+            app:icon="@android:drawable/ic_menu_save"
+            app:strokeColor="#00C853" />
+
+        <Button
+            android:id="@+id/btnActualizarEdicionCuadroLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualizar datos"
+            app:backgroundTint="#FF5722"
+            app:icon="@android:drawable/ic_menu_edit"
+            app:layout_constraintTop_toBottomOf="@+id/txtHoraCuadroStreaming"
+            tools:layout_editor_absoluteX="12dp" />
+
+        <Button
+            android:id="@+id/btnEliminarLocalCuadroLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            app:backgroundTint="#F44336"
+            app:icon="@android:drawable/ic_menu_delete"
+            app:layout_constraintTop_toBottomOf="@+id/btnAgregarStreaming"
+            tools:layout_editor_absoluteX="12dp" />
+
+        <Button
+            android:id="@+id/btnCancelarCuadroLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            app:backgroundTint="#C61818"
+            app:icon="@android:drawable/ic_menu_close_clear_cancel"
+            app:layout_constraintTop_toBottomOf="@+id/btnIrStreamingCuadroStreraming"
+            tools:layout_editor_absoluteX="12dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

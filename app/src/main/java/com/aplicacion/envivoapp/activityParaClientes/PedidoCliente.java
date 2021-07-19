@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activitysParaVendedores.PedidoVendedor;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridPedidoCliente;
-import com.aplicacion.envivoapp.adaptadores.AdapterGridPedidoVendedor;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductoCliente extends AppCompatActivity implements CuadroCancelarPedidoCliente.resultadoDialogo {
+public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPedidoCliente.resultadoDialogo {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -45,12 +45,26 @@ public class ProductoCliente extends AppCompatActivity implements CuadroCancelar
         gridViewPedido = findViewById(R.id.gridProductoCliente);
 
         listarProductos();
+        //Damos funcionalidad al menu
+        Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_PedidoCliente);
+        Button btnPerfil = findViewById(R.id.btn_perfil_listar_PedidoCliente);
+        Button btnPedido = findViewById(R.id.btn_carrito_listar_PedidoCliente);
+        Button btnSalir = findViewById(R.id.btn_salir_PedidoCliente);
+        Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarPedidoCliente);
+
+        new Utilidades().cargarToolbar(btnListarVendedore,
+                btnPerfil,
+                btnPedido,
+                btnSalir,
+                btnMensje,
+                PedidoCliente.this,firebaseAuth,databaseReference);
+
 
     }
     private void borrarGrid(){
         listPedido.clear();//borramos en caso de quedar algo en la cache
         //Inicialisamos el adaptador
-        gridAdapterPedido = new AdapterGridPedidoCliente(ProductoCliente.this, listPedido,databaseReference);
+        gridAdapterPedido = new AdapterGridPedidoCliente(PedidoCliente.this, listPedido,databaseReference);
         gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
 
     }
@@ -81,12 +95,12 @@ public class ProductoCliente extends AppCompatActivity implements CuadroCancelar
                                         }
                                     }
                                     //Inicialisamos el adaptador
-                                    gridAdapterPedido = new AdapterGridPedidoCliente(ProductoCliente.this, listPedido,databaseReference);
+                                    gridAdapterPedido = new AdapterGridPedidoCliente(PedidoCliente.this, listPedido,databaseReference);
                                     gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
 
                                 }else{
                                     if (listPedido.size()==0){
-                                        Toast.makeText(ProductoCliente.this,"Usted no tiene pedidos",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(PedidoCliente.this,"Usted no tiene pedidos",Toast.LENGTH_LONG).show();
                                     }
 
 

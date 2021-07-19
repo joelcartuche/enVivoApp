@@ -113,6 +113,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        authStateListener= new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user= firebaseAuth.getCurrentUser();
+                if (user!= null){
+                    updateUI(user);
+                }else{
+                    updateUI(null);
+                }
+            }
+        };
+
         //inicio logeo
         loginButton.setReadPermissions("email","public_profile");//leemos los permisos del email
         // If using in a fragment
@@ -141,18 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
-
-        authStateListener= new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user= firebaseAuth.getCurrentUser();
-                if (user!= null){
-                    updateUI(user);
-                }else{
-                    updateUI(null);
-                }
-            }
-        };
 
         accessTokenTracker = new AccessTokenTracker() {
             @Override

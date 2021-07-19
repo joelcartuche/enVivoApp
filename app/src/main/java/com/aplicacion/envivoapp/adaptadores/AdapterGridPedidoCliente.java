@@ -65,7 +65,6 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
         TextView precio= convertView.findViewById(R.id.txtPrecioItemPedidoCliente);
         TextView descripcion = convertView.findViewById(R.id.txtDescripcionItemPedidoCliente);
         TextView nombreVendedor = convertView.findViewById(R.id.txtNombreVendedorItemPedidoCliente);
-        Button btnCambiarPedido = convertView.findViewById(R.id.btnCambiarPedidoCliente);
         Button btnCancelarPedido = convertView.findViewById(R.id.btnCancelarItemPedidoCliente);
 
         databaseReference.child("Vendedor").child(pedido.getIdVendedor()).addValueEventListener(new ValueEventListener() {

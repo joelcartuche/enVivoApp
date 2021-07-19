@@ -8,7 +8,6 @@
     tools:context=".activitysParaVendedores.MensajeriaVendedor">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_listar_streamings_vendedor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:contentInsetStart="0dp">
@@ -24,66 +23,108 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/textView38"
-                        android:layout_width="321dp"
-                        android:layout_height="51dp"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
                         android:gravity="center"
-                        android:text="En vivoApp" />
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/button6"
-                        android:layout_width="65dp"
-                        android:layout_height="wrap_content"
-                        app:icon="@android:drawable/ic_menu_send" />
-                </LinearLayout>
+                        android:id="@+id/btnMensajeriaGlobalMensajeriaVendedor"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent">
 
-                    <Button
-                        android:id="@+id/btn_listar_vendedores_mensajeria_vendedor"
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_listar_vendedores"
-                        android:text="Vendedores"
-                        android:textSize="8sp" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
 
-                    <Button
-                        android:id="@+id/btn_perfil_listar_mensajeria_vendedor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_persona"
-                        android:text="Perfil"
-                        android:textSize="8sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btn_carrito_listar_mensajeria_vendedor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_carrito_compra"
-                        android:text="Carrito"
-                        android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btnListarLocalMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:text="Local"
+                                android:textSize="8sp" />
 
-                    <Button
-                        android:id="@+id/btn_salir_mensajeria_vendedor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_persona_salir"
-                        android:text="Salir"
-                        android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btnPerfilVendedorMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona"
+                                android:text="Perfil"
+                                android:textSize="8sp" />
 
-                </LinearLayout>
+                            <Button
+                                android:id="@+id/btnPedidoMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_carrito_compra"
+                                android:text="Pedidos"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnVideosMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:drawableTop="@android:drawable/presence_video_online"
+                                android:text="Videos"
+                                android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btnClientesMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Clientes"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnSalirMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Salir"
+                                android:textSize="8sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
             </LinearLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

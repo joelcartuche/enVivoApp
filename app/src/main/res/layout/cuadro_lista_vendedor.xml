@@ -1,46 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout9"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="12dp"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:padding="24dp">
 
-    <TextView
-        android:id="@+id/txtCuadroListaVendedorNombreVendedor"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:padding="12dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-    <TextView
-        android:id="@+id/txtCuadroListaVendedorTelefonoVendedor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/txtItemCuadroListaVendedorCelularVendedor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/txtCuadroListaVendedorTieneLocalVendedor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
-
-
-    <Button
-        android:id="@+id/btnCuadroListaVendedorVerStreamings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ver Streamings" />
-
-    <Button
-            android:id="@+id/btnCuadroListaVendedorCancelar"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Atras" />
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/txtCuadroListaVendedorNombreVendedor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toTopOf="@+id/txtCuadroListaVendedorTelefonoVendedor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/txtItemCuadroListaVendedorCelularVendedor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toTopOf="@+id/txtCuadroListaVendedorTelefonoVendedor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtCuadroListaVendedorTelefonoVendedor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toTopOf="@+id/gridCuadroListaVendedorTieneLocalVendedor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtCuadroListaVendedorNombreVendedor" />
+
+                <GridView
+                    android:id="@+id/gridCuadroListaVendedorTieneLocalVendedor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/btnCuadroListaVendedorVerStreamings"
+                    app:layout_constraintStart_toStartOf="@+id/txtCuadroListaVendedorTelefonoVendedor"
+                    app:layout_constraintTop_toBottomOf="@+id/txtCuadroListaVendedorTelefonoVendedor" />
+
+                <Button
+                    android:id="@+id/btnCuadroListaVendedorVerStreamings"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Ver Streamings"
+                    app:layout_constraintBottom_toTopOf="@+id/btnCuadroListaVendedorCancelar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gridCuadroListaVendedorTieneLocalVendedor" />
+
+                <Button
+                    android:id="@+id/btnCuadroListaVendedorCancelar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Atras"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnCuadroListaVendedorVerStreamings" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

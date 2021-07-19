@@ -18,6 +18,7 @@ import com.aplicacion.envivoapp.activityParaClientes.MensajeriaCliente;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaCliente;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaVendedor;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoMensajeCliente;
+import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,63 +89,102 @@ public class MensajeriaVendedor extends AppCompatActivity {
             }
         });
 
-        //Damos funcionalidad al menu
-        Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_mensajeria_vendedor);
-        Button btnPerfil = findViewById(R.id.btn_perfil_listar_mensajeria_vendedor);
-        Button btnPedido = findViewById(R.id.btn_carrito_listar_mensajeria_vendedor);
-        Button btnSalir = findViewById(R.id.btn_perfil_listar_mensajeria_vendedor);
+        //le damos funcionalidad al toolbar
+        Button mensajeria = findViewById(R.id.btnMensajeriaGlobalMensajeriaVendedor);
+        Button listarLocal = findViewById(R.id.btnListarLocalMensajeriaVendedor);
+        Button perfil = findViewById(R.id.btnPerfilVendedorMensajeriaVendedor);
+        Button pedido = findViewById(R.id.btnPedidoMensajeriaVendedor);
+        Button videos = findViewById(R.id.btnVideosMensajeriaVendedor);
+        Button salir = findViewById(R.id.btnSalirMensajeriaVendedor);
+        Button clientes = findViewById(R.id.btnClientesMensajeriaVendedor);
 
-        new Utilidades().cargarToolbarVendedor(btnListarVendedore,
-                btnPerfil,btnPedido,btnSalir, MensajeriaVendedor.this,firebaseAuth);
-
+        new Utilidades().cargarToolbarVendedor(listarLocal,
+                perfil,
+                pedido,
+                mensajeria,
+                salir,
+                videos,
+                clientes,
+                MensajeriaVendedor.this,
+                firebaseAuth);
     }
 
-
+private void borrarGrid(){
+        listMensaje.clear();
+    //Inicialisamos el adaptador
+    gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,
+            listMensaje,
+            databaseReference,
+            filtrarTodos.isChecked());
+    gridViewMensaje.setAdapter(gridAdapterMensaje);
+}
     public void listarMensajes(){
         databaseReference.child("Mensaje").orderByChild("fecha").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     listMensaje.clear();//borramos en caso de quedar algo en la cache
-                    int contPedido = 0;//almacena el numero de pedidos
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                         Mensaje mensaje = ds.getValue(Mensaje.class);
-                        if(mensaje != null){
-                            if(mensaje.getIdvendedor().equals(idVendedor)
-                                    && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensajes que sean del cliente y de el streaming actual
-                                if (filtrarPedido.isChecked()){
-                                    if (mensaje.getTexto().indexOf("Quiero comprar:") == 0){
-                                        listMensaje.add(mensaje);
-                                        contPedido+=1;
+                        if(mensaje != null && mensaje.getIdStreaming() !=null){
+                            databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.exists()){
+                                        Cliente cliente = null;
+                                        for (DataSnapshot ds:snapshot.getChildren()){
+                                            Cliente clienteAux = ds.getValue(Cliente.class);
+                                            if (clienteAux.getIdCliente().equals(mensaje.getIdcliente())){
+                                                cliente=clienteAux;
+                                            }
+                                        }
+
+                                        if (cliente != null && !cliente.getBloqueado()){//verificamos si el usuario no esta bloqueado
+                                            if(mensaje.getIdvendedor().equals(idVendedor)
+                                                    && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensajes que sean del cliente y de el streaming actual
+                                                if (filtrarPedido.isChecked()){//filtramos por pedido
+                                                    if (mensaje.getTexto().indexOf("Quiero comprar:") == 0){
+                                                        listMensaje.add(mensaje);
+                                                    }
+                                                }
+                                                if (filtrarTodos.isChecked()){//filtramos a todos los usuarios
+                                                    listMensaje.add(mensaje);
+
+                                                }
+                                            }
+                                            //Inicialisamos el adaptador
+                                            gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,
+                                                    listMensaje,
+                                                    databaseReference,
+                                                    filtrarTodos.isChecked());
+                                            gridViewMensaje.setAdapter(gridAdapterMensaje);
+                                        }
+                                        if (listMensaje.size()==0){
+                                            borrarGrid();
+                                        }
                                     }
                                 }
-                                if (filtrarTodos.isChecked()){
-                                    listMensaje.add(mensaje);
-                                    contPedido+=1;
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
                                 }
-                                //Inicialisamos el adaptador
-                                gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,
-                                        listMensaje,
-                                        databaseReference,
-                                        filtrarTodos.isChecked());
-                                gridViewMensaje.setAdapter(gridAdapterMensaje);
-                            }}
+                            });
+                        }
                     }
-                    if(contPedido== 0){
-                        Toast.makeText(MensajeriaVendedor.this,"Usted no tiene pedidos",Toast.LENGTH_LONG).show();
+                    if (listMensaje.size() ==0){
+                        borrarGrid();
+                        gridViewMensaje.setAdapter(gridAdapterMensaje);
                     }
+
                 }else{
-                    listMensaje.clear();//borramos los datos ya que no hay nada en la base
-                    //Inicialisamos el adaptador
-
-                    gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,listMensaje,databaseReference,false);
-                    gridViewMensaje.setAdapter(gridAdapterMensaje);
-
+                    borrarGrid();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                borrarGrid();
             }
         });
 

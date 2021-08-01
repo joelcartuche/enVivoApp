@@ -36,34 +36,77 @@
                     android:id="@+id/txtItemListVendedoresNombreVendedor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="3dp"
                     app:layout_constraintBottom_toTopOf="@+id/txtItemListarVendedoresTelefonoVendedor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView4"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/txtItemListarVendedoresTelefonoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toTopOf="@+id/txtItemListarVendedoresCelularVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtItemListVendedoresNombreVendedor" />
 
                 <TextView
                     android:id="@+id/txtItemListarVendedoresCelularVendedor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginBottom="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView56"
                     app:layout_constraintTop_toBottomOf="@+id/txtItemListarVendedoresTelefonoVendedor" />
+
+                <TextView
+                    android:id="@+id/txtItemListarVendedoresTelefonoVendedor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginBottom="3dp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtItemListarVendedoresCelularVendedor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView42"
+                    app:layout_constraintTop_toBottomOf="@+id/txtItemListVendedoresNombreVendedor" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre: "
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/textView42"
+                    app:layout_constraintEnd_toStartOf="@+id/txtItemListVendedoresNombreVendedor"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView42"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono: "
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/textView56"
+                    app:layout_constraintEnd_toStartOf="@+id/txtItemListarVendedoresTelefonoVendedor"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+                <TextView
+                    android:id="@+id/textView56"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Celular: "
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/txtItemListarVendedoresCelularVendedor"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView42" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 

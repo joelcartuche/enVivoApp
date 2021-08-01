@@ -2,126 +2,285 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardItemPedidoVendor"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+        android:id="@+id/scrollListPedidoVendedor"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/txtNombreClienteItemPedidoVendedor"
-                    android:layout_width="0dp"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toTopOf="@+id/txtCodigoItemPedidoVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/btnCancelarItemPedidoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:text="Cancelar pedido"
-                    app:backgroundTint="#FF1744"
+                    android:layout_margin="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnCambiarPedidoVendedor" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/txtDescripcionItemPedidoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toTopOf="@+id/btnCambiarPedidoVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtPrecioItemPedidoVendedor" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp">
 
-                <TextView
-                    android:id="@+id/txtPrecioItemPedidoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toTopOf="@+id/txtDescripcionItemPedidoVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtCantidadItemPedidoVendedor" />
+                        <Button
+                            android:id="@+id/btnPagadoPedidoVendedor"
+                            android:layout_width="357dp"
+                            android:layout_height="wrap_content"
+                            android:text="Pedido pagado"
+                            app:layout_constraintBottom_toTopOf="@+id/btnCambiarPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.466"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnConversarVendedorListPedidoVendedor" />
 
-                <TextView
-                    android:id="@+id/txtCantidadItemPedidoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toTopOf="@+id/txtPrecioItemPedidoVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoItemPedidoVendedor" />
+                        <Button
+                            android:id="@+id/btnConversarVendedorListPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="Conversar con el comprador"
+                            app:layout_constraintBottom_toTopOf="@+id/btnPagadoPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/imgListPedidoVendedor" />
 
-                <TextView
-                    android:id="@+id/txtNombreProductoItemPedidoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toTopOf="@+id/txtCantidadItemPedidoVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtCodigoItemPedidoVendedor" />
+                        <Button
+                            android:id="@+id/btnCambiarPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Cambiar pedido"
+                            app:backgroundTint="#00C853"
+                            app:layout_constraintBottom_toTopOf="@+id/btnHabilitarPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.466"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnPagadoPedidoVendedor" />
 
-                <TextView
-                    android:id="@+id/txtCodigoItemPedidoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintBottom_toTopOf="@+id/txtNombreProductoItemPedidoVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtNombreClienteItemPedidoVendedor" />
+                        <Button
+                            android:id="@+id/btnHabilitarPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Habilitar pedido"
+                            app:backgroundTint="#00C853"
+                            app:layout_constraintBottom_toTopOf="@+id/btnEliminarItemPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.466"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnCambiarPedidoVendedor" />
 
-                <Button
-                    android:id="@+id/btnCambiarPedidoVendedor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Cambiar pedido"
-                    app:layout_constraintBottom_toTopOf="@+id/btnCancelarItemPedidoVendedor"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtDescripcionItemPedidoVendedor" />
+                        <Button
+                            android:id="@+id/btnEliminarItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Eliminar pedido"
+                            app:backgroundTint="#FF1744"
+                            app:layout_constraintBottom_toTopOf="@+id/btnCancelarItemPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.466"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnHabilitarPedidoVendedor" />
+
+                        <Button
+                            android:id="@+id/btnCancelarItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="44dp"
+                            android:text="Cancelar pedido"
+                            app:backgroundTint="#FF1744"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.466"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnEliminarItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/txtNombreClienteItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/textView68"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView67"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txtPrecioItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtDescripcionItemPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView72"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCantidadItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/txtCantidadItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtPrecioItemPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView71"
+                            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/txtNombreProductoItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtCantidadItemPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView69"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCodigoItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/txtCodigoItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtNombreProductoItemPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView70"
+                            app:layout_constraintTop_toBottomOf="@+id/textView68" />
+
+                        <TextView
+                            android:id="@+id/txtDescripcionItemPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            app:layout_constraintBottom_toTopOf="@+id/imgListPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView73"
+                            app:layout_constraintTop_toBottomOf="@+id/txtPrecioItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView67"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="Cliente: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView68"
+                            app:layout_constraintEnd_toStartOf="@+id/txtNombreClienteItemPedidoVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView68"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="Datos producto"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/txtCodigoItemPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtNombreClienteItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView69"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView71"
+                            app:layout_constraintEnd_toStartOf="@+id/txtNombreProductoItemPedidoVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCodigoItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView70"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="Código: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView69"
+                            app:layout_constraintEnd_toStartOf="@+id/txtCodigoItemPedidoVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView68" />
+
+                        <TextView
+                            android:id="@+id/textView71"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cantidad: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView72"
+                            app:layout_constraintEnd_toStartOf="@+id/txtCantidadItemPedidoVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView72"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Precio: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView73"
+                            app:layout_constraintEnd_toStartOf="@+id/txtPrecioItemPedidoVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCantidadItemPedidoVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView73"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="17dp"
+                            android:text="Descripción: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/imgListPedidoVendedor"
+                            app:layout_constraintEnd_toStartOf="@+id/txtDescripcionItemPedidoVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtPrecioItemPedidoVendedor" />
+
+                        <ImageView
+                            android:id="@+id/imgListPedidoVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="300dp"
+                            android:layout_marginBottom="1dp"
+                            app:layout_constraintBottom_toTopOf="@+id/btnConversarVendedorListPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtDescripcionItemPedidoVendedor" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.cardview.widget.CardView>

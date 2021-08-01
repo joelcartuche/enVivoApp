@@ -20,13 +20,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.aplicacion.envivoapp.MainActivity;
+import com.aplicacion.envivoapp.Reportes.ReporteVendedor;
 import com.aplicacion.envivoapp.activityParaClientes.DataCliente;
+import com.aplicacion.envivoapp.activityParaClientes.HomeCliente;
 import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
 import com.aplicacion.envivoapp.activityParaClientes.MensajeriaGlobal;
 import com.aplicacion.envivoapp.activityParaClientes.PedidoCliente;
 import com.aplicacion.envivoapp.activitysParaVendedores.DataLocal;
 import com.aplicacion.envivoapp.activitysParaVendedores.DataVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
+import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.ListarClientes;
 import com.aplicacion.envivoapp.activitysParaVendedores.PedidoVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
@@ -85,7 +88,8 @@ public class Utilidades {
         timePickerDialog.show();
     }
 
-    public void cargarToolbar(Button listarVendedores,
+    public void cargarToolbar(Button home,
+                              Button listarVendedores,
                               Button perfil,
                               Button pedido,
                               Button salir,
@@ -93,6 +97,15 @@ public class Utilidades {
                               Context context,
                               FirebaseAuth firebaseAuth,
                               DatabaseReference reference) {
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent streamingsIntent = new Intent(context, HomeCliente.class);
+                context.startActivity(streamingsIntent);
+            }
+        });
+
         //Damos funcionalidad al menu
         Button btnListarVendedore = listarVendedores;
         btnListarVendedore.setOnClickListener(new View.OnClickListener() {
@@ -154,15 +167,28 @@ public class Utilidades {
             }
         });
     }
-    public void cargarToolbarVendedor(Button local,
+    public void cargarToolbarVendedor(Button home,
+                                      Button local,
                               Button perfil,
                               Button pedido,
                               Button mensaje,
                               Button salir,
                               Button videos,
                               Button clientes,
+                              Button  reporte,
                               Context context,
                               FirebaseAuth firebaseAuth){
+
+        Button btnHome = home;
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent reporteIntent = new Intent(context, HomeVendedor.class);
+                context.startActivity(reporteIntent);
+                ((Activity) context).finish();
+            }
+        });
+
         //Damos funcionalidad al menu
         Button btnListarLocal = local;
         btnListarLocal.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +196,7 @@ public class Utilidades {
             public void onClick(View v) {
                 Intent listarLocalIntent = new Intent(context, DataLocal.class);
                 context.startActivity(listarLocalIntent);
+                ((Activity) context).finish();
 
             }
         });
@@ -179,6 +206,7 @@ public class Utilidades {
             public void onClick(View v) {
                 Intent streamingsIntent = new Intent(context, GestionVideos.class);
                 context.startActivity(streamingsIntent);
+                ((Activity) context).finish();
 
             }
         });
@@ -188,6 +216,7 @@ public class Utilidades {
             public void onClick(View v) {
                 Intent streamingsIntent = new Intent(context, DataVendedor.class);
                 context.startActivity(streamingsIntent);
+                ((Activity) context).finish();
 
             }
         });
@@ -197,6 +226,7 @@ public class Utilidades {
             public void onClick(View v) {
                 Intent pedidoIntent = new Intent(context, PedidoVendedor.class);
                 context.startActivity(pedidoIntent);
+                ((Activity) context).finish();
 
             }
         });
@@ -209,9 +239,21 @@ public class Utilidades {
                 Intent mensajeriGlobalIntent = new Intent(context, ListarClientes.class);
                 mensajeriGlobalIntent.putExtras(parametros);
                 context.startActivity(mensajeriGlobalIntent);
+                ((Activity) context).finish();
 
             }
         });
+
+        Button btnReporte = reporte;
+        btnReporte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent reporteIntent = new Intent(context, ReporteVendedor.class);
+                context.startActivity(reporteIntent);
+                ((Activity) context).finish();
+            }
+        });
+
         Button btnSalir = salir;
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,6 +280,7 @@ public class Utilidades {
                 Intent mensajeriGlobalIntent = new Intent(context, ListarClientes.class);
                 mensajeriGlobalIntent.putExtras(parametros);
                 context.startActivity(mensajeriGlobalIntent);
+                ((Activity) context).finish();
             }
         });
     }
@@ -258,4 +301,6 @@ public class Utilidades {
         });
         dialogo1.show();
     }
+
+
 }

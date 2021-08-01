@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activitysParaVendedores.HomeVendedor">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbaeDataCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStart="0dp">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout3"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnMensajeriaGlobalHomeCliente"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_Home_Home_Clinte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_home"
+                        android:text="Home"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_listar_vendedores_HomeCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_listar_vendedores"
+                        android:text="Vendedores"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_perfil_HomeCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_persona"
+                        android:text="Perfil"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_carrito_HomeCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_carrito_compra"
+                        android:text="Carrito"
+                        android:textSize="8sp" />
+
+                    <Button
+                        android:id="@+id/btn_salir_HomeCliente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_persona_salir"
+                        android:text="Salir"
+                        android:textSize="8sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView79"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="9dp"
+                    android:text="Observa a tus vendedores"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toTopOf="@+id/divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/textView77"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView79" />
+
+                <TextView
+                    android:id="@+id/textView77"
+                    android:layout_width="361dp"
+                    android:layout_height="234dp"
+                    android:layout_marginTop="8dp"
+                    android:foreground="@drawable/fondo_home"
+                    android:text="TextView"
+                    app:layout_constraintBottom_toTopOf="@+id/divider2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+                <Button
+                    android:id="@+id/btnStreamingsHomeComprador"
+                    android:layout_width="65dp"
+                    android:layout_height="44dp"
+                    app:backgroundTint="#D50000"
+                    app:icon="@android:drawable/ic_media_play"
+                    app:iconGravity="start|end|textStart"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView77"
+                    app:layout_constraintEnd_toEndOf="@+id/textView77"
+                    app:layout_constraintStart_toStartOf="@+id/textView77"
+                    app:layout_constraintTop_toTopOf="@+id/textView77"
+                    app:layout_constraintVertical_bias="0.452" />
+
+                <TextView
+                    android:id="@+id/textView80"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mira sus streamings"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    app:drawableTint="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView77"
+                    app:layout_constraintEnd_toEndOf="@+id/textView77"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="@+id/textView77"
+                    app:layout_constraintTop_toTopOf="@+id/textView77"
+                    app:layout_constraintVertical_bias="0.223" />
+
+                <TextView
+                    android:id="@+id/textView81"
+                    android:layout_width="193dp"
+                    android:layout_height="245dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="29dp"
+                    android:foreground="@drawable/tiendahoe"
+                    app:layout_constraintBottom_toTopOf="@+id/divider4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/textView81"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView77" />
+
+                <View
+                    android:id="@+id/divider4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView81" />
+
+                <TextView
+                    android:id="@+id/textView82"
+                    android:layout_width="0dp"
+                    android:layout_height="59dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="11dp"
+                    android:gravity="center"
+                    android:text="Chatea con tus vendedores"
+                    app:layout_constraintBottom_toTopOf="@+id/btnMensajeriaHomeComprador"
+                    app:layout_constraintEnd_toStartOf="@+id/textView84"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+                <Button
+                    android:id="@+id/btnMensajeriaHomeComprador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"
+                    android:text="Ir al chat"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/textView84"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView82" />
+
+                <Button
+                    android:id="@+id/btnPedidosHomeComprador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Pedidos"
+                    app:layout_constraintBottom_toTopOf="@+id/divider4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView81"
+                    app:layout_constraintTop_toBottomOf="@+id/textView83" />
+
+                <TextView
+                    android:id="@+id/textView83"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Controla tus pedidos"
+                    app:layout_constraintBottom_toTopOf="@+id/btnPedidosHomeComprador"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.329"
+                    app:layout_constraintStart_toEndOf="@+id/textView81"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+                <TextView
+                    android:id="@+id/textView84"
+                    android:layout_width="119dp"
+                    android:layout_height="129dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:foreground="@drawable/reportes"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView82"
+                    app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

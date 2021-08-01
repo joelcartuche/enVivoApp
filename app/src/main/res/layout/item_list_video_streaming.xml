@@ -32,51 +32,88 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="12dp">
 
                 <TextView
-                    android:id="@+id/txtItemUrlVideoStreaming"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtEstadoStreamingVendedor"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView61"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/txtItemFechaVideoStreaming"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtItemUrlVideoStreaming"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/txtItemHoraVideoStreaming"
-                    app:layout_constraintEnd_toEndOf="@+id/txtItemUrlVideoStreaming"
-                    app:layout_constraintStart_toStartOf="@+id/txtItemUrlVideoStreaming"
-                    app:layout_constraintTop_toBottomOf="@+id/txtItemUrlVideoStreaming" />
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtItemFechaVideoStreaming"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView61"
+                    app:layout_constraintTop_toBottomOf="@+id/txtEstadoStreamingVendedor" />
 
                 <TextView
                     android:id="@+id/txtItemHoraVideoStreaming"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:textSize="16sp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/txtItemFechaVideoStreaming"
-                    app:layout_constraintStart_toStartOf="@+id/txtItemFechaVideoStreaming" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView63"
+                    app:layout_constraintTop_toBottomOf="@+id/txtItemFechaVideoStreaming" />
+
+                <TextView
+                    android:id="@+id/txtItemFechaVideoStreaming"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="1dp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtItemHoraVideoStreaming"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView62"
+                    app:layout_constraintTop_toBottomOf="@+id/txtItemUrlVideoStreaming" />
+
+                <TextView
+                    android:id="@+id/textView61"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Url: "
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/textView62"
+                    app:layout_constraintEnd_toStartOf="@+id/txtItemUrlVideoStreaming"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtEstadoStreamingVendedor" />
+
+                <TextView
+                    android:id="@+id/textView62"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:text="Fecha de la trasmisión: "
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/textView63"
+                    app:layout_constraintEnd_toStartOf="@+id/txtItemFechaVideoStreaming"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView61" />
+
+                <TextView
+                    android:id="@+id/textView63"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:text="Hora de la transmisión: "
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/txtItemHoraVideoStreaming"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView62" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

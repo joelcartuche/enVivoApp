@@ -20,6 +20,7 @@ import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaVendedor;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoMensajeCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,15 +28,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MensajeriaVendedor extends AppCompatActivity {
+public class MensajeriaVendedor extends AppCompatActivity  {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private FirebaseStorage storage ; //para la insersion de archivos
 
     private Button enviarMensaje;
     private EditText textoMensaje;
@@ -46,6 +49,8 @@ public class MensajeriaVendedor extends AppCompatActivity {
     private GridView gridViewMensaje;
     private AdapterGridMensajeriaVendedor gridAdapterMensaje;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +59,7 @@ public class MensajeriaVendedor extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance(); //intanciamos el usuario logeado
         firebaseDatabase = FirebaseDatabase.getInstance(); //intanciamos la base de datos firebase
         databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
+        storage = FirebaseStorage.getInstance();//inicializamos la variable storage
 
         //incializaoms las variables
         enviarMensaje = findViewById(R.id.btnEnviarMensajeVendedor);
@@ -61,7 +67,7 @@ public class MensajeriaVendedor extends AppCompatActivity {
         gridViewMensaje = findViewById(R.id.gridMensajeVendedor);
         filtrarPedido = findViewById(R.id.radioFiltrarPedidoMensajeriaVendedor);
         filtrarTodos  = findViewById(R.id.radioFiltrarTodosMensajeriaVendedor);
-        filtrarTodos.setChecked(true);//para que siempre  liste todos los mensajes
+        //filtrarTodos.setChecked(true);//para que siempre  liste todos los mensajes
 
         //fin de incializacion de variables
 
@@ -72,11 +78,12 @@ public class MensajeriaVendedor extends AppCompatActivity {
         urlStreaming = vendedor.getString("url"); //recogemos los datos del vendedor
         idStreaming = vendedor.getString("streaming");
 
-        listarMensajes();
+        //listarMensajes();
 
         filtrarTodos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                filtrarPedido.setChecked(false);
                 filtrarTodos.setChecked(true);
                 listarMensajes();
             }
@@ -84,6 +91,7 @@ public class MensajeriaVendedor extends AppCompatActivity {
         filtrarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                filtrarPedido.setChecked(true);
                 filtrarTodos.setChecked(false);
                 listarMensajes();
             }
@@ -97,98 +105,77 @@ public class MensajeriaVendedor extends AppCompatActivity {
         Button videos = findViewById(R.id.btnVideosMensajeriaVendedor);
         Button salir = findViewById(R.id.btnSalirMensajeriaVendedor);
         Button clientes = findViewById(R.id.btnClientesMensajeriaVendedor);
+        Button reporte = findViewById(R.id.btnReporteMensajeriaVendedor);
+        Button home = findViewById(R.id.btnHomeVendedorMensajeriaVendedor);
 
-        new Utilidades().cargarToolbarVendedor(listarLocal,
+        new Utilidades().cargarToolbarVendedor(home,
+                listarLocal,
                 perfil,
                 pedido,
                 mensajeria,
                 salir,
                 videos,
                 clientes,
+                reporte,
                 MensajeriaVendedor.this,
                 firebaseAuth);
     }
 
-private void borrarGrid(){
+    private void borrarGrid() {
         listMensaje.clear();
-    //Inicialisamos el adaptador
-    gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,
-            listMensaje,
-            databaseReference,
-            filtrarTodos.isChecked());
-    gridViewMensaje.setAdapter(gridAdapterMensaje);
-}
+        //Inicialisamos el adaptador
+        gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,
+                listMensaje,
+                databaseReference,
+                filtrarTodos.isChecked(),
+                storage);
+        gridViewMensaje.setAdapter(gridAdapterMensaje);
+    }
+
     public void listarMensajes(){
-        databaseReference.child("Mensaje").orderByChild("fecha").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+        borrarGrid();
+        databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    listMensaje.clear();//borramos en caso de quedar algo en la cache
-                    for (final DataSnapshot ds : snapshot.getChildren()) {
-                        Mensaje mensaje = ds.getValue(Mensaje.class);
-                        if(mensaje != null && mensaje.getIdStreaming() !=null){
-                            databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()){
-                                        Cliente cliente = null;
-                                        for (DataSnapshot ds:snapshot.getChildren()){
-                                            Cliente clienteAux = ds.getValue(Cliente.class);
-                                            if (clienteAux.getIdCliente().equals(mensaje.getIdcliente())){
-                                                cliente=clienteAux;
-                                            }
-                                        }
-
-                                        if (cliente != null && !cliente.getBloqueado()){//verificamos si el usuario no esta bloqueado
-                                            if(mensaje.getIdvendedor().equals(idVendedor)
-                                                    && mensaje.getIdStreaming().equals(idStreaming)){//aceptamos los mensajes que sean del cliente y de el streaming actual
-                                                if (filtrarPedido.isChecked()){//filtramos por pedido
-                                                    if (mensaje.getTexto().indexOf("Quiero comprar:") == 0){
-                                                        listMensaje.add(mensaje);
-                                                    }
-                                                }
-                                                if (filtrarTodos.isChecked()){//filtramos a todos los usuarios
-                                                    listMensaje.add(mensaje);
-
-                                                }
-                                            }
-                                            //Inicialisamos el adaptador
-                                            gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,
-                                                    listMensaje,
-                                                    databaseReference,
-                                                    filtrarTodos.isChecked());
-                                            gridViewMensaje.setAdapter(gridAdapterMensaje);
-                                        }
-                                        if (listMensaje.size()==0){
-                                            borrarGrid();
-                                        }
+                if (snapshot.exists()){
+                    listMensaje.clear();
+                    for (DataSnapshot ds:snapshot.getChildren()){
+                        Mensaje mensaje= ds.getValue(Mensaje.class);
+                        if (mensaje!=null  && mensaje.getIdStreaming() != null && idStreaming !=null){
+                            if (!mensaje.getEsClienteBloqueado()
+                                    && mensaje.getIdvendedor().equals(idVendedor)
+                                    && mensaje.getIdStreaming().equals(idStreaming)) {//filtramos los mensajes de los clientes bloqueados
+                                if (filtrarPedido.isChecked()
+                                        && !mensaje.getPedidoAceptado()
+                                        && !mensaje.getPedidoCancelado()){//filtramos por pedido
+                                    if (mensaje.getTexto().indexOf("Quiero comprar:") == 0){
+                                        listMensaje.add(mensaje);
                                     }
                                 }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
+                                if (filtrarTodos.isChecked()){//filtramos a todos los usuarios
+                                    listMensaje.add(mensaje);
                                 }
-                            });
+                            }
                         }
                     }
-                    if (listMensaje.size() ==0){
-                        borrarGrid();
-                        gridViewMensaje.setAdapter(gridAdapterMensaje);
-                    }
+                    gridAdapterMensaje = new AdapterGridMensajeriaVendedor(MensajeriaVendedor.this,
+                            listMensaje,
+                            databaseReference,
+                            filtrarTodos.isChecked(),
+                            storage);
+                    gridViewMensaje.setAdapter(gridAdapterMensaje);
 
-                }else{
-                    borrarGrid();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                borrarGrid();
+
             }
         });
 
-    }
 
+
+    }
 
 }

@@ -8,8 +8,28 @@ public class VideoStreaming {
     private String urlVideoStreaming;
     private Date FechaTransmision;
     private String idVendedor;
+    private Boolean eliminado;
+    private Boolean iniciado;
 
     public VideoStreaming() {
+        this.eliminado=false;
+        this.iniciado = false;
+    }
+
+    public Boolean getIniciado() {
+        return iniciado;
+    }
+
+    public void setIniciado(Boolean iniciado) {
+        this.iniciado = iniciado;
+    }
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
     public String getIdVendedor() {
@@ -42,5 +62,12 @@ public class VideoStreaming {
 
     public void setFechaTransmision(Date fechaTransmision) {
         FechaTransmision = fechaTransmision;
+    }
+
+    @Override
+    public String toString() {
+        return FechaTransmision.getDate()+" / "
+                +FechaTransmision.getMonth()+" / "
+                +FechaTransmision.getYear();
     }
 }

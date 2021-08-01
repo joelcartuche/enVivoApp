@@ -69,6 +69,15 @@
                             android:orientation="horizontal">
 
                             <Button
+                                android:id="@+id/btnHomeVendedorDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_home"
+                                android:text="Home"
+                                android:textSize="8sp" />
+
+                            <Button
                                 android:id="@+id/btnListarLocalDataLocal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -110,6 +119,15 @@
                                 android:layout_weight="1"
                                 android:drawableTop="@drawable/ic_persona_salir"
                                 android:text="Clientes"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnReporteDataLocal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="?android:attr/actionModeFindDrawable"
+                                android:text="Reportes"
                                 android:textSize="8sp" />
 
                             <Button

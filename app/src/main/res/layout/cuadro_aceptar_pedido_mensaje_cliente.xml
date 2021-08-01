@@ -157,7 +157,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Enviar"
-        app:backgroundTint="#8BC34A"
+        app:backgroundTint="#00C853"
         app:layout_constraintBottom_toTopOf="@+id/btnCancelarCuadroAceptarPedido"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

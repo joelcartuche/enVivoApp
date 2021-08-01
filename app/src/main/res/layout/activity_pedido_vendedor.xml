@@ -69,6 +69,15 @@
                             android:orientation="horizontal">
 
                             <Button
+                                android:id="@+id/btnHomeVendedorPedidoVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_home"
+                                android:text="Home"
+                                android:textSize="8sp" />
+
+                            <Button
                                 android:id="@+id/btnListarLocalPedidoVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -111,6 +120,14 @@
                                 android:drawableTop="@drawable/ic_persona_salir"
                                 android:text="Clientes"
                                 android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btnReportePedidoVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="?android:attr/actionModeFindDrawable"
+                                android:text="Reportes"
+                                android:textSize="8sp"/>
 
                             <Button
                                 android:id="@+id/btnSalirPedidoVendedor"
@@ -136,85 +153,112 @@
         android:layout_height="match_parent"
         android:padding="12dp">
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier"
+        <TextView
+            android:id="@+id/textView39"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:barrierDirection="top"
-            app:constraint_referenced_ids="radioGroup"
-            tools:layout_editor_absoluteY="610dp" />
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
+            android:layout_marginBottom="5dp"
+            android:text="Pedidos"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
             app:layout_constraintBottom_toTopOf="@+id/gridPedidoVendedor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView39">
 
-            <TextView
-                android:id="@+id/textView42"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Filtrar por:" />
+                android:layout_height="match_parent">
 
-            <RadioButton
-                android:id="@+id/radioAceptadoPedidoVendedor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Aceptados"
-                android:textSize="10sp" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Filtrar por:" />
 
-            <RadioButton
-                android:id="@+id/radioTodosPedidoVendedor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Todos"
-                android:textSize="10sp" />
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radioEliminadosPedidoVendedor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Eliminados"
-                android:textSize="10sp" />
 
-        </RadioGroup>
+                    <RadioButton
+                        android:id="@+id/radioPagadoPedidoVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pagados"
+                        android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/textView39"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                    <RadioButton
+                        android:id="@+id/radioAceptadoPedidoVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Aceptados"
+                        android:textSize="10sp" />
 
-            android:text="Pedidos"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/radioGroup"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                    <RadioButton
+                        android:id="@+id/radioPasadosFecha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pasados de fecha"
+                        android:textSize="10sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioEliminadosPedidoVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cancelados"
+                        android:textSize="10sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioTodosPedidoVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Todos"
+                        android:textSize="10sp" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <GridView
             android:id="@+id/gridPedidoVendedor"
 
             android:layout_width="0dp"
-            android:layout_height="407dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
             android:horizontalSpacing="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView">
 
         </GridView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

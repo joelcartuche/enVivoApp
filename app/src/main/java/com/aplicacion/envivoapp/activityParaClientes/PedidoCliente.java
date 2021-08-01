@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private FirebaseStorage storage ; //para la insersion de archivos
 
     private List<Pedido> listPedido = new ArrayList<>();
     private GridView gridViewPedido;
@@ -41,6 +43,7 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
         firebaseAuth = FirebaseAuth.getInstance(); //intanciamos el usuario logeado
         firebaseDatabase = FirebaseDatabase.getInstance(); //intanciamos la base de datos firebase
         databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
+        storage = FirebaseStorage.getInstance();//inicializamos la variable storage
 
         gridViewPedido = findViewById(R.id.gridProductoCliente);
 
@@ -51,8 +54,9 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
         Button btnPedido = findViewById(R.id.btn_carrito_listar_PedidoCliente);
         Button btnSalir = findViewById(R.id.btn_salir_PedidoCliente);
         Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarPedidoCliente);
+        Button btnHome = findViewById(R.id.btn_Home_Pedido_Cliente);
 
-        new Utilidades().cargarToolbar(btnListarVendedore,
+        new Utilidades().cargarToolbar(btnHome,btnListarVendedore,
                 btnPerfil,
                 btnPedido,
                 btnSalir,
@@ -64,7 +68,10 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
     private void borrarGrid(){
         listPedido.clear();//borramos en caso de quedar algo en la cache
         //Inicialisamos el adaptador
-        gridAdapterPedido = new AdapterGridPedidoCliente(PedidoCliente.this, listPedido,databaseReference);
+        gridAdapterPedido = new AdapterGridPedidoCliente(PedidoCliente.this,
+                listPedido,
+                databaseReference,
+                storage);
         gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
 
     }
@@ -77,12 +84,14 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
                     Cliente cliente =null;
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                          Cliente clienteAux= ds.getValue(Cliente.class);
-                         if (clienteAux.getUidUsuario().equals(firebaseAuth.getUid())){
+                         if (clienteAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
                              cliente=clienteAux;
+                             break;
                          }
                     }
 
                     if (cliente!= null){
+                        Cliente finalCliente = cliente;
                         databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -90,19 +99,21 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
                                     listPedido.clear();//borramos en caso de quedar algo en la cache
                                     for (final DataSnapshot ds : snapshot.getChildren()) {
                                         Pedido pedido = ds.getValue(Pedido.class);//obtenemos
-                                        if (pedido.getAceptado()) {
+                                        if (pedido.getAceptado() && pedido.getIdCliente().equals(finalCliente.getIdCliente())) {
                                             listPedido.add(pedido);
                                         }
                                     }
                                     //Inicialisamos el adaptador
-                                    gridAdapterPedido = new AdapterGridPedidoCliente(PedidoCliente.this, listPedido,databaseReference);
+                                    gridAdapterPedido = new AdapterGridPedidoCliente(PedidoCliente.this,
+                                            listPedido,
+                                            databaseReference,
+                                            storage);
                                     gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
 
                                 }else{
                                     if (listPedido.size()==0){
                                         Toast.makeText(PedidoCliente.this,"Usted no tiene pedidos",Toast.LENGTH_LONG).show();
                                     }
-
 
                                     borrarGrid();
                                 }

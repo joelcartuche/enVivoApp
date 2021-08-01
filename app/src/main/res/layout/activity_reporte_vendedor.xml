@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Reportes.ReporteVendedor">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetStart="0dp">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        android:layout_width="300dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:text="En vivoApp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalReporteVendedor"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/btnMensajeriaGlobalReporteVendedor"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        app:icon="@android:drawable/ic_menu_send"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView38"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <Button
+                                android:id="@+id/btnHomeVendedorReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_home"
+                                android:text="Home"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnListarLocalReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:text="Local"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnPerfilVendedorReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona"
+                                android:text="Perfil"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnPedidoReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_carrito_compra"
+                                android:text="Pedidos"
+                                android:textSize="8sp" />
+
+                            <Button
+                                android:id="@+id/btnVideosReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:drawableTop="@android:drawable/presence_video_online"
+                                android:text="Videos"
+                                android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btnClientesReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Clientes"
+                                android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btnReporteReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="?android:attr/actionModeFindDrawable"
+                                android:text="Reportes"
+                                android:textSize="8sp"/>
+
+                            <Button
+                                android:id="@+id/btnSalirReporteVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Salir"
+                                android:textSize="8sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:scrollbars="horizontal|vertical"
+            app:layout_constraintBottom_toTopOf="@+id/btnGenerarReporteVendedor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <GridView
+                    android:id="@+id/gridDatosReporteVendedor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView74">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView76"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Generar reporte de: "
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <RadioButton
+                        android:id="@+id/radioPedidosFinalizadosReporteVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pedidos finalizados" />
+
+                    <RadioButton
+                        android:id="@+id/radioPedidosCanceladosReporteVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pedidos cancelados" />
+
+                    <RadioButton
+                        android:id="@+id/radioPedidosEliminadosReporteVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pedidos eliminados" />
+                </RadioGroup>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/textView74"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Reportes:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnGenerarReporteVendedor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Generar Reporte"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

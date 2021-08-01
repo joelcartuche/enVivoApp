@@ -1,38 +1,59 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activityParaClientes.ListarStreamingsVendedor;
+import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
+import com.aplicacion.envivoapp.activityParaClientes.MensajeriaGlobal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCancelarPedidoCliente.resultadoDialogo {
     private Context context;
     private List<Pedido> listaPedidoCliente;
     private DatabaseReference databaseReference;
+    private FirebaseStorage storage;
 
     public AdapterGridPedidoCliente(Context context,
                                     List<Pedido> listaPedidoCliente,
-                                    DatabaseReference databaseReference){
+                                    DatabaseReference databaseReference,
+                                    FirebaseStorage storage){
         this.context = context;
         this.listaPedidoCliente = listaPedidoCliente;
         this.databaseReference = databaseReference;
+        this.storage=storage;
     }
 
     @Override
@@ -50,6 +71,7 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
         return position;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
@@ -65,9 +87,26 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
         TextView precio= convertView.findViewById(R.id.txtPrecioItemPedidoCliente);
         TextView descripcion = convertView.findViewById(R.id.txtDescripcionItemPedidoCliente);
         TextView nombreVendedor = convertView.findViewById(R.id.txtNombreVendedorItemPedidoCliente);
+        TextView fechaPedido = convertView.findViewById(R.id.txtFechaItemPedidoCliente);
+        TextView fechaFinalPedido = convertView.findViewById(R.id.txtFechaFinalItemPedidoCliente);
+        TextView colorFecha = convertView.findViewById(R.id.txtColorFechaVendedorItemPedidoCliente);
+        ImageView imagenPedido = convertView.findViewById(R.id.imgPedidoCliente);
         Button btnCancelarPedido = convertView.findViewById(R.id.btnCancelarItemPedidoCliente);
+        Button btnConversarVendedor = convertView.findViewById(R.id.btnConvesarVendedor);
+
+        btnConversarVendedor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle parametros = new Bundle();
+                parametros.putString("vendedor", pedido.getIdVendedor());
+                Intent streamingsIntent = new Intent(context, MensajeriaGlobal.class);
+                streamingsIntent.putExtras(parametros);
+                context.startActivity(streamingsIntent);
+            }
+        });
 
         databaseReference.child("Vendedor").child(pedido.getIdVendedor()).addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
@@ -77,8 +116,16 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
                     precio.setText(pedido.getPrecioProducto()+"");
                     descripcion.setText(pedido.getDescripcionProducto());
                     nombreVendedor.setText(snapshot.getValue(Vendedor.class).getNombre());
-                }
+                    fechaPedido.setText(pedido.getFechaPedido().getDate() +"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear());
+                    fechaFinalPedido.setText(pedido.getFechaFinalPedido().getDate() +"/"+pedido.getFechaFinalPedido().getMonth()+"/"+pedido.getFechaFinalPedido().getYear());
+                    storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Picasso.with(context).load(uri).into(imagenPedido);
+                        }
+                    });
 
+                }
             }
 
             @Override

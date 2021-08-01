@@ -7,13 +7,14 @@ import com.aplicacion.envivoapp.modelos.Vendedor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
@@ -37,14 +38,7 @@ public class DataVendedor extends AppCompatActivity {
     private Button guardar;
 
     //botones del toolbar
-    private Button mensajeria;
-    private Button listarLocal;
-    private Button perfil ;
-    private Button pedido ;
-    private Button videos;
-    private Button salir;
-
-
+    private Toolbar dataVendedor;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -64,6 +58,7 @@ public class DataVendedor extends AppCompatActivity {
         telefono = findViewById(R.id.txtTelefono);
         diasEsperaCancelacion = findViewById(R.id.txtNumeroDiasCancelacion);
         guardar = findViewById(R.id.btnGuardar);
+        dataVendedor = findViewById(R.id.toolbar_DataVendedor);
 
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +83,7 @@ public class DataVendedor extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {//evaluamos si los datos se guardaron satisfactoriamente
                             Toast.makeText(DataVendedor.this, "Los datos se han guardado correctamente", Toast.LENGTH_LONG).show();
-                            Intent dataVendedor = new Intent(DataVendedor.this, DataLocal.class);
+                            Intent dataVendedor = new Intent(DataVendedor.this, HomeVendedor.class);
                             startActivity(dataVendedor);
                         }
                     }).addOnFailureListener(new OnFailureListener() { //evaluamos si a ocurrido algun error al guardar los datos
@@ -105,21 +100,25 @@ public class DataVendedor extends AppCompatActivity {
 
         //cargamos el toolbar
         //le damos funcionalidad al toolbar
-        mensajeria = findViewById(R.id.btnMensajeriaGlobalDataVendedor);
-        listarLocal = findViewById(R.id.btnListarLocalDataVendedor);
-        perfil = findViewById(R.id.btnPerfilVendedorDataVendedor);
-        pedido = findViewById(R.id.btnPedidoDataVendedor);
-        videos = findViewById(R.id.btnVideosDataVendedor);
-        salir = findViewById(R.id.btnSalirDataVendedor);
+        Button mensajeria = findViewById(R.id.btnMensajeriaGlobalDataVendedor);
+        Button listarLocal = findViewById(R.id.btnListarLocalDataVendedor);
+        Button perfil = findViewById(R.id.btnPerfilVendedorDataVendedor);
+        Button pedido = findViewById(R.id.btnPedidoDataVendedor);
+        Button videos = findViewById(R.id.btnVideosDataVendedor);
+        Button salir = findViewById(R.id.btnSalirDataVendedor);
         Button clientes = findViewById(R.id.btnClientesDataVendedor);
+        Button reporte = findViewById(R.id.btnReporteDataVendedor);
+        Button home = findViewById(R.id.btnHomeVendedorDataVendedor);
 
-        new Utilidades().cargarToolbarVendedor(listarLocal,
+        new Utilidades().cargarToolbarVendedor(home,
+                listarLocal,
                 perfil,
                 pedido,
                 mensajeria,
                 salir,
                 videos,
                 clientes,
+                reporte,
                 DataVendedor.this,
                 firebaseAuth);
     }
@@ -145,24 +144,11 @@ public class DataVendedor extends AppCompatActivity {
                         celular.setText(vendedor.getCelular());
                         telefono.setText(vendedor.getTelefono());
                         diasEsperaCancelacion.setText(vendedor.getDiasEperaCancelacion()+"");
-
-                        mensajeria.setVisibility(View.VISIBLE);
-                        listarLocal.setVisibility(View.VISIBLE);
-                        perfil.setVisibility(View.VISIBLE);
-                        pedido.setVisibility(View.VISIBLE);
-                        videos.setVisibility(View.VISIBLE);
-                        salir.setVisibility(View.VISIBLE);
+                        dataVendedor.setVisibility(View.VISIBLE);
 
                     }else{
                         //desabilitamos los botones
-
-                        mensajeria.setVisibility(View.GONE);
-                        listarLocal.setVisibility(View.GONE);
-                        perfil.setVisibility(View.GONE);
-                        pedido.setVisibility(View.GONE);
-                        videos.setVisibility(View.GONE);
-                        salir.setVisibility(View.GONE);
-
+                        dataVendedor.setVisibility(View.GONE);
                     }
                 }
             }

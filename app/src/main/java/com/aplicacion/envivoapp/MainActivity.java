@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -18,9 +19,11 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.aplicacion.envivoapp.activityParaClientes.DataCliente;
+import com.aplicacion.envivoapp.activityParaClientes.HomeCliente;
 import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
 import com.aplicacion.envivoapp.activitysParaVendedores.DataVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
+import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedor;
 import com.aplicacion.envivoapp.fragmentos.UsuarioTieneCuenta;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Usuario;
@@ -29,9 +32,11 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
@@ -52,25 +57,26 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
 
     private CallbackManager callBackManager;  //crea un administrador de devoluciones de llamada que gestione las respuestas de inicio de sesión.
-    private LoginButton loginButton; //boton para redireccionar el inicio de sesión con facebook
+    private LoginButton loginButton,loginButtonIniciarSesion; //boton para redireccionar el inicio de sesión con facebook
     private  FirebaseAuth firebaseAuth; //alamacena el usuario de firebase
     private  FirebaseAuth.AuthStateListener authStateListener;
-    private Button iniciarSesion;
-    private RadioButton esVendedor,esCliente;
+
+
     private  AccessTokenTracker accessTokenTracker;
 
     private FragmentTransaction fragmentTransaction; //dinamismo para el fragmento
     private Fragment fragmentUsuarioTieneCuenta; //intanciamos los fragmentos
 
 
-    private EditText correo,clave;
+    private CardView cardIniciarSesion, cardCrearCuenta;
+    private Button btnCrearCuenta,btnAtras;
+    private RadioButton esVendedor,esCliente;
+    private Boolean esNuevo = false;
 
 
-    Button guardar;
-
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    Usuario usuario;
+    private FirebaseDatabase firebaseDatabase; //almacena a firebase database de firebase
+    private DatabaseReference databaseReference; //almacena eel database reference de firebase
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,29 +92,62 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance(); //instanciamos el usuario de firebase
 
         loginButton = findViewById(R.id.login_button);//almacenamos el boton de facebook
+        loginButtonIniciarSesion = findViewById(R.id.login_buttonIniciarSesion);
 
-        esVendedor = findViewById(R.id.radioButtonEsVendedor);
-        esCliente = findViewById(R.id.radioButtonEsCliente);
+
+
         fragmentUsuarioTieneCuenta = new UsuarioTieneCuenta();
-        correo = (EditText) findViewById(R.id.txtCorreoUsuario);//probar logeo
-        clave = (EditText) findViewById(R.id.txtClaveUsuario);
-        guardar = (Button) findViewById(R.id.guardarUsuario);
-        iniciarSesion = findViewById(R.id.btnIniciarSesion);
-        usuario = new Usuario();
-        loginButton.setVisibility(View.INVISIBLE);
+
+        esVendedor = findViewById(R.id.radioButtonEsVendedor);//almacena si el usuario es vendedor
+        esCliente = findViewById(R.id.radioButtonEsCliente);//almacena si el usuario es cliente
+        btnCrearCuenta = findViewById(R.id.btnCrearCuenta);
+        btnAtras = findViewById(R.id.btnAtras);
+        cardCrearCuenta = findViewById(R.id.cardCrearCuenta);
+        cardIniciarSesion = findViewById(R.id.cardIniciarSesion);
+        esNuevo = false;
 
 
+        usuario = new Usuario();//incializamos el usuarioo
 
-        esVendedor.setOnClickListener(new View.OnClickListener() {
+        loginButton.setVisibility(View.GONE);//desabilitamos el boton de logeo
+
+
+        //incio de funcionalidad a los checkBox
+        esVendedor.setOnClickListener(new View.OnClickListener() {//en caso de que el usuario seleccione cualquiera de los checkBox
             @Override
             public void onClick(View v) {
                 loginButton.setVisibility(View.VISIBLE);
+            } //habilitamos el boton de logeo
+        });
+        esCliente.setOnClickListener(new View.OnClickListener() {//en caso de que el usuario seleccione cualquiera de los checkBox
+            @Override
+            public void onClick(View v) {
+                loginButton.setVisibility(View.VISIBLE);
+            }//habilitamos el boton de logeo
+        });
+        //fin de funcionalidad a los checkBox
+
+        //escondemos el card view de crear cuenta
+        cardCrearCuenta.setVisibility(View.GONE);
+        //en caso de que el usuario le de click a crear cuenta
+        btnCrearCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cardIniciarSesion.setVisibility(View.GONE);//escondemos el card de iniciar sesion
+                cardCrearCuenta.setVisibility(View.VISIBLE);//mostramos el card de crear cuenta
+                esNuevo = true;
             }
         });
-        esCliente.setOnClickListener(new View.OnClickListener() {
+
+
+
+        //en caso de que el usuario desee regresar
+        btnAtras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginButton.setVisibility(View.VISIBLE);
+                cardCrearCuenta.setVisibility(View.GONE);//escondemos el card de iniciar sesion
+                cardIniciarSesion.setVisibility(View.VISIBLE);//mostramos el card de crear cuenta
+                esNuevo=false;
             }
         });
 
@@ -116,27 +155,52 @@ public class MainActivity extends AppCompatActivity {
         authStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user= firebaseAuth.getCurrentUser();
-                if (user!= null){
+                FirebaseUser user= firebaseAuth.getCurrentUser();//almacena el usuario actual logeado
+                if (user!= null){//en caso de no haber usuario iniciamos el updateUI
                     updateUI(user);
                 }else{
-                    updateUI(null);
+                    updateUI(null);//sino no enviamos nada a update Ui y continuamos con el usuario actual
                 }
             }
         };
 
-        //inicio logeo
-        loginButton.setReadPermissions("email","public_profile");//leemos los permisos del email
-        // If using in a fragment
-        //loginButton.setFragment(MainActivity.this);
-
+        loginButtonIniciarSesion.setReadPermissions("email","public_profile");
         // Callback registration
-        loginButton.registerCallback(callBackManager, new FacebookCallback<LoginResult>() {
+        loginButtonIniciarSesion.registerCallback(callBackManager, new FacebookCallback<LoginResult>() { //hacemos un collback para el registro del usuario
             @Override
             public void onSuccess(LoginResult loginResult) {
                 //
-                Log.d("FacebookAuthentication","OnSuccess"+loginResult);
-                handleFacebookToken(loginResult.getAccessToken());
+
+                Log.d("FacebookAuthentication","OnSuccess"+loginResult); //en caso de ser exitoso imprimimos un mensaje en consola
+                handleFacebookToken(loginResult.getAccessToken()); //llamamos a la funcion handleFacebookToken para el token de facebook
+            }
+
+            @Override
+            public void onCancel() {
+
+                Log.d("FacebookAuthentication","OnCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+                Log.d("FacebookAuthentication","OnError"+error);
+            }
+
+
+        });
+
+        //inicio logeo
+        loginButton.setReadPermissions("email","public_profile");//leemos los permisos del email
+
+
+        // Callback registration
+        loginButton.registerCallback(callBackManager, new FacebookCallback<LoginResult>() { //hacemos un collback para el registro del usuario
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                //
+                Log.d("FacebookAuthentication","OnSuccess"+loginResult); //en caso de ser exitoso imprimimos un mensaje en consola
+                handleFacebookToken(loginResult.getAccessToken()); //llamamos a la funcion handleFacebookToken para el token de facebook
             }
 
             @Override
@@ -157,28 +221,13 @@ public class MainActivity extends AppCompatActivity {
         accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                if (currentAccessToken == null){
+                if (currentAccessToken == null){//en caso de no tener el token salimos de firebase
                     firebaseAuth.signOut();
                 }
             }
         };
 
-
         //fin de logeo
-
-        iniciarSesion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginButton.setVisibility(View.INVISIBLE);
-                esCliente.setChecked(false);
-                esVendedor.setChecked(false);
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.frameUserTieneCuenta,fragmentUsuarioTieneCuenta);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-            }
-        });
 
         inicialiceFirebase();
 
@@ -216,68 +265,60 @@ public class MainActivity extends AppCompatActivity {
     public void buscarUsuario(FirebaseUser firebaseUser){
         if (firebaseAuth.getCurrentUser() != null){
             String usuarioLogeado = firebaseAuth.getCurrentUser().getUid();//obtenemos el uid del usuario logeado
-            Toast.makeText(MainActivity.this,"Usuario existente ",Toast.LENGTH_LONG).show();
-            databaseReference.child("Usuario").child(usuarioLogeado).addValueEventListener(new ValueEventListener() {
+
+            databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        usuario =snapshot.getValue(Usuario.class);
-                        if (usuario.getEsVendedor()){
-                            startActivity(new Intent(MainActivity.this, GestionVideos.class));
-                            finish();//para que el usuario no pueda regresar a activitys anteriores
-                        }else{//buscamos si ya tiene un usuario ingresado
-                            databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()){
-                                        for (DataSnapshot ds:snapshot.getChildren()){
-                                            Cliente cli = ds.getValue(Cliente.class);
-                                            if(cli.getUidUsuario().equals(usuario.getUidUser())){//en caso de ya tener los datos ingresados
-                                                startActivity(new Intent(MainActivity.this, ListarVendedores.class)); //en caso de ya aver ingresado sus datos inciamos listar vendedores
-                                                finish();//para que el usuario no pueda regresar a activitys anteriores
-                                            }else{
-                                                startActivity(new Intent(MainActivity.this, DataCliente.class));//en caso de no haber ingresado los datos iniciamos data cliente
-                                                finish();//para que el usuario no pueda regresar a activitys anteriores
-                                            }
-                                        }
-                                    }else{//en caso de que no exista nada en la base de datos
-                                        if (usuario.getEsVendedor()){
-                                            startActivity(new Intent(MainActivity.this, ListarVendedores.class)); //en caso de ya aver ingresado sus datos inciamos listar vendedores
-                                            finish();//para que el usuario no pueda regresar a activitys anteriores
-                                        }else{
-                                            startActivity(new Intent(MainActivity.this, DataCliente.class));//en caso de no haber ingresado los datos iniciamos data cliente
-                                            finish();//para que el usuario no pueda regresar a activitys anteriores
-                                        }
-                                    }
-
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
+                    if(snapshot.exists()) {
+                        Usuario usuario = null;
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            Usuario usuarioAux = ds.getValue(Usuario.class);
+                            if (usuarioAux.getUidUser().equals(usuarioLogeado)) {
+                                usuario = usuarioAux;
+                            }
                         }
-                    }else{
-                        //if (snapshot.getValue() == null && usuario.getUidUser() == null){//en caso de que no existan elemntos usuario en la base de datos
+                        if (usuario != null) {
+                            if (usuario.getEsVendedor()) {
+                                startActivity(new Intent(MainActivity.this, HomeVendedor.class));
+                                finish();//para que el usuario no pueda regresar a activitys anteriores
+                            } else {//buscamos si ya tiene un usuario ingresado
+                                startActivity(new Intent(MainActivity.this, HomeCliente.class)); //en caso de ya aver ingresado sus datos inciamos listar vendedores
+                                finish();//para que el usuario no pueda regresar a activitys anteriores
+
+                            }
+                        }else if(usuario == null && esNuevo){
+                            //if (snapshot.getValue() == null && usuario.getUidUser() == null){//en caso de que no existan elemntos usuario en la base de datos}
+                            usuario = new Usuario();
                             usuario.setEmail(firebaseUser.getEmail());//seteamos el email
                             usuario.setEsVendedor(esVendedor.isChecked());// seteamos si es o no vendedor
                             usuario.setUidUser(firebaseUser.getUid());//seteamos el usuario
+                            usuario.setImagen(firebaseUser.getPhotoUrl().toString());
 
-                            databaseReference.child("Usuario").child(usuario.getUidUser()).setValue(usuario);//almacenamos los datos en firebase
-                            Toast.makeText(MainActivity.this,"guardado con exito",Toast.LENGTH_LONG).show();
+                            Usuario finalUsuario = usuario;
+                            databaseReference.child("Usuario").child(usuario.getUidUser()).setValue(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    if (finalUsuario.getEsVendedor()){
+                                        startActivity(new Intent(MainActivity.this, DataVendedor.class));
 
-                            if (usuario.getEsVendedor()){
-                                startActivity(new Intent(MainActivity.this, DataVendedor.class));
+                                    }else{
+                                        startActivity(new Intent(MainActivity.this, DataCliente.class));
+                                        //finish(); //para que el usuario no pueda regresar a activitys anteriores
+                                    }
+                                    Toast.makeText(MainActivity.this,"guardado con exito",Toast.LENGTH_LONG).show();
+                                }
+                            });//almacenamos los datos en firebase
 
-                            }else{
-                                startActivity(new Intent(MainActivity.this, DataCliente.class));
-                                //finish(); //para que el usuario no pueda regresar a activitys anteriores
-                            }
-                        //}
+                            //}
+                        }else{
+                            Toast.makeText(MainActivity.this,"Usted no tiene una cuenta registrada porfavor cree una", Toast.LENGTH_LONG).show();
+                            FirebaseAuth.getInstance().signOut();
+                            LoginManager.getInstance().logOut();
+                        }
+
                     }
+
+
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -290,34 +331,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser firebaseUser){
         if (firebaseUser!=null ) { //een caso de no exitir conexion con firebase
-            databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
+            databaseReference.child("Usuario").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists() ){
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists() ){
                         buscarUsuario(firebaseUser);
-
-                    }else{
-                        if (snapshot.getValue() == null && usuario.getUidUser() == null){//en caso de que no existan elemntos usuario en la base de datos
-                            usuario.setEmail(firebaseUser.getEmail());//seteamos el email
-                            usuario.setEsVendedor(esVendedor.isChecked());// seteamos si es o no vendedor
-                            usuario.setUidUser(firebaseUser.getUid());//seteamos el usuario
-
-                            databaseReference.child("Usuario").child(usuario.getUidUser()).setValue(usuario);//almacenamos los datos en firebase
-                            Toast.makeText(MainActivity.this,"guardado con exito",Toast.LENGTH_LONG).show();
-
-                            if (usuario.getEsVendedor()){
-                                startActivity(new Intent(MainActivity.this, DataVendedor.class));
-
-                            }else{
-                                startActivity(new Intent(MainActivity.this, DataCliente.class));
-                                //finish(); //para que el usuario no pueda regresar a activitys anteriores
-                            }
-                        }
                     }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
             /*//añadimos la imagen al text view

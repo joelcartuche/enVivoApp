@@ -14,12 +14,13 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.aplicacion.envivoapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,10 +72,12 @@ public class DataCliente extends AppCompatActivity {
         Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_DataCliente);
         Button btnPerfil = findViewById(R.id.btn_perfil_DataClienter);
         Button btnPedido = findViewById(R.id.btn_carrito_DataCliente);
-        Button btnSalir = findViewById(R.id.btn_perfil_DataClienter);
+        Button btnSalir = findViewById(R.id.btn_salir_DataCliente);
         Button btnMensje = findViewById(R.id.btnMensajeriaGlobalDataCliente);
+        Button btnHome = findViewById(R.id.btn_Home_Data_Clinte);
 
-        new Utilidades().cargarToolbar(btnListarVendedore,
+        new Utilidades().cargarToolbar(btnHome,
+                btnListarVendedore,
                 btnPerfil,
                 btnPedido,
                 btnSalir,
@@ -113,7 +116,7 @@ public class DataCliente extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(DataCliente.this,"Datos guardados con éxito",Toast.LENGTH_LONG).show();
-                            Intent listarIntent = new Intent(DataCliente.this, ListarVendedores.class);
+                            Intent listarIntent = new Intent(DataCliente.this, HomeCliente.class);
                             startActivity(listarIntent);
                         }
                     }).addOnFailureListener(new OnFailureListener() {

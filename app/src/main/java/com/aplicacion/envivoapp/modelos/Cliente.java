@@ -1,5 +1,8 @@
 package com.aplicacion.envivoapp.modelos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cliente {
     private String idCliente;
     private String nombre;
@@ -13,6 +16,8 @@ public class Cliente {
     public Cliente() {
         this.bloqueado = false;
     }
+
+
 
     public Boolean getBloqueado() {
         return bloqueado;

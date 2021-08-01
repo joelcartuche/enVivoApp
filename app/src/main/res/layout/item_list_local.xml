@@ -36,9 +36,7 @@
             <TextView
                 android:id="@+id/txtNombreLocal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -50,9 +48,7 @@
             <TextView
                 android:id="@+id/txtDireccionLocal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -65,8 +61,7 @@
                 android:id="@+id/txtTelefonoLocal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="N/A"
-                android:textSize="18sp" />
+                android:text="N/A" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -79,8 +74,7 @@
                 android:id="@+id/txtCelularLocal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="N/A"
-                android:textSize="18sp" />
+                android:text="N/A" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

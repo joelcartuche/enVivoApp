@@ -76,8 +76,6 @@ public class AdapterListarVendedores extends BaseAdapter {
         telefonoVendedor.setText(vendedor.getTelefono());
         celularVendedor.setText(vendedor.getCelular());
 
-
-
         return view; //retornamos la vista
     }
 }

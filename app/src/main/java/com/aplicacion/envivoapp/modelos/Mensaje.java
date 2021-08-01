@@ -15,6 +15,8 @@ public class Mensaje {
     private Boolean canceloPedido;
     private Boolean cambioPedido;
     private Boolean esGlobal;
+    private Boolean esClienteBloqueado;
+    private String imagen;
 
     public Mensaje() {
         this.pedidoAceptado = false;
@@ -23,6 +25,24 @@ public class Mensaje {
         this.canceloPedido = false;
         this.cambioPedido = false;
         this.esGlobal = false;
+        this.esClienteBloqueado = false;
+        this.imagen=null;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public Boolean getEsClienteBloqueado() {
+        return esClienteBloqueado;
+    }
+
+    public void setEsClienteBloqueado(Boolean esClienteBloqueado) {
+        this.esClienteBloqueado = esClienteBloqueado;
     }
 
     public Boolean getEsGlobal() {

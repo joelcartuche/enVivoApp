@@ -32,6 +32,7 @@ import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.utilidades.RetornoParametroCliente;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -99,7 +100,10 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
         Button btnSalir = findViewById(R.id.btn_salir_ListarVendedor);
         Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarVendedor);
 
-        new Utilidades().cargarToolbar(btnListarVendedore,
+        Button btnHome = findViewById(R.id.btn_Home_Listar_Vendedores);
+
+        new Utilidades().cargarToolbar(btnHome,
+                btnListarVendedore,
                 btnPerfil,
                 btnPedido,
                 btnSalir,
@@ -118,10 +122,10 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                         Vendedor vendedor = ds.getValue(Vendedor.class);//obtenemos el objeto video streaming
                         listVendedor.add(vendedor);
-                        //Inicialisamos el adaptador
-                        adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this,listVendedor,databaseReference);
-                        listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
                     }
+                    //Inicialisamos el adaptador
+                    adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this,listVendedor,databaseReference);
+                    listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
                 }else{
                     listVendedor.clear();//borramos los datos ya que no hay nada en la base
                     //Inicialisamos el adaptador
@@ -138,12 +142,18 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
     @Override
     public void resultado(Boolean isVerStreamings, Vendedor vendedor) {
         if(isVerStreamings){
-            databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
+            databaseReference.child("Cliente").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()){
-                        for ( DataSnapshot ds : snapshot.getChildren()) {
-                            Cliente cliente = ds.getValue(Cliente.class);//obtenemos el objeto video streaming
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        Cliente cliente =null;
+                        for ( DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Cliente clienteAux = ds.getValue(Cliente.class);//obtenemos el objeto cliente
+                            if (clienteAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
+                                cliente= clienteAux;
+                            }
+                        }
+                        if (cliente !=null){
                             Bundle parametros = new Bundle();
                             parametros.putString("vendedor",vendedor.getIdVendedor());
                             parametros.putString("cliente",cliente.getIdCliente());
@@ -152,9 +162,6 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
                             startActivity(streamingsIntent);
                         }
                     }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
         }

@@ -131,14 +131,19 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
         Button videos = findViewById(R.id.btnVideosDataLocal);
         Button salir = findViewById(R.id.btnSalirDataLocal);
         Button clientes = findViewById(R.id.btnClientesDataLocal);
+        Button reporte = findViewById(R.id.btnReporteDataLocal);
+        Button home = findViewById(R.id.btnHomeVendedorDataLocal);
 
-        new Utilidades().cargarToolbarVendedor(listarLocal,
+
+        new Utilidades().cargarToolbarVendedor(home,
+                listarLocal,
                 perfil,
                 pedido,
                 mensajeria,
                 salir,
                 videos,
                 clientes,
+                reporte,
                 DataLocal.this,
                 firebaseAuth);
 

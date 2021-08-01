@@ -69,6 +69,15 @@
                             android:orientation="horizontal">
 
                             <Button
+                                android:id="@+id/btnHomeVendedorGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_home"
+                                android:text="Home"
+                                android:textSize="8sp" />
+
+                            <Button
                                 android:id="@+id/btnListarLocalGestionVideos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -113,6 +122,16 @@
                                 android:text="Clientes"
                                 android:textSize="8sp" />
 
+                            <Button
+                                android:id="@+id/btnReporteGestionVideos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="?android:attr/actionModeFindDrawable"
+                                android:text="Reportes"
+                                android:textSize="8sp" />
+
+
 
                             <Button
                                 android:id="@+id/btnSalirGestionVideos"
@@ -140,6 +159,39 @@
         android:text="Agregar Streaming"
         app:backgroundTint="#FF6D00"
         app:icon="@android:drawable/ic_menu_add" />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView75"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filtrar por:" />
+
+        <RadioButton
+            android:id="@+id/radioAnadidoStreaming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Añadidos  " />
+
+        <RadioButton
+            android:id="@+id/radioEliminadosStreamings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminados  " />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/busquedaStreamingsGestionVideos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:ems="10"
+        android:hint="Búsqueda"
+        android:inputType="textPersonName" />
 
     <GridView
         android:id="@+id/listStreaming"

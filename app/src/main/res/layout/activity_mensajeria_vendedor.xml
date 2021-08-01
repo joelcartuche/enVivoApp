@@ -69,6 +69,15 @@
                             android:orientation="horizontal">
 
                             <Button
+                                android:id="@+id/btnHomeVendedorMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_home"
+                                android:text="Home"
+                                android:textSize="8sp" />
+
+                            <Button
                                 android:id="@+id/btnListarLocalMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -113,6 +122,15 @@
                                 android:textSize="8sp" />
 
                             <Button
+                                android:id="@+id/btnReporteMensajeriaVendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="?android:attr/actionModeFindDrawable"
+                                android:text="Reportes"
+                                android:textSize="8sp"/>
+
+                            <Button
                                 android:id="@+id/btnSalirMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -148,8 +166,8 @@
 
         <GridView
             android:id="@+id/gridMensajeVendedor"
-            android:layout_width="392dp"
-            android:layout_height="260dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:gravity="center"
             android:horizontalSpacing="0dp"
             android:numColumns="1"
@@ -162,8 +180,8 @@
 
         <EditText
             android:id="@+id/txtMensajeVendedor"
-            android:layout_width="296dp"
-            android:layout_height="43dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:inputType="textPersonName"
@@ -209,8 +227,8 @@
 
         <RadioGroup
             android:id="@+id/radioGroup2"
-            android:layout_width="376dp"
-            android:layout_height="56dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
             android:orientation="horizontal"

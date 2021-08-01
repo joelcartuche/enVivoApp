@@ -58,6 +58,15 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/btn_Home_Mensajeria_Global"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_home"
+                        android:text="Home"
+                        android:textSize="8sp" />
+
+                    <Button
                         android:id="@+id/btn_listar_vendedores_MensajeriaGlobal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -117,6 +126,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:id="@+id/btnImagenGlobalMensajeria"
+            android:layout_width="62dp"
+            android:layout_height="46dp"
+            app:icon="@android:drawable/ic_menu_gallery"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txtMensajeMensajeriaGlobal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridMensajeriaGlobal" />
+
         <GridView
             android:id="@+id/gridMensajeriaGlobal"
             android:layout_width="0dp"
@@ -131,26 +150,25 @@
         <EditText
             android:id="@+id/txtMensajeMensajeriaGlobal"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="47dp"
             android:layout_marginTop="4dp"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnEnviarMensajeriaGlobal"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gridMensajeriaGlobal" />
+            app:layout_constraintStart_toEndOf="@+id/btnImagenGlobalMensajeria"
+            app:layout_constraintTop_toBottomOf="@+id/gridMensajeriaGlobal"
+            app:layout_constraintVertical_bias="0.47" />
 
         <Button
             android:id="@+id/btnEnviarMensajeriaGlobal"
-            android:layout_width="74dp"
-            android:layout_height="67dp"
+            android:layout_width="61dp"
+            android:layout_height="54dp"
             android:layout_marginTop="4dp"
-            android:foreground="@android:drawable/ic_menu_send"
+            app:icon="@android:drawable/ic_menu_send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/txtMensajeMensajeriaGlobal"
             app:layout_constraintTop_toBottomOf="@+id/gridMensajeriaGlobal" />
     </androidx.constraintlayout.widget.ConstraintLayout>

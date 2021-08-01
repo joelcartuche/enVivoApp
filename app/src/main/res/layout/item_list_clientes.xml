@@ -24,34 +24,79 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="3dp">
+            android:padding="12dp">
 
-            <TextView
-                android:id="@+id/txtINombreClienteItemListClientes"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="18sp" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/txtTelefonoClienteItemListClientes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/textView64"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre: " />
 
-            <TextView
-                android:id="@+id/txtCelularClienteItemListClientes"
+                <TextView
+                    android:id="@+id/txtINombreClienteItemListClientes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textSize="18sp" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView65"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono: " />
+
+                <TextView
+                    android:id="@+id/txtTelefonoClienteItemListClientes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView66"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Celular: " />
+
+                <TextView
+                    android:id="@+id/txtCelularClienteItemListClientes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnBloquearClienteItemListClientes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bloquear Cliente" />
+                android:text="Bloquear Cliente"
+                app:backgroundTint="#D50000" />
+
+            <Button
+                android:id="@+id/btnDesbloquearCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Desbloquear Cliente"
+                app:backgroundTint="#00C853" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

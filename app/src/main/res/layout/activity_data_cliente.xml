@@ -62,6 +62,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+
+                    <Button
+                        android:id="@+id/btn_Home_Data_Clinte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_home"
+                        android:text="Home"
+                        android:textSize="8sp" />
+
                     <Button
                         android:id="@+id/btn_listar_vendedores_DataCliente"
                         android:layout_width="wrap_content"
@@ -108,7 +118,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="12dp">
 
         <TextView
             android:id="@+id/textView27"

@@ -1,39 +1,65 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activitysParaVendedores.ListarClientes;
+import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaGlobalVendedor;
+import com.aplicacion.envivoapp.cuadroDialogo.CuadroCambiarPedido;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCancelarPedidoCliente.resultadoDialogo{
 
     private Context context;
     private List<Pedido> listaPedidoVendedor;
     private DatabaseReference databaseReference;
+    private  Boolean eliminado;
+    private  FirebaseStorage storage;
 
     public AdapterGridPedidoVendedor(Context context,
-                                    List<Pedido> listaPedidoVendedor,
-                                    DatabaseReference databaseReference){
+                                     List<Pedido> listaPedidoVendedor,
+                                     DatabaseReference databaseReference,
+                                     FirebaseStorage storage){
         this.context = context;
         this.listaPedidoVendedor = listaPedidoVendedor;
         this.databaseReference = databaseReference;
+        this.eliminado = eliminado;
+        this.storage = storage;
     }
 
     @Override
@@ -68,37 +94,107 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
         TextView nombreCliente = convertView.findViewById(R.id.txtNombreClienteItemPedidoVendedor);
         Button btnCambiarPedido = convertView.findViewById(R.id.btnCambiarPedidoVendedor);
         Button btnCancelarPedido = convertView.findViewById(R.id.btnCancelarItemPedidoVendedor);
+        Button btnPagado = convertView.findViewById(R.id.btnPagadoPedidoVendedor);
+        Button btnHabilitarPedido = convertView.findViewById(R.id.btnHabilitarPedidoVendedor);
+        Button btnEliminarPedido = convertView.findViewById(R.id.btnEliminarItemPedidoVendedor);
+        ImageView imagenPedido = convertView.findViewById(R.id.imgListPedidoVendedor);
+        Button btnConversarComprador = convertView.findViewById(R.id.btnConversarVendedorListPedidoVendedor);
+        CardView cardView = convertView.findViewById(R.id.cardItemPedidoVendor);
+        ScrollView scrollView = convertView.findViewById(R.id.scrollListPedidoVendedor);
 
+        //hacemos que el scroll baje para que muestre los nuevos datos
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+
+        //damos funcion al boton conversar comprador
+        conversarComprador(btnConversarComprador,position,context);
+
+        //llenamos los textView con los datos correspondientes
         databaseReference.child("Cliente").child(pedido.getIdCliente()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    codigo.setText(pedido.getCodigoProducto());
-                    nombre.setText(pedido.getNombreProducto());
-                    cantidad.setText(pedido.getCantidadProducto()+"");
-                    precio.setText(pedido.getPrecioProducto()+"");
-                    descripcion.setText(pedido.getDescripcionProducto());
-                    nombreCliente.setText(snapshot.getValue(Cliente.class).getNombre());
+                if (snapshot.exists()) {
+                    Cliente cliente = snapshot.getValue(Cliente.class);
+                    if (!cliente.getBloqueado()){
+                        codigo.setText(pedido.getCodigoProducto());
+                        nombre.setText(pedido.getNombreProducto());
+                        cantidad.setText(pedido.getCantidadProducto() + "");
+                        precio.setText(pedido.getPrecioProducto() + "");
+                        descripcion.setText(pedido.getDescripcionProducto());
+                        nombreCliente.setText(cliente.getNombre());
+                        storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.with(context).load(uri).into(imagenPedido);
+                            }
+                        });
+                    }else{
+                        cardView.setVisibility(View.GONE);//para no mostrar los pedidos de clientes bloqueados
+                    }
+
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
-        //Le damos funcionalidad a los botones
-        btnCancelarPedido.setOnClickListener(new View.OnClickListener() {
+        btnPagado.setVisibility(View.GONE);//escondemos el boton de pagado
+        btnHabilitarPedido.setVisibility(View.GONE);
+        btnCambiarPedido.setVisibility(View.GONE);
+        btnEliminarPedido.setVisibility(View.GONE);
+        btnCancelarPedido.setVisibility(View.GONE);
 
-            @Override
-            public void onClick(View v) {/*
-                new CuadroCancelarPedidoCliente(context,
-                        pedido,
-                        databaseReference,
-                        AdapterGridPedidoVendedor.this);//inciamos el cuadro de dialogo cancelar
-                        */
-            }
-        });
+        if (pedido.getAceptado()&& !pedido.getPagado() && !pedido.getCancelado()) {//en caso de ser aceptado el pedido mostramos el boton de pagado
+            btnCambiarPedido.setVisibility(View.VISIBLE);
+            btnPagado.setVisibility(View.VISIBLE);
+            btnCancelarPedido.setVisibility(View.VISIBLE);
+            btnHabilitarPedido.setVisibility(View.GONE);
+            btnEliminarPedido.setVisibility(View.GONE);
+
+            btnCancelarPedido.setText("Cancelar pedido");
+            //fucion de pedido aceptado
+            pedidoAceptado(btnPagado,btnCancelarPedido,btnCambiarPedido,pedido);
+
+        }
+        if(pedido.getPagado() && !pedido.getCancelado() && !pedido.getAceptado()){ //en caso de que el pedido ya este pagado
+            btnCambiarPedido.setVisibility(View.GONE);
+            btnPagado.setVisibility(View.GONE);
+            btnHabilitarPedido.setVisibility(View.VISIBLE);
+            btnCancelarPedido.setVisibility(View.VISIBLE);
+            btnEliminarPedido.setVisibility(View.GONE);
+
+            btnCancelarPedido.setText("Eliminar por completo");//cambiuamos el mensaje del boton a eliminado
+            //funcionalidad de un pedido pagado
+
+            pedidoPagado(btnCancelarPedido,btnHabilitarPedido,pedido);
+
+
+        }
+        if (pedido.getCancelado() && !pedido.getPagado() && !pedido.getAceptado()){
+
+            btnCambiarPedido.setVisibility(View.GONE);
+            btnPagado.setVisibility(View.GONE);
+            btnCancelarPedido.setVisibility(View.GONE);
+            btnHabilitarPedido.setVisibility(View.VISIBLE);
+            btnEliminarPedido.setVisibility(View.VISIBLE);
+
+            btnCambiarPedido.setVisibility(View.GONE);
+            btnPagado.setVisibility(View.GONE);
+
+
+            //funcionalidad de pedido cancelado
+
+            pedidoCancelado(btnEliminarPedido,btnHabilitarPedido,pedido);
+
+        }
+
 
         return convertView;
 
@@ -108,5 +204,203 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
     @Override
     public void resultado(Boolean isAcepatado, Boolean isCancelado) {
 
+    }
+
+    //funcionalidad del boton pagado cuando el pedido esta aceptado
+
+    private void pedidoAceptado(Button btnPagado,Button btnCancelarPedido,Button btnCambiarPedido,Pedido pedido){
+
+        //damos funcionalidad al boton y cambiamos a pagado el pedido
+        btnPagado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pedido.getAceptado()) {
+                    Map<String, Object> pedidoActualizacion = new HashMap<>();
+                    pedidoActualizacion.put("pagado", true);
+                    pedidoActualizacion.put("cancelado", false);
+                    pedidoActualizacion.put("aceptado", false);
+                    pedidoActualizacion.put("eliminado", false);
+                    databaseReference.child("Pedido").child(pedido.getIdPedido()).updateChildren(pedidoActualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(context, "El pedido a sido cambiado a pagado exitosamente", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context, "A ocurrido un error al cambiar a pagado  el pedido", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+        //Le damos funcionalidad a los botones
+        btnCancelarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pedido.getAceptado()) {
+                    new CuadroCancelarPedidoCliente(context,
+                            pedido,
+                            databaseReference,
+                            AdapterGridPedidoVendedor.this);//inciamos el cuadro de dialogo cancelar
+                }
+            }
+        });
+
+        btnCambiarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pedido.getAceptado()) {
+                    new CuadroCambiarPedido(context, pedido, databaseReference);
+                }
+            }
+        });
+
+        //fin
+    }
+
+    //funcionalida parar cuando un pedido ya ha sido pagado
+
+    private  void pedidoPagado(Button btnCancelarPedido,Button btnHabilitarPedido,Pedido pedido){
+
+        btnHabilitarPedido.setText("Pedido no pagado");
+        btnHabilitarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pedido.getPagado()) {
+                    DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Map<String, Object> pedidoActualizacion = new HashMap<>();
+                            pedidoActualizacion.put("eliminado", false);
+                            pedidoActualizacion.put("aceptado", true);
+                            pedidoActualizacion.put("cancelado", false);
+                            pedidoActualizacion.put("pagado", false);
+                            databaseReference.child("Pedido").child(pedido.getIdPedido()).updateChildren(pedidoActualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(context, "El pedido a sido actualizado correctamente", Toast.LENGTH_LONG).show();
+
+                                    } else {
+                                        Toast.makeText(context, "A ocurrido un error al actualizar el pedido", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    new Utilidades().cuadroDialogo(context, confirmar, "Habilitar pedido aceptado", "¿Desea habilitar pedido?");
+                }
+            }
+        });
+
+        btnCancelarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pedido.getPagado()) {
+                    DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Map<String, Object> pedidoActualizacion = new HashMap<>();
+                             //cambiamos la bandera de eliminado a true
+                            pedidoActualizacion.put("pagado", false);
+                            pedidoActualizacion.put("cancelado", false);
+                            pedidoActualizacion.put("aceptado", false);
+                            pedidoActualizacion.put("eliminado", true);
+                            databaseReference.child("Pedido").child(pedido.getIdPedido()).updateChildren(pedidoActualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) { //en caso de que el update sea exitoso
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(context, "El pedido a sido eliminado exitosamente", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(context, "A ocurrido un error al eliminar el pedido", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    new Utilidades().cuadroDialogo(context, confirmar, "Eliminar pedido", "¿Desea eliminar el pedido?");
+                }
+            }
+        });
+
+    }
+
+    //funcionalidad pedido cancelado
+    private  void pedidoCancelado(Button btnCancelarPedido,Button btnHabilitarPedido,Pedido pedido){
+        btnCancelarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pedido.getCancelado()) {
+                    DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Map<String, Object> pedidoActualizacion = new HashMap<>();
+                            pedidoActualizacion.put("pagado", false);
+                            pedidoActualizacion.put("cancelado", false);
+                            pedidoActualizacion.put("aceptado", false);
+                            pedidoActualizacion.put("eliminado", true);
+                            databaseReference.child("Pedido").child(pedido.getIdPedido()).updateChildren(pedidoActualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(context, "El pedido a sido eliminado exitosamente", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(context, "A ocurrido un error al eliminar el pedido", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    new Utilidades().cuadroDialogo(context, confirmar, "Eliminar pedido", "¿Desea eliminar el pedido?");
+                }
+            }
+        });
+
+        btnHabilitarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pedido.getCancelado()) {
+                    DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Map<String, Object> pedidoActualizacion = new HashMap<>();
+                            pedidoActualizacion.put("eliminado", false);
+                            pedidoActualizacion.put("aceptado", true);
+                            pedidoActualizacion.put("cancelado", false);
+                            databaseReference.child("Pedido").child(pedido.getIdPedido()).updateChildren(pedidoActualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(context, "El pedido a sido actualizado correctamente", Toast.LENGTH_LONG).show();
+
+                                    } else {
+                                        Toast.makeText(context, "A ocurrido un error al actualizar el pedido", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
+                    };
+                    new Utilidades().cuadroDialogo(context, confirmar, "Habilitar pedido aceptado", "¿Desea habilitar pedido?");
+                }
+            }
+        });
+    }
+
+    //funcionalidad para conversar con el comprador
+    public void conversarComprador(Button mensajear,int position,Context context){
+        mensajear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle parametros = new Bundle();
+                parametros.putString("cliente", listaPedidoVendedor.get(position).getIdCliente());//enviamos el id para el activity
+                Intent streamingsIntent = new Intent(context,
+                        MensajeriaGlobalVendedor.class);
+                streamingsIntent.putExtras(parametros);
+                context.startActivity(streamingsIntent);
+            }
+        });
     }
 }

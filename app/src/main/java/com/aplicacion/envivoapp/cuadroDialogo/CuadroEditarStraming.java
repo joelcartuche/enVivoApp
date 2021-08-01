@@ -2,15 +2,19 @@ package com.aplicacion.envivoapp.cuadroDialogo;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
@@ -54,18 +58,28 @@ public class CuadroEditarStraming {
         EditText txtEditarUrlVideo = dialog.findViewById(R.id.txtUrlCuadroStreaming);
         EditText txtEditarFechaVideo = dialog.findViewById(R.id.txtFechaCuadroStreaming);
         EditText txtEditarHoraVideo = dialog.findViewById(R.id.txtHoraCuadroStreaming);
+        RadioButton activarVideo = dialog.findViewById(R.id.radioActivarReunion);
+        RadioButton desactivarVideo = dialog.findViewById(R.id.radioDesactivarReunion);
         Button btnGuardarVideo = dialog.findViewById(R.id.btnGuardarCuadroEditarStreaming);
         Button btnActualizarVideo = dialog.findViewById(R.id.btnAgregarStreaming);
         Button btnEliminarVideo = dialog.findViewById(R.id.btnEliminarStreamingCuadroStreraming);
         Button btnCancelarVideo = dialog.findViewById(R.id.btnCancelarCuadroStreamings);
         Button btnIrVideo = dialog.findViewById(R.id.btnIrStreamingCuadroStreraming);
 
+        if (videoStreaming.getIniciado()){
+            activarVideo.setChecked(true);
+            desactivarVideo.setChecked(false);
+        }else{
+            activarVideo.setChecked(false);
+            desactivarVideo.setChecked(true);
+        }
 
-        if (esNuevo){
+        if (esNuevo ){
             btnGuardarVideo.setVisibility(View.VISIBLE);
             btnActualizarVideo.setVisibility(View.GONE);
             btnEliminarVideo.setVisibility(View.GONE);
             btnIrVideo.setVisibility(View.GONE);
+
         }else{
             btnGuardarVideo.setVisibility(View.GONE);
             btnActualizarVideo.setVisibility(View.VISIBLE);
@@ -115,6 +129,7 @@ public class CuadroEditarStraming {
                                         videoStreaming.setFechaTransmision(fechaTransmision);//seteamos la fecha de trasmision
                                         videoStreaming.setIdVideoStreaming(UUID.randomUUID().toString()); //seteamos el id
                                         videoStreaming.setIdVendedor(vendedor.getIdVendedor()); //seteamos el uid del vendedor
+                                        videoStreaming.setIniciado(activarVideo.isChecked());
                                         reference.child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).setValue(videoStreaming).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -125,6 +140,7 @@ public class CuadroEditarStraming {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Toast.makeText(context, "A ocurrido un error al guardar los datos", Toast.LENGTH_LONG).show();
+                                                Log.w("Error guardar","A ocurrido un error",e);
                                             }
                                         });
 
@@ -173,6 +189,7 @@ public class CuadroEditarStraming {
                 videoStreamingMap.put("urlVideoStreaming",txtEditarUrlVideo.getText().toString());//setiamos el url del video
                 videoStreamingMap.put("fechaTransmision",fechaTransmision);//seteamos la fecha de trasmision
                 videoStreamingMap.put("idVideoStreaming",videoStreaming.getIdVideoStreaming());//seteamos el id
+                videoStreamingMap.put("iniciado",activarVideo.isChecked());
                 firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).updateChildren(videoStreamingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -187,28 +204,149 @@ public class CuadroEditarStraming {
 
             }
         });
-        btnEliminarVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+        if (videoStreaming != null) {
+            if (!videoStreaming.getEliminado()) {//en caso de que el video no este eliminado
+                btnGuardarVideo.setVisibility(View.GONE);
+                btnActualizarVideo.setVisibility(View.VISIBLE);
+                btnEliminarVideo.setVisibility(View.VISIBLE);
+                btnIrVideo.setVisibility(View.VISIBLE);
+
+                btnEliminarVideo.setText("Eliminar");
+                btnEliminarVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(context, "Datos eliminados con exito", Toast.LENGTH_LONG).show();
-                        interfaceResultadoDialogo.resultado(true,false,null);
-                        dialog.dismiss();
+                    public void onClick(View v) {
+                        Map<String, Object> actualizacionEstado = new HashMap<>();
+                        actualizacionEstado.put("eliminado", true);
+                        actualizacionEstado.put("iniciado", false);
+                        firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).updateChildren(actualizacionEstado).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(context, "Datos eliminados con exito", Toast.LENGTH_LONG).show();
+                                interfaceResultadoDialogo.resultado(true, false, null);
+                                dialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, "No se pudo eliminar el dato intentelo de nuevo", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                });
+
+            } else if(videoStreaming.getEliminado()) { //en caso de que el video este eliminado
+
+                btnGuardarVideo.setVisibility(View.VISIBLE);
+                btnActualizarVideo.setVisibility(View.GONE);
+                btnEliminarVideo.setVisibility(View.VISIBLE);
+                btnIrVideo.setVisibility(View.GONE);
+
+
+                //no dejamos que se editen los datos si el video esta eliminado
+                txtEditarUrlVideo.setFocusable(false);
+                txtEditarUrlVideo.setEnabled(false);
+                txtEditarFechaVideo.setFocusable(false);
+                txtEditarFechaVideo.setEnabled(false);
+                txtEditarHoraVideo.setFocusable(false);
+                txtEditarHoraVideo.setEnabled(false);
+                if (videoStreaming.getIniciado()){
+                    activarVideo.setChecked(true);
+                    desactivarVideo.setChecked(false);
+                }else{
+                    activarVideo.setChecked(false);
+                    desactivarVideo.setChecked(true);
+                }
+
+                btnEliminarVideo.setText("Eliminar por completo");
+                btnGuardarVideo.setText("Recuperar video");
+                btnEliminarVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "No se pudo eliminar el dato intentelo de nuevo", Toast.LENGTH_LONG).show();
+                    public void onClick(View v) {
+                        DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {//creamos la accion de confirmacion para la eliminacion
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        //inicio de bloqueo de mensajes
+                                        reference.child("Mensaje").addValueEventListener(new ValueEventListener() {//bloqueamos los mensajes del cliente
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                if (snapshot.exists()){
+                                                    for (DataSnapshot ds: snapshot.getChildren()){
+                                                        Mensaje mensaje= ds.getValue(Mensaje.class);
+                                                        if (mensaje.getIdStreaming().equals(videoStreaming.getIdVideoStreaming())){
+                                                            Map<String,Object> bloqueoCliente = new HashMap<>();
+                                                            bloqueoCliente.put("esClienteBloqueado",true);//actualizamos el estado bloqueado de los mensajes del cliente
+                                                            reference.child("Mensaje").child(mensaje.getIdMensaje()).updateChildren(bloqueoCliente).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Toast.makeText(context,"Bloqueando mensajes...",Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Toast.makeText(context,"Error al Bloquer los mensajes",Toast.LENGTH_LONG).show();
+
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                    Toast.makeText(context, "Datos borrados con exito", Toast.LENGTH_LONG).show();
+                                                    interfaceResultadoDialogo.resultado(true, false, null);
+                                                    dialog.dismiss();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                                Log.w("Error bloqueo","Error al bloquear los mensajes",error.toException());
+                                            }
+                                        });
+
+                                        //fin de bloqueo de mensajes
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(context, "No se pudo eliminar el dato intentelo de nuevo", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        };
+                        new Utilidades().cuadroDialogo(context, confirmar, "Eliminación total", "¿Desea eliminar por completo los datos?\nLos mensajes del streaming no se podran volver a visualizar pero los pedidos aceptados no seran alterados");
+                    }
+                });
+                //le damos funcionalidad a guardar video para regresar el video
+                btnGuardarVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Map<String, Object> actualizacionEstado = new HashMap<>();
+                        actualizacionEstado.put("iniciado", false);
+                        actualizacionEstado.put("eliminado", false);
+                        firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).updateChildren(actualizacionEstado).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(context, "Datos recuperados con exito", Toast.LENGTH_LONG).show();
+                                interfaceResultadoDialogo.resultado(true, false, null);
+                                dialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, "No se pudo eliminar el dato intentelo de nuevo", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 });
             }
-        });
-
+        }
         btnIrVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 interfaceResultadoDialogo.resultado(false,true,videoStreaming);
                 dialog.dismiss();
             }

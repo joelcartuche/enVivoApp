@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
@@ -22,6 +23,7 @@ import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -81,99 +83,152 @@ public class ListarClientes extends AppCompatActivity {
         Button videos = findViewById(R.id.btnVideosListarClientes);
         Button salir = findViewById(R.id.btnSalirListarClientes);
         Button clientes = findViewById(R.id.btnClientesDataListarClientes);
+        Button reporte = findViewById(R.id.btnReporteListarClientes);
+        Button home = findViewById(R.id.btnHomeVendedorListarClientes);
 
-        new Utilidades().cargarToolbarVendedor(listarLocal,
+        new Utilidades().cargarToolbarVendedor(home,
+                listarLocal,
                 perfil,
                 pedido,
                 mensajeria,
                 salir,
                 videos,
                 clientes,
+                reporte,
                 ListarClientes.this,
                 firebaseAuth);
 
 
     }
 
+    public  void borrarGrid(){
+        listCliente.clear();
+        //Inicialisamos el adaptador
+        adapterListCliente = new AdapterListarClientes(ListarClientes.this,listCliente,databaseReference,esMensajeGlobal);
+        listaClienteView.setAdapter(adapterListCliente); //configuramos el view
+    }
+
     public void listarVendedores(){
-        databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    listCliente.clear();//borramos en caso de quedar algo en la cache
-                    for (final DataSnapshot ds : snapshot.getChildren()) {
-                        Cliente cliente = ds.getValue(Cliente.class);//obtenemos el objeto video streaming
-                        if (cliente!=null && !cliente.getBloqueado() && esMensajeGlobal.equals("1") ){ //en caso de haber un cliente bloqueado no se muestra el cliente en la mensajeria
-                            //buscamos si el cliente a realizado un mensaje al vendedor
-                            databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()){
-                                        Mensaje mensaje = null;
-                                        for (DataSnapshot ds:snapshot.getChildren()){//visualizar que cliente a enviado un mensaje al vendedor
-                                            Mensaje mensajeAux = ds.getValue(Mensaje.class);
-                                            if (mensajeAux.getIdcliente().equals(cliente.getIdCliente())
-                                                    && mensajeAux.getEsGlobal()){
-                                                mensaje = mensajeAux;
-                                                break;
-                                            }
-                                        }
-                                        if (mensaje!=null){
-                                            listCliente.add(cliente);
-                                            //Inicialisamos el adaptador
-                                            adapterListCliente = new AdapterListarClientes(ListarClientes.this,listCliente,databaseReference,esMensajeGlobal);
-                                            listaClienteView.setAdapter(adapterListCliente); //configuramos el view
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                        }else{//listamos todos los clientes
-                            //buscamos si el cliente a realizado un mensaje al vendedor
-                            databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()){
-                                        Mensaje mensaje = null;
-                                        for (DataSnapshot ds:snapshot.getChildren()){//visualizar que cliente a enviado un mensaje al vendedor
-                                            Mensaje mensajeAux = ds.getValue(Mensaje.class);
-                                            if (mensajeAux.getIdcliente().equals(cliente.getIdCliente())
-                                                    && mensajeAux.getEsGlobal()){
-                                                mensaje = mensajeAux;
-                                                break;
-                                            }
-                                        }
-                                        if (mensaje!=null){
-                                            listCliente.add(cliente);
-                                            //Inicialisamos el adaptador
-                                            adapterListCliente = new AdapterListarClientes(ListarClientes.this,listCliente,databaseReference,esMensajeGlobal);
-                                            listaClienteView.setAdapter(adapterListCliente); //configuramos el view
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
+                if (snapshot.exists()){
+                    Vendedor vendedor = null;
+                    for (DataSnapshot ds:snapshot.getChildren()){
+                        Vendedor vendedorAux = ds.getValue(Vendedor.class);
+                        if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
+                            vendedor=vendedorAux;
                         }
                     }
+                    if (vendedor!= null){
+                        borrarGrid();
+                        Vendedor finalVendedor = vendedor;
+                        databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    for (final DataSnapshot ds : snapshot.getChildren()) {
+                                        Cliente cliente = ds.getValue(Cliente.class);//obtenemos el objeto video streaming
+                                        if (cliente!=null
+                                                && !cliente.getBloqueado()
+                                                && esMensajeGlobal.equals("1")){ //en caso de haber un cliente bloqueado no se muestra el cliente en la mensajeria
+                                            //buscamos si el cliente a realizado un mensaje al vendedor
+                                            databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    if (snapshot.exists()){
+                                                        Mensaje mensaje = null;
+                                                        for (DataSnapshot ds:snapshot.getChildren()){//visualizar que cliente a enviado un mensaje al vendedor
+                                                            Mensaje mensajeAux = ds.getValue(Mensaje.class);
+                                                            if (mensajeAux.getIdcliente().equals(cliente.getIdCliente())
+                                                                    && mensajeAux.getIdvendedor().equals(finalVendedor.getIdVendedor())
+                                                                    && mensajeAux.getEsGlobal()){
+                                                                mensaje = mensajeAux;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (mensaje!=null){
+                                                            int cont = -1;
+                                                            cont = listCliente.indexOf(cliente);
+                                                            if (cont == -1){
+                                                                listCliente.add(cliente);
+                                                                //Inicialisamos el adaptador
+                                                                adapterListCliente = new AdapterListarClientes(ListarClientes.this,listCliente,databaseReference,esMensajeGlobal);
+                                                                listaClienteView.setAdapter(adapterListCliente); //configuramos el view
+                                                            }
 
-                }else{
-                    listCliente.clear();//borramos los datos ya que no hay nada en la base
-                    //Inicialisamos el adaptador
-                    adapterListCliente = new AdapterListarClientes(ListarClientes.this,listCliente,databaseReference,esMensajeGlobal);
-                    listaClienteView.setAdapter(adapterListCliente); //configuramos el view
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                        }else{//listamos todos los clientes
+                                            //buscamos si el cliente a realizado un mensaje al vendedor
+                                            if (cliente!=null
+                                                    && esMensajeGlobal.equals("0")) {
+                                                databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        if (snapshot.exists()) {
+                                                            Mensaje mensaje = null;
+                                                            for (DataSnapshot ds : snapshot.getChildren()) {//visualizar que cliente a enviado un mensaje al vendedor
+                                                                Mensaje mensajeAux = ds.getValue(Mensaje.class);
+                                                                if (mensajeAux.getIdcliente().equals(cliente.getIdCliente())
+                                                                        && mensajeAux.getIdvendedor().equals(finalVendedor.getIdVendedor())) {
+                                                                    mensaje = mensajeAux;
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if (mensaje != null) {
+                                                                int cont = -1;
+                                                                cont = listCliente.indexOf(cliente);
+                                                                if (cont == -1){
+                                                                    listCliente.add(cliente);
+                                                                    //Inicialisamos el adaptador
+                                                                    adapterListCliente = new AdapterListarClientes(ListarClientes.this,listCliente,databaseReference,esMensajeGlobal);
+                                                                    listaClienteView.setAdapter(adapterListCliente); //configuramos el view
+                                                                }
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+                                            }
+
+                                        }
+                                    }
+
+                                }else {
+                                    Toast.makeText(ListarClientes.this,"ERRRRRRrorrrrrr",Toast.LENGTH_SHORT).show();
+                                    borrarGrid();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
+
+
+
     }
 }

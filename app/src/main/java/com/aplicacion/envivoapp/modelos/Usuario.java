@@ -1,11 +1,23 @@
 package com.aplicacion.envivoapp.modelos;
 
+import android.net.Uri;
+
 public class Usuario {
     private String email;
     private String uidUser;
+    private String imagen;
     private Boolean esVendedor;
 
     public Usuario() {
+    }
+
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public String getUidUser() {

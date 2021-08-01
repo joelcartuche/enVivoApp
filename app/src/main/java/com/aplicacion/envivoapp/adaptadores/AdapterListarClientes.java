@@ -75,79 +75,84 @@ public class AdapterListarClientes extends BaseAdapter {
         TextView telefonoCliente = convertView.findViewById(R.id.txtTelefonoClienteItemListClientes);
         TextView celularCliente = convertView.findViewById(R.id.txtCelularClienteItemListClientes);
         Button btnbloquerCliente = convertView.findViewById(R.id.btnBloquearClienteItemListClientes);
+        Button btnDesbloquearCliente = convertView.findViewById(R.id.btnDesbloquearCliente);
+        nombreCliente.setText(cliente.getNombre());
+        telefonoCliente.setText(cliente.getTelefono());
+        celularCliente.setText(cliente.getCelular());
         if (esMensajeGlobal.equals("1")){
             btnbloquerCliente.setVisibility(View.GONE);
+            btnDesbloquearCliente.setVisibility(View.GONE);
         }
         if (esMensajeGlobal.equals("0")){//en caso de que se desee listar al los clientes bloqueados
-            if (cliente.getBloqueado()) {//seteamos el mensje y color del boton
-                btnbloquerCliente.setText("Desbloquear cliente");
-                btnbloquerCliente.setBackgroundColor(Color.parseColor("#4CAF50"));
-            }else{
-                btnbloquerCliente.setText("Bloquer cliente");
-                btnbloquerCliente.setBackgroundColor(Color.parseColor("#FF1744"));
-            }
+            if (!cliente.getBloqueado()) {//seteamos el mensje y color del boton
+                btnDesbloquearCliente.setVisibility(View.GONE);
+                btnbloquerCliente.setVisibility(View.VISIBLE);
 
-            btnbloquerCliente.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (cliente.getBloqueado()){
-
+                btnbloquerCliente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         DialogInterface.OnClickListener dialogDesbloqueo = new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Map<String,Object> bloqueo = new HashMap<>();
-                                bloqueo.put("bloqueado",false);//actualizamos el estado bloqueado del cliente
-                                databaseReference.child("cliente").child(cliente.getIdCliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(context,"El cliente fue desbloqueado con éxito",Toast.LENGTH_LONG).show();
-                                        dialog.dismiss();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(context,"Error al bloquear el usuario",Toast.LENGTH_LONG).show();
-                                        dialog.dismiss();
-                                    }
-                                });
-
-                            }
-                        };
-                        new Utilidades().cuadroDialogo(context,dialogDesbloqueo,"Desbloquear cliente","¿Desea desbloquearlo al cliente?");
-
-                    }else{
-
-                        DialogInterface.OnClickListener dialogBloqueo = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Map<String,Object> bloqueo = new HashMap<>();
                                 bloqueo.put("bloqueado",true);//actualizamos el estado bloqueado del cliente
-                                databaseReference.child("cliente").child(cliente.getIdCliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                databaseReference.child("Cliente").child(cliente.getIdCliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(context,"El cliente fue bloqueado con exito",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context,"El cliente fue bloqueado con éxito ya puede ser vizualizado",Toast.LENGTH_SHORT).show();
                                         dialog.dismiss();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(context,"Error al bloquear el usuario",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context,"Error al bloquear el cliente",Toast.LENGTH_SHORT).show();
                                         dialog.dismiss();
                                     }
                                 });
 
                             }
                         };
-                        new Utilidades().cuadroDialogo(context,dialogBloqueo,"Bloquear cliente","¿Desea bloquearlo al cliente?");
+                        new Utilidades().cuadroDialogo(context,dialogDesbloqueo,"Bbloquear cliente","¿Desea bloquearlo al cliente?");
                     }
-                }
-            });
+                });
+
+            }else{
+                btnDesbloquearCliente.setVisibility(View.VISIBLE);
+                btnbloquerCliente.setVisibility(View.GONE);
+                btnDesbloquearCliente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                DialogInterface.OnClickListener dialogBloqueo = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Map<String,Object> bloqueo = new HashMap<>();
+                        bloqueo.put("bloqueado",false);//actualizamos el estado bloqueado del cliente
+                        databaseReference.child("Cliente").child(cliente.getIdCliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(context,"El cliente fue desbloqueado con exito ya no se podra vizualisar",Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context,"Error al Desbloquear el usuario",Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                            }
+                        });
+
+                    }
+                };
+                new Utilidades().cuadroDialogo(context,dialogBloqueo,"Desbloquear cliente","¿Desea desbloquearlo al cliente?");
+
+                    }
+                });
+
+            }
 
         }
-
-        nombreCliente.setText(cliente.getNombre());
-        telefonoCliente.setText(cliente.getTelefono());
-        celularCliente.setText(cliente.getCelular());
 
         return convertView;
     }

@@ -57,10 +57,10 @@ public class CuadroCancelarPedidoCliente {
             @Override
             public void onClick(View v) {
                 //creamos el pedido
-                reference.child("Pedido").child(pedido.getIdPedido()).addValueEventListener(new ValueEventListener() {
+                reference.child("Pedido").child(pedido.getIdPedido()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if(task.isSuccessful()){ //controlamos el cambio de pedido habilitado para que no se reenvie el mensaje
                             //creamos el mensaje
                             Mensaje  mensaje = new Mensaje();
                             String idMensaje = reference.push().getKey();
@@ -86,7 +86,7 @@ public class CuadroCancelarPedidoCliente {
 
                             mensaje.setFecha(fecha);
                             if(mensajeCancelacion.getText().toString().equals("")){ //en caso de que el cliente no ingrese un mensasje
-                                mensaje.setTexto("El cliente a eliminado el pedido");
+                                mensaje.setTexto("Su pedido ha sido eliminado");
                             }else{
                                 mensaje.setTexto(mensajeCancelacion.getText().toString());
                             }
@@ -112,10 +112,6 @@ public class CuadroCancelarPedidoCliente {
                         }else{
                             Toast.makeText(context,"No se a podido eliminar el pedido",Toast.LENGTH_LONG).show();
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
                 });

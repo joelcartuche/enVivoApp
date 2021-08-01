@@ -3,6 +3,8 @@
     package="com.aplicacion.envivoapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".utilidades.MyFirebaseApp"
@@ -12,7 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnVivoApp">
-        <activity android:name=".activitysParaVendedores.MensajeriaGlobalVendedor"></activity>
+        <activity android:name=".activityParaClientes.HomeCliente"></activity>
+        <activity android:name=".activitysParaVendedores.HomeVendedor" />
+        <activity android:name=".Reportes.ReporteVendedor" />
+        <activity android:name=".activitysParaVendedores.MensajeriaGlobalVendedor" />
         <activity android:name=".activitysParaVendedores.ListarClientes" />
         <activity android:name=".activityParaClientes.MensajeriaGlobal" />
         <activity android:name=".activitysParaVendedores.PedidoVendedor" />

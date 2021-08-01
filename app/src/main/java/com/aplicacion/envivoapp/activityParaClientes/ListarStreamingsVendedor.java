@@ -15,6 +15,7 @@ import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
@@ -22,6 +23,7 @@ import com.aplicacion.envivoapp.adaptadores.AdapterVideoStreaming;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroDatosStreaming;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,17 +66,21 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
         listaStreamingView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView fechaAux = view.findViewById(R.id.txtItemFechaVideoStreaming);
-                TextView horaAux = view.findViewById(R.id.txtItemHoraVideoStreaming);
-                TextView urlAux = view.findViewById(R.id.txtItemUrlVideoStreaming);
+                if (listStreaming.get(position).getIniciado()) {
+                    TextView fechaAux = view.findViewById(R.id.txtItemFechaVideoStreaming);
+                    TextView horaAux = view.findViewById(R.id.txtItemHoraVideoStreaming);
+                    TextView urlAux = view.findViewById(R.id.txtItemUrlVideoStreaming);
 
-                new CuadroDatosStreaming(ListarStreamingsVendedor.this,
-                        idVendedor,
-                        idCliente,
-                        listStreaming.get(position).getIdVideoStreaming(),
-                        urlAux.getText().toString(),fechaAux.getText().toString(),
-                        horaAux.getText().toString(),
-                        ListarStreamingsVendedor.this);
+                    new CuadroDatosStreaming(ListarStreamingsVendedor.this,
+                            idVendedor,
+                            idCliente,
+                            listStreaming.get(position).getIdVideoStreaming(),
+                            urlAux.getText().toString(), fechaAux.getText().toString(),
+                            horaAux.getText().toString(),
+                            ListarStreamingsVendedor.this);
+                }else{
+                    Toast.makeText(ListarStreamingsVendedor.this,"El vendedor a terminado o no se inicia la transmision del video",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -85,7 +91,9 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
         Button btnSalir = findViewById(R.id.btn_perfil_listar_streaming_vendedor);
         Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarStremingsVendedor);
 
-        new Utilidades().cargarToolbar(btnListarVendedore,
+        Button btnHome = findViewById(R.id.btn_Home_Streaming_Vendedor);
+
+        new Utilidades().cargarToolbar(btnHome,btnListarVendedore,
                 btnPerfil,
                 btnPedido,
                 btnSalir,
@@ -94,21 +102,21 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
     }
 
     public void listarStreamings(){
-        databaseReference.child("VideoStreaming").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+        databaseReference.child("VideoStreaming").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 if (snapshot.exists()) {
                     listStreaming.clear();//borramos en caso de quedar algo en la cache
                     for (final DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.child("idVendedor").getValue().toString().equals(idVendedor)) {
-                            VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);//obtenemos el objeto video streaming
+                        VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);
+                        if (videoStreaming.getIdVendedor().equals(idVendedor)
+                                && !videoStreaming.getEliminado()) { //listamos los streamings del vendedor que no han sido eliminados
                             listStreaming.add(videoStreaming);
-                            //Inicialisamos el adaptador
-                            adapterListStreaming = new AdapterVideoStreaming(ListarStreamingsVendedor.this,listStreaming,databaseReference);
-                            listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
                         }
                     }
+                    //Inicialisamos el adaptador
+                    adapterListStreaming = new AdapterVideoStreaming(ListarStreamingsVendedor.this,listStreaming,databaseReference);
+                    listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
                 }else{
                     listStreaming.clear();//borramos los datos ya que no hay nada en la base
                     //Inicialisamos el adaptador
@@ -119,9 +127,9 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
-
     }
 
     @Override
@@ -135,6 +143,7 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
             Intent streamingsIntent = new Intent(ListarStreamingsVendedor.this,MensajeriaCliente.class);
             streamingsIntent.putExtras(parametros);
             startActivity(streamingsIntent);
+
         }
     }
 }

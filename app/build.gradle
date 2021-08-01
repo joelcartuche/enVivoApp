@@ -12,6 +12,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,5 +47,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.opencsv:opencsv:4.6'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.firebase:firebase-storage'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
 }

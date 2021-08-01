@@ -12,13 +12,53 @@ public class Pedido {
     private Date fechaPedido;
     private Boolean aceptado;
     private Boolean cancelado;
+    private Boolean pagado;
+    private Boolean eliminado;
     private String idVendedor;
     private String idCliente;
     private String idStreaming;
+    private String imagen;
+
+    private  Date fechaFinalPedido;
 
     public Pedido() {
         this.aceptado=false;
         this.cancelado=false;
+        this.pagado = false;
+        this.eliminado=false;
+        this.imagen = null;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public Date getFechaFinalPedido() {
+        return fechaFinalPedido;
+    }
+
+    public void setFechaFinalPedido(Date fechaFinalPedido) {
+        this.fechaFinalPedido = fechaFinalPedido;
+    }
+
+    public Boolean getPagado() {
+        return pagado;
+    }
+
+    public void setPagado(Boolean pagado) {
+        this.pagado = pagado;
+    }
+
+    public Boolean getEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(Boolean eliminado) {
+        this.eliminado = eliminado;
     }
 
     public String getIdStreaming() {

@@ -1,5 +1,8 @@
 package com.aplicacion.envivoapp.modelos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Vendedor {
     private String idVendedor;
     private String nombre;
@@ -9,8 +12,11 @@ public class Vendedor {
     private Integer diasEperaCancelacion;
     private String uidUsuario;
 
+
     public Vendedor() {
     }
+
+
 
     public String getIdVendedor() {
         return idVendedor;

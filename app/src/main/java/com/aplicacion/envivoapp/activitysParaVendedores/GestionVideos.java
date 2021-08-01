@@ -1,22 +1,29 @@
 package com.aplicacion.envivoapp.activitysParaVendedores;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
-import com.aplicacion.envivoapp.cuadroDialogo.CuadroEditarLocal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroEditarStraming;
 import com.aplicacion.envivoapp.adaptadores.AdapterVideoStreaming;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.RadioButton;
+import android.widget.SearchView;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
@@ -39,12 +46,16 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private List<VideoStreaming> listStreaming = new ArrayList<>();
-    private ListAdapter adapterListStreaming;
+    private AdapterVideoStreaming adapterListStreaming;
 
 
     private GridView listaStreamingView;
     private Button agregarStreaming;
     private String idVendedor;
+    private RadioButton anadidos,eliminados;
+    private EditText buscador;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +70,34 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
 
         listaStreamingView = findViewById(R.id.listStreaming);
         agregarStreaming = findViewById(R.id.btnAgregarStreaming);
+        buscador = findViewById(R.id.busquedaStreamingsGestionVideos);
 
+
+        anadidos = findViewById(R.id.radioAnadidoStreaming);
+        eliminados= findViewById(R.id.radioEliminadosStreamings);
+
+        anadidos.setChecked(true);
         //Inicialisamos el adaptador
         listarStreamings();
 
+        anadidos.setOnClickListener(new View.OnClickListener() {//funcionalidad del boton añadir
+            @Override
+            public void onClick(View v) {
+                //cambio de banderas
+                eliminados.setChecked(false);
+                anadidos.setChecked(true);
+                listarStreamings();
+            }
+        });
+        eliminados.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //cambio de banderas
+                anadidos.setChecked(false);
+                eliminados.setChecked(true);
+                listarStreamings();
+            }
+        });
 
         listaStreamingView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,6 +118,41 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
             }
         });
 
+
+        //le damos funcionalidad al buscador
+        buscador.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<VideoStreaming> listaAux = new ArrayList<>();
+                for (VideoStreaming vd : listStreaming) {
+                    if (vd.toString().indexOf(s.toString()) == 0) {
+                        listaAux.add(vd);
+                    }
+                }
+                if (listaAux.size() != 0) {
+                    //Inicialisamos el adaptador
+                    adapterListStreaming = new AdapterVideoStreaming(GestionVideos.this, listaAux, databaseReference);
+                    listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
+                }else{
+                    //Inicialisamos el adaptador
+                    adapterListStreaming = new AdapterVideoStreaming(GestionVideos.this, listStreaming, databaseReference);
+                    listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         //le damos funcionalidad al toolbar
         Button mensajeria = findViewById(R.id.btnMensajeriaGlobalGestionVideos);
         Button listarLocal = findViewById(R.id.btnListarLocalGestionVideos);
@@ -91,13 +161,18 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
         Button videos = findViewById(R.id.btnVideosGestionVideos);
         Button salir = findViewById(R.id.btnSalirGestionVideos);
         Button clientes = findViewById(R.id.btnClientesGestionVideos);
-        new Utilidades().cargarToolbarVendedor(listarLocal,
+        Button reporte = findViewById(R.id.btnReporteGestionVideos);
+        Button home = findViewById(R.id.btnHomeVendedorGestionVideos);
+
+        new Utilidades().cargarToolbarVendedor(home,
+                listarLocal,
                 perfil,
                 pedido,
                 mensajeria,
                 salir,
                 videos,
                 clientes,
+                reporte,
                 GestionVideos.this,
                 firebaseAuth);
     }
@@ -132,7 +207,15 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
                                     for (DataSnapshot ds:snapshot.getChildren()){
                                         VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);
                                         if (videoStreaming.getIdVendedor().equals(finalVendedor.getIdVendedor())){
-                                            listStreaming.add(videoStreaming);
+                                            if (anadidos.isChecked() && !eliminados.isChecked()) {//en caso de que el filtro añadidos este habilitado
+                                                if (!videoStreaming.getEliminado()) {
+                                                    listStreaming.add(videoStreaming);
+                                                }
+                                            } else if (eliminados.isChecked() && !anadidos.isChecked()) {//en caso de que el filtro eliminados este habilitado
+                                                    if (videoStreaming.getEliminado()) {
+                                                        listStreaming.add(videoStreaming);
+                                                    }
+                                                }
                                         }
                                     }
                                         //Inicialisamos el adaptador

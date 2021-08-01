@@ -2,26 +2,25 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardMensajeria"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imgItemMensajeVendedor"
             android:layout_width="48dp"
-            android:layout_height="0dp"
+            android:layout_height="52dp"
             android:layout_marginStart="6dp"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="2dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginBottom="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnCancelarMensajeVendedor"
-            app:layout_constraintEnd_toStartOf="@+id/txtItemMensajeVendedor"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/txtItemMensajeVendedor"
+            app:layout_constraintEnd_toStartOf="@+id/txtItemNombreMensajeVendedor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,30 +28,36 @@
             android:id="@+id/txtItemFechaMensajeVendedor"
             android:layout_width="129dp"
             android:layout_height="33dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="21dp"
             android:textSize="10sp"
             app:layout_constraintBottom_toTopOf="@+id/txtItemMensajeVendedor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/txtItemNombreMensajeVendedor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/btnCancelarMensajeVendedor"
             android:layout_width="0dp"
             android:layout_height="31dp"
+            android:layout_marginTop="12dp"
             android:layout_weight="1"
             android:text="Cancelar"
             android:textSize="10sp"
             app:backgroundTint="#F44336"
             app:layout_constraintBottom_toTopOf="@+id/btnBloquearClienteMensajeriaVendedor"
             app:layout_constraintEnd_toStartOf="@+id/btnAceptarMensajeVendedor"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtItemMensajeVendedor" />
+            app:layout_constraintTop_toBottomOf="@+id/imagenVendedorPedido"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/btnAceptarMensajeVendedor"
             android:layout_width="0dp"
             android:layout_height="32dp"
+            android:layout_marginTop="11dp"
             android:layout_weight="1"
             android:text="Aceptar"
             android:textSize="10sp"
@@ -60,7 +65,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btnBloquearClienteMensajeriaVendedor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnCancelarMensajeVendedor"
-            app:layout_constraintTop_toBottomOf="@+id/txtItemMensajeVendedor" />
+            app:layout_constraintTop_toBottomOf="@+id/imagenVendedorPedido" />
 
         <Button
             android:id="@+id/btnBloquearClienteMensajeriaVendedor"
@@ -71,30 +76,43 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnCancelarMensajeVendedor" />
+            app:layout_constraintTop_toBottomOf="@+id/btnAceptarMensajeVendedor" />
 
         <TextView
             android:id="@+id/txtItemNombreMensajeVendedor"
-            android:layout_width="0dp"
+            android:layout_width="228dp"
             android:layout_height="31dp"
 
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
             android:textSize="10sp"
             app:layout_constraintBottom_toTopOf="@+id/txtItemMensajeVendedor"
             app:layout_constraintEnd_toStartOf="@+id/txtItemFechaMensajeVendedor"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imgItemMensajeVendedor"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txtItemMensajeVendedor"
             android:layout_width="0dp"
-            android:layout_height="30dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnCancelarMensajeVendedor"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/imagenVendedorPedido"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imgItemMensajeVendedor"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtItemNombreMensajeVendedor"
             tools:text="asdfasdfasdf" />
+
+        <ImageView
+            android:id="@+id/imagenVendedorPedido"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnAceptarMensajeVendedor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtItemMensajeVendedor" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -10,8 +10,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
-    <string name="facebook_app_id">395326485243537</string>
-    <string name="fb_login_protocol_scheme">fb395326485243537</string>
+    <string name="facebook_app_id">969563257161369</string>
+    <string name="fb_login_protocol_scheme">fb969563257161369</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_lista_streamig">listaStreamig</string>

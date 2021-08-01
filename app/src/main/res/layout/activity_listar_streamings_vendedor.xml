@@ -61,6 +61,15 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/btn_Home_Streaming_Vendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTop="@drawable/ic_home"
+                        android:text="Home"
+                        android:textSize="8sp" />
+
+                    <Button
                         android:id="@+id/btn_listar_vendedores_listar_streaming"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -103,16 +112,24 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/textView30"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Streamings del vendedor"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp">
 
-    <GridView
-        android:id="@+id/listListarStreamingsVendedor"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Streamings del vendedor"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <GridView
+            android:id="@+id/listListarStreamingsVendedor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </LinearLayout>

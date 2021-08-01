@@ -1,190 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#EBF1E3"
-    android:padding="12dp">
+    app:cardCornerRadius="15dp"
+    app:cardElevation="15dp">
 
-    <TextView
-        android:id="@+id/textView15"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Url del streaming"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/txtUrlCuadroStreaming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+        android:orientation="vertical"
+        android:padding="12dp">
 
-    <EditText
-        android:id="@+id/txtUrlCuadroStreaming"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:ems="10"
-        android:hint="Ingrese url del streaming"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/textView16"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edite los datos del Streaming"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Fecha de inicio del streaming"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/txtFechaCuadroStreaming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUrlCuadroStreaming" />
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Url del streaming"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/txtFechaCuadroStreaming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="Fecha"
-        android:inputType="date"
-        android:onClick="abrirCalendario"
-        app:layout_constraintBottom_toTopOf="@+id/textView17"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        <EditText
+            android:id="@+id/txtUrlCuadroStreaming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Ingrese url del streaming"
+            android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hora de incio del streaming"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/txtHoraCuadroStreaming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFechaCuadroStreaming" />
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha de inicio del streaming"
+            android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/txtHoraCuadroStreaming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="Ingrese la hora de inicio del streaming"
-        android:inputType="time"
-        android:onClick="abrirCalendarioHora"
-        app:layout_constraintBottom_toTopOf="@+id/btnGuardarCuadroEditarStreaming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+        <EditText
+            android:id="@+id/txtFechaCuadroStreaming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Fecha"
+            android:inputType="date"
+            android:onClick="abrirCalendario" />
 
-    <Button
-        android:id="@+id/btnGuardarCuadroEditarStreaming"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Guardar"
-        app:backgroundTint="#00C853"
-        app:icon="@android:drawable/ic_menu_save"
-        app:layout_constraintBottom_toTopOf="@+id/btnAgregarStreaming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHoraCuadroStreaming" />
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hora de incio del streaming"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnAgregarStreaming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Actualizar"
-        app:backgroundTint="#FF5722"
-        app:icon="@android:drawable/ic_menu_edit"
-        app:layout_constraintBottom_toTopOf="@+id/btnEliminarStreamingCuadroStreraming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGuardarCuadroEditarStreaming" />
+        <EditText
+            android:id="@+id/txtHoraCuadroStreaming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Ingrese la hora de inicio del streaming"
+            android:inputType="time"
+            android:onClick="abrirCalendarioHora" />
 
-    <Button
-        android:id="@+id/btnIrStreamingCuadroStreraming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ir a Streaming"
-        app:backgroundTint="#3949AB"
-        app:icon="@android:drawable/ic_menu_slideshow"
-        app:layout_constraintBottom_toTopOf="@+id/btnCancelarCuadroStreamings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnEliminarStreamingCuadroStreraming" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="401dp"
-        android:layout_height="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCancelarCuadroStreamings" />
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnCancelarCuadroStreamings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cancelar"
-        app:backgroundTint="#C61818"
-        app:icon="@android:drawable/ic_menu_close_clear_cancel"
-        app:layout_constraintBottom_toTopOf="@+id/textView20"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnIrStreamingCuadroStreraming" />
+                <RadioButton
+                    android:id="@+id/radioActivarReunion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Activar reunión" />
 
-    <Button
-        android:id="@+id/btnEliminarStreamingCuadroStreraming"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Eliminar"
-        app:backgroundTint="#F44336"
-        app:icon="@android:drawable/ic_menu_delete"
-        app:layout_constraintBottom_toTopOf="@+id/btnIrStreamingCuadroStreraming"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAgregarStreaming" />
+                <RadioButton
+                    android:id="@+id/radioDesactivarReunion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Desactivar reunión" />
+            </RadioGroup>
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edite los datos del Streaming"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView15"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+        <Button
+            android:id="@+id/btnGuardarCuadroEditarStreaming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar"
+            app:backgroundTint="#64DD17"
+            app:icon="@android:drawable/ic_menu_save" />
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="414dp"
-        android:layout_height="7dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView18"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/btnAgregarStreaming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualizar"
+            app:backgroundTint="#FF6D00"
+            app:icon="@android:drawable/ic_menu_edit" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/btnEliminarStreamingCuadroStreraming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            app:backgroundTint="#D50000"
+            app:icon="@android:drawable/ic_menu_delete" />
+
+        <Button
+            android:id="@+id/btnIrStreamingCuadroStreraming"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:text="Ir a Streaming"
+            app:backgroundTint="#0091EA"
+            app:icon="@android:drawable/ic_menu_slideshow" />
+
+        <Button
+            android:id="@+id/btnCancelarCuadroStreamings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            app:backgroundTint="#DD2C00"
+            app:icon="@android:drawable/ic_delete" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

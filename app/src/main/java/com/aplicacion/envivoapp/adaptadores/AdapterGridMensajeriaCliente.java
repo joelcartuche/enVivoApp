@@ -1,11 +1,13 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,10 +16,13 @@ import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +32,16 @@ public class AdapterGridMensajeriaCliente extends BaseAdapter {
     private Context context;
     private List<Mensaje> listaMensajeCliente;
     private DatabaseReference databaseReference;
+    private FirebaseStorage storage ; //para la insersion de archivos
 
-    public AdapterGridMensajeriaCliente(Context context, List<Mensaje> listaMensajeCliente,DatabaseReference databaseReference){
+    public AdapterGridMensajeriaCliente(Context context,
+                                        List<Mensaje> listaMensajeCliente,
+                                        DatabaseReference databaseReference,
+                                        FirebaseStorage storage ){
         this.context = context;
         this.listaMensajeCliente = listaMensajeCliente;
         this.databaseReference = databaseReference;
+        this.storage = storage;
     }
 
     @Override
@@ -61,6 +71,9 @@ public class AdapterGridMensajeriaCliente extends BaseAdapter {
         TextView nombreClienteMensaje = convertView.findViewById(R.id.txtItemNombreMensajeCliente);
         TextView fechaClienteMensaje  = convertView.findViewById(R.id.txtItemFechaMensajeCliente);
         TextView mensajeClienteMensaje = convertView.findViewById(R.id.txtItemMensajeCliente);
+        ImageView imagenPedido = convertView.findViewById(R.id.bitmapCapturaPantallaMensajeriaVendedor);
+
+
 
         if (mensaje.getEsVededor()){//En caso de que el mensaje sea departe del vendedor
             databaseReference.child("Vendedor").child(mensaje.getIdvendedor()).addValueEventListener(new ValueEventListener() {
@@ -97,7 +110,12 @@ public class AdapterGridMensajeriaCliente extends BaseAdapter {
                                 mensaje.getFecha().getSeconds());
                         mensajeClienteMensaje.setText(mensaje.getTexto());
 
-
+                        storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.with(context).load(uri).into(imagenPedido);
+                            }
+                        });
                     }else{
                         Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
                     }

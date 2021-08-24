@@ -18,10 +18,8 @@ import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -96,7 +94,7 @@ public class DataVendedor extends AppCompatActivity {
             }
         });
 
-        llenarCuadros();
+        cargarDatosVendedor();
 
         //cargamos el toolbar
         //le damos funcionalidad al toolbar
@@ -122,7 +120,7 @@ public class DataVendedor extends AppCompatActivity {
                 DataVendedor.this,
                 firebaseAuth);
     }
-    public void llenarCuadros(){
+    public void cargarDatosVendedor(){
 
         databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
             @Override

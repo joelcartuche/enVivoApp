@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:contentInsetStart="0dp">
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout3"
 
@@ -42,7 +43,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMensajeriaGlobalMensajeriaVendedor"
                         android:layout_width="60dp"
                         android:layout_height="34dp"
@@ -61,14 +62,14 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:orientation="vertical" >
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnHomeVendedorMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -77,7 +78,7 @@
                                 android:text="Home"
                                 android:textSize="8sp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnListarLocalMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -86,7 +87,7 @@
                                 android:text="Local"
                                 android:textSize="8sp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnPerfilVendedorMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -95,7 +96,7 @@
                                 android:text="Perfil"
                                 android:textSize="8sp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnPedidoMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -104,7 +105,7 @@
                                 android:text="Pedidos"
                                 android:textSize="8sp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnVideosMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -112,25 +113,26 @@
                                 android:drawableTop="@android:drawable/presence_video_online"
                                 android:text="Videos"
                                 android:textSize="8sp" />
-                            <Button
+
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnClientesMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:drawableTop="@drawable/ic_clientes"
                                 android:text="Clientes"
                                 android:textSize="8sp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnReporteMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:drawableTop="?android:attr/actionModeFindDrawable"
                                 android:text="Reportes"
-                                android:textSize="8sp"/>
+                                android:textSize="8sp" />
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnSalirMensajeriaVendedor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -158,11 +160,12 @@
             android:id="@+id/textView41"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:text="Mensajeria"
             app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoView2" />
+            app:layout_constraintTop_toBottomOf="@+id/btnMinimizarVideoMensajeriaVendedor" />
 
         <GridView
             android:id="@+id/gridMensajeVendedor"
@@ -173,43 +176,17 @@
             android:numColumns="1"
             android:stretchMode="columnWidth"
             android:verticalSpacing="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/txtMensajeVendedor"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radioGroup2" />
 
-        <EditText
-            android:id="@+id/txtMensajeVendedor"
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/videoYutubeMensajeriaVendedor"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnEnviarMensajeVendedor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gridMensajeVendedor" />
-
-        <Button
-            android:id="@+id/btnEnviarMensajeVendedor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:background="#FFFFFF"
-            app:icon="@android:drawable/ic_menu_send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtMensajeVendedor"
-            app:layout_constraintTop_toBottomOf="@+id/gridMensajeVendedor" />
-
-        <VideoView
-            android:id="@+id/videoView2"
-            android:layout_width="360dp"
-            android:layout_height="147dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView41"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnMinimizarVideoMensajeriaVendedor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView36" />
@@ -219,7 +196,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Video en vivo"
-            app:layout_constraintBottom_toTopOf="@+id/videoView2"
+            app:layout_constraintBottom_toTopOf="@+id/videoYutubeMensajeriaVendedor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.079"
             app:layout_constraintStart_toStartOf="parent"
@@ -257,6 +234,19 @@
                 android:layout_weight="1"
                 android:text="Todos" />
         </RadioGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnMinimizarVideoMensajeriaVendedor"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="2dp"
+            android:drawableBottom="@drawable/ic_minimizar"
+            app:backgroundTint="#2979FF"
+            app:layout_constraintBottom_toTopOf="@+id/textView41"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoYutubeMensajeriaVendedor" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

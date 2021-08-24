@@ -51,7 +51,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Utilidades {
+
+    private String claveYoutube;
+
     public Utilidades() {
+    }
+
+    public String getClaveYoutube() {
+        return claveYoutube = "AIzaSyDzjngQCozr7u7xkbUAIKPZDKkDBzfXq-0";
     }
 
     //mostramos el calendario en el edit text

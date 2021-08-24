@@ -1,9 +1,12 @@
 package com.aplicacion.envivoapp.adaptadores;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
+import com.aplicacion.envivoapp.activitysParaVendedores.ListarClientes;
+import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
@@ -100,6 +106,7 @@ public class AdapterListarClientes extends BaseAdapter {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Toast.makeText(context,"El cliente fue bloqueado con éxito ya puede ser vizualizado",Toast.LENGTH_SHORT).show();
+                                        actualizarActividad();
                                         dialog.dismiss();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
@@ -123,7 +130,6 @@ public class AdapterListarClientes extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
 
-
                 DialogInterface.OnClickListener dialogBloqueo = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -133,6 +139,7 @@ public class AdapterListarClientes extends BaseAdapter {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(context,"El cliente fue desbloqueado con exito ya no se podra vizualisar",Toast.LENGTH_LONG).show();
+                                actualizarActividad();
                                 dialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -155,5 +162,15 @@ public class AdapterListarClientes extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public void actualizarActividad(){//actualiza el activity actual para evitar la dupicacion de los datos
+        Bundle parametros = new Bundle();
+        parametros.putString("global", "0");
+        Intent actualizar = new Intent(context, context.getClass());
+        actualizar.putExtras(parametros);
+        context.startActivity(actualizar);
+        ((Activity) context).finish();
+
     }
 }

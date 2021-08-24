@@ -52,7 +52,7 @@ public class CuadroEditarStraming {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//el dialogo se presenta sin el titulo
         dialog.setCancelable(false); //impedimos el cancelamiento del dialogo
         //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
-        dialog.setContentView(R.layout.editar_video_streaming); //le asisganos el layout
+        dialog.setContentView(R.layout.cuadro_editar_video_streaming); //le asisganos el layout
 
         Utilidades utilidades = new Utilidades();
         EditText txtEditarUrlVideo = dialog.findViewById(R.id.txtUrlCuadroStreaming);
@@ -66,14 +66,15 @@ public class CuadroEditarStraming {
         Button btnCancelarVideo = dialog.findViewById(R.id.btnCancelarCuadroStreamings);
         Button btnIrVideo = dialog.findViewById(R.id.btnIrStreamingCuadroStreraming);
 
-        if (videoStreaming.getIniciado()){
-            activarVideo.setChecked(true);
-            desactivarVideo.setChecked(false);
-        }else{
-            activarVideo.setChecked(false);
-            desactivarVideo.setChecked(true);
+        if (videoStreaming != null) {
+            if (videoStreaming.getIniciado()) {
+                activarVideo.setChecked(true);
+                desactivarVideo.setChecked(false);
+            } else {
+                activarVideo.setChecked(false);
+                desactivarVideo.setChecked(true);
+            }
         }
-
         if (esNuevo ){
             btnGuardarVideo.setVisibility(View.VISIBLE);
             btnActualizarVideo.setVisibility(View.GONE);

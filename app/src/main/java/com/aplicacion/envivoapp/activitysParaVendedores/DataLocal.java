@@ -1,29 +1,21 @@
 package com.aplicacion.envivoapp.activitysParaVendedores;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import com.aplicacion.envivoapp.activityParaClientes.MensajeriaGlobal;
 import com.aplicacion.envivoapp.adaptadores.AdapterListarLocal;
-import com.aplicacion.envivoapp.adaptadores.AdapterMensajeriaGlobal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroEditarLocal;
 import com.aplicacion.envivoapp.modelos.Local;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
-import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.resultadoDialogo{
 
@@ -147,10 +138,10 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
                 DataLocal.this,
                 firebaseAuth);
 
-        cargarGrid();
+        listarLocal();
     }
 
-    public  void cargarGrid(){
+    public  void listarLocal(){
         databaseReference.child("Local").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

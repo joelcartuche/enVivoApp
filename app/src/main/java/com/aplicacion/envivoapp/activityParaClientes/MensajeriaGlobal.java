@@ -259,21 +259,18 @@ public class MensajeriaGlobal extends AppCompatActivity {
         try {
             startActivityForResult(Intent.createChooser(intent,"Seleccione un archivo para subir"),1);
         }catch (android.content.ActivityNotFoundException ex){
-            Toast.makeText(MensajeriaGlobal.this,"Por favorm instale un administrados de archivos",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MensajeriaGlobal.this,"Por favor instale un administrados de archivos",Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case PICKER:
                 if (resultCode == RESULT_OK){
-
-
-                    Uri pathArchivo = data.getData();
+                    Uri pathArchivo = data.getData(); //Obtenemos el uri de la imagen seleccionada
                     //cargamos el bitmap
                     databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
                         @RequiresApi(api = Build.VERSION_CODES.O)

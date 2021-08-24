@@ -120,7 +120,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:drawableTop="@drawable/ic_clientes"
                                 android:text="Clientes"
                                 android:textSize="8sp" />
                             <Button
@@ -166,13 +166,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.44" />
 
         <GridView
             android:id="@+id/gridMensajeriaGlobalVendedor"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toTopOf="@+id/txtTextiMensajeriaGlobalVendedor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -182,10 +183,9 @@
         <EditText
             android:id="@+id/txtTextiMensajeriaGlobalVendedor"
             android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
-            android:ems="10"
+            android:layout_height="50dp"
+            android:layout_marginBottom="2dp"
+            android:ems="15"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnEnviarMensajeriaGlobalVendedor"
@@ -216,6 +216,7 @@
             app:layout_constraintEnd_toStartOf="@+id/txtTextiMensajeriaGlobalVendedor"
             app:layout_constraintHorizontal_bias="0.7"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gridMensajeriaGlobalVendedor" />
+            app:layout_constraintTop_toBottomOf="@+id/gridMensajeriaGlobalVendedor"
+            app:layout_constraintVertical_bias="0.51" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

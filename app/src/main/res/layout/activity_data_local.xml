@@ -112,12 +112,13 @@
                                 android:drawableTop="@android:drawable/presence_video_online"
                                 android:text="Videos"
                                 android:textSize="8sp" />
+
                             <Button
                                 android:id="@+id/btnClientesDataLocal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:drawableTop="@drawable/ic_clientes"
                                 android:text="Clientes"
                                 android:textSize="8sp" />
 

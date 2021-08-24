@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -24,7 +25,6 @@ import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
 import com.aplicacion.envivoapp.activitysParaVendedores.DataVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
 import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedor;
-import com.aplicacion.envivoapp.fragmentos.UsuarioTieneCuenta;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Usuario;
 import com.facebook.AccessToken;
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private CardView cardIniciarSesion, cardCrearCuenta;
+    private ImageView imagenCrearCuenta,imagenIniciarSesion;
     private Button btnCrearCuenta,btnAtras;
     private RadioButton esVendedor,esCliente;
     private Boolean esNuevo = false;
@@ -96,14 +97,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        fragmentUsuarioTieneCuenta = new UsuarioTieneCuenta();
-
         esVendedor = findViewById(R.id.radioButtonEsVendedor);//almacena si el usuario es vendedor
         esCliente = findViewById(R.id.radioButtonEsCliente);//almacena si el usuario es cliente
         btnCrearCuenta = findViewById(R.id.btnCrearCuenta);
         btnAtras = findViewById(R.id.btnAtras);
         cardCrearCuenta = findViewById(R.id.cardCrearCuenta);
         cardIniciarSesion = findViewById(R.id.cardIniciarSesion);
+        imagenCrearCuenta = findViewById(R.id.imageViewCrearCuenta);
+        imagenIniciarSesion = findViewById(R.id.imageViewIniciarSesion);
         esNuevo = false;
 
 
@@ -129,12 +130,15 @@ public class MainActivity extends AppCompatActivity {
 
         //escondemos el card view de crear cuenta
         cardCrearCuenta.setVisibility(View.GONE);
+        imagenCrearCuenta.setVisibility(View.GONE);
         //en caso de que el usuario le de click a crear cuenta
         btnCrearCuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cardIniciarSesion.setVisibility(View.GONE);//escondemos el card de iniciar sesion
+                imagenIniciarSesion.setVisibility(View.GONE);
                 cardCrearCuenta.setVisibility(View.VISIBLE);//mostramos el card de crear cuenta
+                imagenCrearCuenta.setVisibility(View.VISIBLE);
                 esNuevo = true;
             }
         });
@@ -146,7 +150,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cardCrearCuenta.setVisibility(View.GONE);//escondemos el card de iniciar sesion
+                imagenCrearCuenta.setVisibility(View.GONE);
                 cardIniciarSesion.setVisibility(View.VISIBLE);//mostramos el card de crear cuenta
+                imagenIniciarSesion.setVisibility(View.VISIBLE);
                 esNuevo=false;
             }
         });
@@ -230,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         //fin de logeo
 
         inicialiceFirebase();
+        //String version = Build.VERSION.RELEASE;
 
     }
 
@@ -241,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleFacebookToken(AccessToken accessToken) {
         Log.d("FacebookAuthentication","handleFacebookToken"+accessToken);
-        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken()); //almacenamos las credenciales del incio de secion
+        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken()); //almacenamos las credenciales del incio de sesion
 
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() { //inciciamos la cesion en firebase con las credenciales
             @Override
@@ -265,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
     public void buscarUsuario(FirebaseUser firebaseUser){
         if (firebaseAuth.getCurrentUser() != null){
             String usuarioLogeado = firebaseAuth.getCurrentUser().getUid();//obtenemos el uid del usuario logeado
-
             databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

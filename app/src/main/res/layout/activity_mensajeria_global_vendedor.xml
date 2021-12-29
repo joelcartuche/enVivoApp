@@ -33,7 +33,7 @@
                         android:layout_width="300dp"
                         android:layout_height="42dp"
                         android:gravity="center"
-                        android:text="En vivoApp"
+                        android:text="@string/app_name"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,9 +44,9 @@
 
                     <Button
                         android:id="@+id/btnMensajeriaGlobalMensajeriaGlobalVendedor"
-                        android:layout_width="60dp"
-                        android:layout_height="34dp"
-                        app:icon="@android:drawable/ic_menu_send"
+                        android:layout_width="50sp"
+                        android:layout_height="40sp"
+                        app:icon="@drawable/ic_enviar_mensajes"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -54,19 +54,19 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                        android:layout_height="match_parent">
 
                             <Button
                                 android:id="@+id/btnHomeVendedorMensajeriaGlobalVendedor"
@@ -111,7 +111,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:drawableTop="@android:drawable/presence_video_online"
+                                android:drawableTop="@drawable/ic_videos_streaming"
                                 android:text="Videos"
                                 android:textSize="8sp" />
 
@@ -128,7 +128,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="?android:attr/actionModeFindDrawable"
+                                android:drawableTop="@drawable/ic_reportes_vendedor"
                                 android:text="Reportes"
                                 android:textSize="8sp" />
 
@@ -141,10 +141,10 @@
                                 android:text="Salir"
                                 android:textSize="8sp" />
 
-                        </LinearLayout>
+
                     </LinearLayout>
                 </HorizontalScrollView>
-
+            </LinearLayout>
             </LinearLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -198,7 +198,7 @@
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:icon="@android:drawable/ic_menu_send"
+            app:icon="@drawable/ic_enviar_mensajes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtTextiMensajeriaGlobalVendedor"
@@ -211,7 +211,7 @@
             android:layout_height="52dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:icon="@android:drawable/ic_menu_gallery"
+            app:icon="@drawable/ic_selecionar_imagen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txtTextiMensajeriaGlobalVendedor"
             app:layout_constraintHorizontal_bias="0.7"

@@ -52,7 +52,6 @@ public class DataCliente extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbaeDataCliente);
         buscarCliente();
 
-
         //Damos funcionalidad al menu
         Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_DataCliente);
         Button btnPerfil = findViewById(R.id.btn_perfil_DataClienter);
@@ -68,7 +67,6 @@ public class DataCliente extends AppCompatActivity {
                 btnSalir,
                 btnMensje,
                 DataCliente.this,firebaseAuth,databaseReference);
-
     }
 
     public void bloquearBotones(){

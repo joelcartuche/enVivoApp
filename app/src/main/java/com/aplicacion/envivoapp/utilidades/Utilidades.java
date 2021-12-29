@@ -71,7 +71,7 @@ public class Utilidades {
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String fecha = dayOfMonth + "/" + (month+1) + "/" + (year-1);
+                String fecha = dayOfMonth + "/" + (month+1) + "/" + (year);
                 fechaStreaming.setText(fecha);
             }
         }, dia, mes, anio);//obtenemos en el formato de dia mes anio
@@ -268,8 +268,10 @@ public class Utilidades {
                 DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         FirebaseAuth.getInstance().signOut();
                         LoginManager.getInstance().logOut();
+
                         Intent streamingsIntent = new Intent(context, MainActivity.class);
                         context.startActivity(streamingsIntent);
                         ((Activity) context).finish();

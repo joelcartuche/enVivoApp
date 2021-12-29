@@ -63,7 +63,21 @@ public class CuadroAceptarPedidoMensajeCliente {
         EditText descripcionProducto = dialog.findViewById(R.id.txtDescripcionCuadroPedido);
         Button aceptarProducto = dialog.findViewById(R.id.btnAceptarPedidoCuadroAceptarPedido);
         Button cancelarProducto = dialog.findViewById(R.id.btnCancelarCuadroAceptarPedido);
-
+        if(nombreProducto == null){
+            nombreProducto.setText("");
+        }
+        if(cantidadProducto == null){
+            cantidadProducto.setText("");
+        }
+        if(codigoProducto == null){
+            codigoProducto.setText("");
+        }
+        if(precioProducto == null){
+            precioProducto.setText("");
+        }
+        if(descripcionProducto == null){
+            precioProducto.setText("");
+        }
         aceptarProducto.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override

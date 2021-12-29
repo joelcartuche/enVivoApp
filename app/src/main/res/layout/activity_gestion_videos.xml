@@ -33,7 +33,7 @@
                         android:layout_width="300dp"
                         android:layout_height="42dp"
                         android:gravity="center"
-                        android:text="En vivoApp"
+                        android:text="@string/app_name"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,9 +44,9 @@
 
                     <Button
                         android:id="@+id/btnMensajeriaGlobalGestionVideos"
-                        android:layout_width="60dp"
-                        android:layout_height="34dp"
-                        app:icon="@android:drawable/ic_menu_send"
+                        android:layout_width="50sp"
+                        android:layout_height="40sp"
+                        app:icon="@drawable/ic_enviar_mensajes"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -54,14 +54,17 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" >
+
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -82,7 +85,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:drawableTop="@drawable/ic_local_vendedor"
                                 android:text="Local"
                                 android:textSize="8sp" />
 
@@ -109,7 +112,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:drawableTop="@android:drawable/presence_video_online"
+                                android:drawableTop="@drawable/ic_videos_streaming"
                                 android:text="Videos"
                                 android:textSize="8sp" />
 
@@ -127,7 +130,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="?android:attr/actionModeFindDrawable"
+                                android:drawableTop="@drawable/ic_reportes_vendedor"
                                 android:text="Reportes"
                                 android:textSize="8sp" />
 
@@ -143,9 +146,10 @@
                                 android:textSize="8sp" />
 
                         </LinearLayout>
-                    </LinearLayout>
+
                 </HorizontalScrollView>
 
+            </LinearLayout>
             </LinearLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -191,7 +195,8 @@
         android:drawableStart="@android:drawable/ic_menu_search"
         android:ems="10"
         android:hint="Búsqueda"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:drawableLeft="@android:drawable/ic_menu_search" />
 
     <GridView
         android:id="@+id/listStreaming"

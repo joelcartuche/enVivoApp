@@ -34,7 +34,7 @@
                         android:layout_width="300dp"
                         android:layout_height="42dp"
                         android:gravity="center"
-                        android:text="En vivoApp"
+                        android:text="@string/app_name"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,9 +45,9 @@
 
                     <Button
                         android:id="@+id/btnMensajeriaGlobalListarStremingsVendedor"
-                        android:layout_width="60dp"
-                        android:layout_height="34dp"
-                        app:icon="@android:drawable/ic_menu_send"
+                        android:layout_width="50sp"
+                        android:layout_height="40sp"
+                        app:icon="@drawable/ic_enviar_mensajes"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -59,52 +59,64 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
-                    <Button
-                        android:id="@+id/btn_Home_Streaming_Vendedor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_home"
-                        android:text="Home"
-                        android:textSize="8sp" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
 
-                    <Button
-                        android:id="@+id/btn_listar_vendedores_listar_streaming"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_listar_vendedores"
-                        android:text="Vendedores"
-                        android:textSize="8sp" />
 
-                    <Button
-                        android:id="@+id/btn_perfil_listar_streaming_vendedor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_persona"
-                        android:text="Perfil"
-                        android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btn_Home_Streaming_Vendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_home"
+                                android:text="Home"
+                                android:textSize="8sp" />
 
-                    <Button
-                        android:id="@+id/btn_carrito_listar_streaming_vendedor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_carrito_compra"
-                        android:text="Carrito"
-                        android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btn_listar_vendedores_listar_streaming"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:text="Vendedores"
+                                android:textSize="8sp" />
 
-                    <Button
-                        android:id="@+id/btn_salir_listar_streaming"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableTop="@drawable/ic_persona_salir"
-                        android:text="Salir"
-                        android:textSize="8sp" />
+                            <Button
+                                android:id="@+id/btn_carrito_listar_streaming_vendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_carrito_compra"
+                                android:text="Carrito"
+                                android:textSize="8sp" />
 
+                            <Button
+                                android:id="@+id/btn_perfil_listar_streaming_vendedor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona"
+                                android:text="Perfil"
+                                android:textSize="8sp" />
+
+
+
+                            <Button
+                                android:id="@+id/btn_salir_listar_streaming"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawableTop="@drawable/ic_persona_salir"
+                                android:text="Salir"
+                                android:textSize="8sp" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
                 </LinearLayout>
             </LinearLayout>
 

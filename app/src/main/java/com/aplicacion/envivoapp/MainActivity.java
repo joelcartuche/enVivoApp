@@ -1,10 +1,12 @@
 package com.aplicacion.envivoapp;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,11 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -44,6 +51,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +60,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -68,17 +78,20 @@ public class MainActivity extends AppCompatActivity {
     private Fragment fragmentUsuarioTieneCuenta; //intanciamos los fragmentos
 
 
-    private CardView cardIniciarSesion, cardCrearCuenta;
-    private ImageView imagenCrearCuenta,imagenIniciarSesion;
-    private Button btnCrearCuenta,btnAtras;
+    private CardView cardIniciarSesion, cardCrearCuenta,cardImgCrearCuenta,cardImgIniciarSesion;
+    private ImageView imgCrearCuenta,imgIniciarSesion;
+    private Button btnCrearCuenta,btnAtras,btnIniciarSesionGoolge,btnCrearCuentaGoogle;
     private RadioButton esVendedor,esCliente;
     private Boolean esNuevo = false;
+    private GoogleSignInClient googleSignInClient;
+    private int RC_SIGN_IN = 1;
 
 
     private FirebaseDatabase firebaseDatabase; //almacena a firebase database de firebase
     private DatabaseReference databaseReference; //almacena eel database reference de firebase
     private Usuario usuario;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,54 +108,76 @@ public class MainActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);//almacenamos el boton de facebook
         loginButtonIniciarSesion = findViewById(R.id.login_buttonIniciarSesion);
 
-
-
         esVendedor = findViewById(R.id.radioButtonEsVendedor);//almacena si el usuario es vendedor
         esCliente = findViewById(R.id.radioButtonEsCliente);//almacena si el usuario es cliente
         btnCrearCuenta = findViewById(R.id.btnCrearCuenta);
         btnAtras = findViewById(R.id.btnAtras);
         cardCrearCuenta = findViewById(R.id.cardCrearCuenta);
         cardIniciarSesion = findViewById(R.id.cardIniciarSesion);
-        imagenCrearCuenta = findViewById(R.id.imageViewCrearCuenta);
-        imagenIniciarSesion = findViewById(R.id.imageViewIniciarSesion);
+        cardImgCrearCuenta = findViewById(R.id.cardImgCrearCuenta);
+        cardImgIniciarSesion = findViewById(R.id.cardImgIniciarSesion);
+        imgIniciarSesion = findViewById(R.id.imageViewIniciarSesion);
+        imgCrearCuenta = findViewById(R.id.imageViewCrearCuenta);
+        btnIniciarSesionGoolge = findViewById(R.id.bntIniciarSesionGoogle);
+        btnCrearCuentaGoogle = findViewById(R.id.btnCrearCuentaGoogle);
+
         esNuevo = false;
 
+        //para el inicio se sesion con google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(MainActivity.this,gso);
 
         usuario = new Usuario();//incializamos el usuarioo
 
         loginButton.setVisibility(View.GONE);//desabilitamos el boton de logeo
-
+        btnCrearCuentaGoogle.setVisibility(View.GONE);
 
         //incio de funcionalidad a los checkBox
         esVendedor.setOnClickListener(new View.OnClickListener() {//en caso de que el usuario seleccione cualquiera de los checkBox
             @Override
             public void onClick(View v) {
                 loginButton.setVisibility(View.VISIBLE);
+                btnCrearCuentaGoogle.setVisibility(View.VISIBLE);
             } //habilitamos el boton de logeo
         });
         esCliente.setOnClickListener(new View.OnClickListener() {//en caso de que el usuario seleccione cualquiera de los checkBox
             @Override
             public void onClick(View v) {
                 loginButton.setVisibility(View.VISIBLE);
+                btnCrearCuentaGoogle.setVisibility(View.VISIBLE);
             }//habilitamos el boton de logeo
         });
         //fin de funcionalidad a los checkBox
 
         //escondemos el card view de crear cuenta
         cardCrearCuenta.setVisibility(View.GONE);
-        imagenCrearCuenta.setVisibility(View.GONE);
+        cardImgCrearCuenta.setVisibility(View.GONE);
+        imgCrearCuenta.setVisibility(View.GONE);
+
         //en caso de que el usuario le de click a crear cuenta
         btnCrearCuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cardIniciarSesion.setVisibility(View.GONE);//escondemos el card de iniciar sesion
-                imagenIniciarSesion.setVisibility(View.GONE);
+                cardImgIniciarSesion.setVisibility(View.GONE);
+                imgIniciarSesion.setVisibility(View.GONE);
+
                 cardCrearCuenta.setVisibility(View.VISIBLE);//mostramos el card de crear cuenta
-                imagenCrearCuenta.setVisibility(View.VISIBLE);
+                cardImgCrearCuenta.setVisibility(View.VISIBLE);
+                imgCrearCuenta.setVisibility(View.VISIBLE);
                 esNuevo = true;
             }
         });
 
+        btnCrearCuentaGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
 
 
         //en caso de que el usuario desee regresar
@@ -150,9 +185,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 cardCrearCuenta.setVisibility(View.GONE);//escondemos el card de iniciar sesion
-                imagenCrearCuenta.setVisibility(View.GONE);
+                cardImgCrearCuenta.setVisibility(View.GONE);
+                imgCrearCuenta.setVisibility(View.GONE);
+
                 cardIniciarSesion.setVisibility(View.VISIBLE);//mostramos el card de crear cuenta
-                imagenIniciarSesion.setVisibility(View.VISIBLE);
+                cardImgIniciarSesion.setVisibility(View.VISIBLE);
+                imgIniciarSesion.setVisibility(View.VISIBLE);
                 esNuevo=false;
             }
         });
@@ -169,6 +207,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
+        btnIniciarSesionGoolge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
 
         loginButtonIniciarSesion.setReadPermissions("email","public_profile");
         // Callback registration
@@ -242,8 +287,42 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        callBackManager.onActivityResult(requestCode,resultCode,data);
         super.onActivityResult(requestCode, resultCode, data);
+        callBackManager.onActivityResult(requestCode,resultCode,data); //codigo para facebook
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d("Goolge inicio sesión", "firebaseAuthWithGoogle:" + account.getId());
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("Goolge inicio sesión", "Google sign in failed", e);
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("Goolge inicio sesión", "signInWithCredential:success");
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("Goolge inicio sesión", "signInWithCredential:failure", task.getException());
+                            updateUI(null);
+                        }
+                    }
+                });
     }
 
     private void handleFacebookToken(AccessToken accessToken) {
@@ -273,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null){
             String usuarioLogeado = firebaseAuth.getCurrentUser().getUid();//obtenemos el uid del usuario logeado
             databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()) {
@@ -350,9 +430,6 @@ public class MainActivity extends AppCompatActivity {
             foto = foto+"?type=large";
             Piccasso.get().Load(foto).into(ImagenViewAsignado)        }
             */
-        }else{
-            //Retornamos una imagen predefinida
-            //imageView.setImageResourse(R.drawable.Logo);
         }
     }
 
@@ -360,6 +437,11 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         firebaseDatabase = FirebaseDatabase.getInstance();//inicializamos firebaseDatabase
         databaseReference = firebaseDatabase.getReference();//inicializamos el reference a la base de datos
+    }
+
+    private void signIn() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
 
@@ -379,4 +461,6 @@ public class MainActivity extends AppCompatActivity {
             firebaseAuth.removeAuthStateListener(authStateListener);
         }
     }
+
+
 }

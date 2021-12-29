@@ -89,7 +89,6 @@ public class AdapterMensajeriaGlobal extends BaseAdapter {
             });
         }
 
-
         if (mensaje.getEsVededor()){//En caso de que el mensaje sea departe del vendedor
             databaseReference.child("Vendedor").child(mensaje.getIdvendedor()).addValueEventListener(new ValueEventListener() {
                 @Override

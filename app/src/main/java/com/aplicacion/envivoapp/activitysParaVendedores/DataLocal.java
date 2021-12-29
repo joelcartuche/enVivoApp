@@ -104,7 +104,6 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
                             }
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
@@ -161,14 +160,15 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
                                             if (vendedorAux!=null){
                                                 if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
                                                     vendedor = vendedorAux;
-                                                    break;
                                                 }
                                             }
                                         }
                                         if (vendedor!= null){
-                                            listLocal.add(local);
-                                            gridAdapterLocal = new AdapterListarLocal(DataLocal.this, listLocal, databaseReference);
-                                            gridViewLocal.setAdapter(gridAdapterLocal); //configuramos el view
+                                            if(local.getIdVendedor().equals(vendedor.getIdVendedor())) {
+                                                listLocal.add(local);
+                                                gridAdapterLocal = new AdapterListarLocal(DataLocal.this, listLocal, databaseReference);
+                                                gridViewLocal.setAdapter(gridAdapterLocal); //configuramos el view
+                                            }
                                         }
                                     }
                                 }

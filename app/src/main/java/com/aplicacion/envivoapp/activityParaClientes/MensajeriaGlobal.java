@@ -158,14 +158,19 @@ public class MensajeriaGlobal extends AppCompatActivity {
                                     mensaje.setIdvendedor(idVendedor);
                                     mensaje.setIdStreaming(null);
                                     mensaje.setEsGlobal(true);
+                                    mensaje.setEsVededor(false);
                                     mensajeEnv.setText("");
                                     databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Toast.makeText(MensajeriaGlobal.this,"Error al enviar el mensaje",Toast.LENGTH_LONG).show();
                                         }
+                                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            gridViewMensaje.setVerticalScrollbarPosition(listMensaje.size());
+                                        }
                                     });
-
                                 }
                             }
                         }
@@ -175,9 +180,6 @@ public class MensajeriaGlobal extends AppCompatActivity {
                             borrarGrid();
                         }
                     });
-
-
-
 
                 }
             }

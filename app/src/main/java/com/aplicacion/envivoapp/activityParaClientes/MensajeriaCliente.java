@@ -3,16 +3,21 @@ package com.aplicacion.envivoapp.activityParaClientes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,11 +25,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaVendedor;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaCliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.utilidades.ScreenshotUtil;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -58,14 +66,15 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private FirebaseStorage storage ; //para la insersion de archivos
+    private FirebaseStorage storage; //para la insersion de archivos
 
     private Button enviarMensaje,quieroComprar;
     private EditText textoMensaje;
     private String idVendedor,idCliente,idStreaming,urlStreaming;
 
+
     private List<Mensaje> listMensaje = new ArrayList<>();
-    private GridView gridViewMensaje;
+    private RecyclerView gridViewMensaje;
     private AdapterGridMensajeriaCliente gridAdapterMensaje;
     private Bitmap bitmapCapturaPantalla;
     private YouTubePlayerView reproductorYoutube;
@@ -97,13 +106,15 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
 
 
         //Enviamos el mensaje informativo
-        DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {
+        /*DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         };
         new Utilidades().cuadroDialogo(MensajeriaCliente.this,confirmar,"Informacion","Antés de presionar el boton quiero comprar debe realizar una captura de pantalla del producto que se esta mostrando en el streaming para ello puede usar la combinacion de teclas o deslizando el menu de la parte superior");
+        */
+
         Bundle vendedor = MensajeriaCliente.this.getIntent().getExtras();
         idVendedor = vendedor.getString("vendedor"); //recogemos los datos del vendedor
         idCliente = vendedor.getString("cliente");
@@ -111,7 +122,7 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
         idStreaming = vendedor.getString("streaming");
 
 
-        listarMensajes();//listamos los mensajes del cliente
+
 
         //Damos funcionalidad al menu
         Button btnListarVendedore = findViewById(R.id.btn_listar_vendedores_MensajeriaCliente);
@@ -136,19 +147,28 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
             public void onClick(View v) {
 
                 selectorImagenes();
-
-
+                /*bitmapCapturaPantalla = tomarCapturaPantalla();
+                if(bitmapCapturaPantalla != null){
+                    textoMensaje.setText("Quiero comprar: ");
+                }else{
+                    Toast.makeText(MensajeriaCliente.this,"Error al crear captura",Toast.LENGTH_LONG).show();
+                }
+                /*
+                 */
                 /*
                 textoMensaje.setText("Quiero comprar: ");
                 //bitmapCapturaPantalla = ScreenshotUtil.getInstance().takeScreenshotForScreen(MensajeriaCliente.this);
                 View rootView = getWindow().getDecorView();
                 bitmapCapturaPantalla = ScreenshotUtil.getInstance().takeScreenshotForView(rootView);
                 Toast.makeText(MensajeriaCliente.this,"Ingrese el nombre o código y la cantidad del producto que desea",Toast.LENGTH_LONG).show();
-                */
 
-                //textoMensaje.setText("Quiero comprar: ");
-                //bitmapCapturaPantalla = ThumbnailUtils.createVideoThumbnail("imgPath", MediaStore.Images.Thumbnails.MINI_KIND);;
-                //Toast.makeText(MensajeriaCliente.this,"Ingrese el nombre o código y la cantidad del producto que desea",Toast.LENGTH_LONG).show();
+                 */
+                /*
+                textoMensaje.setText("Quiero comprar: ");
+
+                bitmapCapturaPantalla = ThumbnailUtils.createVideoThumbnail("imgPath", MediaStore.Images.Thumbnails.MINI_KIND);;
+                Toast.makeText(MensajeriaCliente.this,"Ingrese el nombre o código y la cantidad del producto que desea",Toast.LENGTH_LONG).show();
+                 */
                 /*
                 screenshot.notificationTitle("My screenshot title");
                 screenshot.setCallback(new Screenshot.OnResultListener() {
@@ -162,6 +182,7 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
 
                 final ViewGroup view= (ViewGroup) (getWindow().getDecorView().getRootView());
                 screenshot.takeScreenshotFromView(findViewById(R.id.videoYoutubeMensajeriaCliente).getRootView());
+
                  */
             }
         });
@@ -262,10 +283,13 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
         listMensaje.clear();//borramos los datos ya que no hay nada en la base
         gridAdapterMensaje = new AdapterGridMensajeriaCliente(MensajeriaCliente.this,listMensaje,databaseReference,storage);
         gridViewMensaje.setAdapter(gridAdapterMensaje);
+        gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaCliente.this));
+
     }
 
     public void listarMensajes(){
         databaseReference.child("Mensaje").orderByChild("fecha").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -281,6 +305,9 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
                     }
                     gridAdapterMensaje = new AdapterGridMensajeriaCliente(MensajeriaCliente.this, listMensaje, databaseReference, storage);
                     gridViewMensaje.setAdapter(gridAdapterMensaje);
+                    gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaCliente.this));
+                    gridViewMensaje.getLayoutManager().scrollToPosition(listMensaje.size()-1);
+
                 }else{
                    borrarGrid();
                 }
@@ -297,7 +324,33 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean fueRestaurado) {
         if(!fueRestaurado){
-            youTubePlayer.cueVideo("QN7BKarpltI");//https://www.youtube.com/watch?v=QN7BKarpltI
+            String resultado = urlStreaming;
+
+            if(resultado.contains("https://youtu.be/")){
+                resultado = resultado.replace("https://youtu.be/","");
+            }
+            if(resultado.contains("https://youtube.com/")){
+                resultado = resultado.replace("https://youtube.com/","");
+            }
+            if(resultado.contains("watch?v=")){
+                resultado =  resultado.replace("watch?v=","");
+            }
+            if(resultado.contains("&")){
+                resultado = resultado.split("&")[0];
+
+            }
+
+            youTubePlayer.cueVideo(resultado);//https://www.youtube.com/watch?v=QN7BKarpltI
+
+            listarMensajes();//listamos los mensajes del cliente
+        }else{
+            Toast.makeText(MensajeriaCliente.this,"Error al reproducir el video",Toast.LENGTH_LONG).show();
+            Bundle parametros = new Bundle();
+            parametros.putString("vendedor",idVendedor);
+            parametros.putString("cliente",idCliente);
+            Intent streamingsIntent = new Intent(MensajeriaCliente.this,ListarStreamingsVendedor.class);
+            streamingsIntent.putExtras(parametros);
+            startActivity(streamingsIntent);
         }
     }
 

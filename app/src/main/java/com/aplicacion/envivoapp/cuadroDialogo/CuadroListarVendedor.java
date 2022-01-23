@@ -1,5 +1,6 @@
 package com.aplicacion.envivoapp.cuadroDialogo;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +17,14 @@ import androidx.annotation.NonNull;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.adaptadores.AdapterListarLocal;
+import com.aplicacion.envivoapp.adaptadores.AdapterListarLocalClientes;
 import com.aplicacion.envivoapp.modelos.Local;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +42,7 @@ import java.util.Map;
 public class CuadroListarVendedor {
 
     List<Local> listLocal = new ArrayList<>(); //lista que contendra los locales del vendedor
-    AdapterListarLocal gridAdapterLocal; //iniciamos el adaptador del gridView
+    AdapterListarLocalClientes gridAdapterLocal; //iniciamos el adaptador del gridView
 
     public interface resultadoDialogo{
         void resultado(Boolean isVerStreamings,Vendedor vendedor);
@@ -49,6 +52,8 @@ public class CuadroListarVendedor {
     public CuadroListarVendedor(Context context,
                                 Vendedor vendedor,
                                 DatabaseReference reference,
+                                FirebaseAuth firebaseAuth,
+                                Bundle bundle,
                                 CuadroListarVendedor.resultadoDialogo result){
         interfaceResultadoDialogo = result;
         final Dialog dialog = new Dialog(context);
@@ -56,6 +61,7 @@ public class CuadroListarVendedor {
         dialog.setCancelable(false); //impedimos el cancelamiento del dialogo
         //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
         dialog.setContentView(R.layout.cuadro_lista_vendedor); //le asisganos el layout
+
 
 
         TextView nombreVendedor = dialog.findViewById(R.id.txtCuadroListaVendedorNombreVendedor);
@@ -101,10 +107,10 @@ public class CuadroListarVendedor {
 
 
 
-                    gridAdapterLocal = new AdapterListarLocal(context, listLocal, reference);
+                    gridAdapterLocal = new AdapterListarLocalClientes(context, listLocal, firebaseAuth, bundle, reference);
                     localVendedorView.setAdapter(gridAdapterLocal); //configuramos el view
                 }else{
-                    gridAdapterLocal = new AdapterListarLocal(context, listLocal, reference);
+                    gridAdapterLocal = new AdapterListarLocalClientes(context, listLocal,firebaseAuth, bundle, reference);
                     localVendedorView.setAdapter(gridAdapterLocal); //configuramos el view
                 }
             }

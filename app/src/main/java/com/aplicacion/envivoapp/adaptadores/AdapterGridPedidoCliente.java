@@ -25,6 +25,7 @@ import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
 import com.aplicacion.envivoapp.activityParaClientes.MensajeriaGlobal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
+import com.aplicacion.envivoapp.modelos.Usuario;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -93,6 +94,7 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
         ImageView imagenPedido = convertView.findViewById(R.id.imgPedidoCliente);
         Button btnCancelarPedido = convertView.findViewById(R.id.btnCancelarItemPedidoCliente);
         Button btnConversarVendedor = convertView.findViewById(R.id.btnConvesarVendedor);
+        ImageView imgPerfilVendedor = convertView.findViewById(R.id.imgPerfilVendedorPedidoCliente);
 
         btnConversarVendedor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,18 +112,47 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
+                    Vendedor vendedor = snapshot.getValue(Vendedor.class);
                     codigo.setText(pedido.getCodigoProducto());
                     nombre.setText(pedido.getNombreProducto());
                     cantidad.setText(pedido.getCantidadProducto()+"");
                     precio.setText(pedido.getPrecioProducto()+"");
                     descripcion.setText(pedido.getDescripcionProducto());
-                    nombreVendedor.setText(snapshot.getValue(Vendedor.class).getNombre());
+                    nombreVendedor.setText(vendedor.getNombre());
                     fechaPedido.setText(pedido.getFechaPedido().getDate() +"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear());
                     fechaFinalPedido.setText(pedido.getFechaFinalPedido().getDate() +"/"+pedido.getFechaFinalPedido().getMonth()+"/"+pedido.getFechaFinalPedido().getYear());
                     storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             Picasso.with(context).load(uri).into(imagenPedido);
+                        }
+                    });
+                    //Cargamos la imagen del usuario
+                    databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                Usuario usuario = null;
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    Usuario usuarioAux = ds.getValue(Usuario.class);
+                                    if (usuarioAux.getUidUser().equals(vendedor.getUidUsuario())) {
+                                        usuario = usuarioAux;
+                                    }
+                                }
+                                if (usuario != null) {
+                                    Uri uri = Uri.parse(usuario.getImagen());
+                                    Picasso.with(context).
+                                            load(uri).
+                                            resize(100, 100).
+                                            into(imgPerfilVendedor);
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
 

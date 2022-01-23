@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.aplicacion.envivoapp.activitysParaVendedores.ListarClientes;
 import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.modelos.Usuario;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +36,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -82,9 +86,64 @@ public class AdapterListarClientes extends BaseAdapter {
         TextView celularCliente = convertView.findViewById(R.id.txtCelularClienteItemListClientes);
         Button btnbloquerCliente = convertView.findViewById(R.id.btnBloquearClienteItemListClientes);
         Button btnDesbloquearCliente = convertView.findViewById(R.id.btnDesbloquearCliente);
+        TextView lblTelelfono = convertView.findViewById(R.id.lblTelefono);
+        TextView lblCelular = convertView.findViewById(R.id.lblCelular);
+        ImageView imgPerfil = convertView.findViewById(R.id.imgPerfilCliente);
+
         nombreCliente.setText(cliente.getNombre());
-        telefonoCliente.setText(cliente.getTelefono());
-        celularCliente.setText(cliente.getCelular());
+
+        if (cliente.getTelefono()==null || cliente.getTelefono().equals("")){
+            lblTelelfono.setVisibility(View.GONE);
+            telefonoCliente.setVisibility(View.GONE);
+        }else{
+            telefonoCliente.setText(cliente.getTelefono());
+        }
+
+        if (cliente.getCelular() == null || cliente.getCelular().equals("") ){
+            lblCelular.setVisibility(View.GONE);
+            celularCliente.setVisibility(View.GONE);
+        }else{
+            celularCliente.setText(cliente.getCelular());
+        }
+
+        //Cargamos la imagen del usuario
+        databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    Usuario usuario = null;
+                    for (DataSnapshot ds: snapshot.getChildren()){
+                        Usuario usuarioAux = ds.getValue(Usuario.class);
+                        if (usuarioAux.getUidUser().equals(cliente.getUidUsuario())){
+                            usuario = usuarioAux;
+                        }
+                    }
+                    if (usuario != null){
+                        if (usuario.getImagen() != null ){
+                            if (!usuario.getImagen().equals("")) {
+                                Uri uri = Uri.parse(usuario.getImagen());
+                                Picasso.with(context).
+                                        load(uri).
+                                        resize(300, 300).
+                                        into(imgPerfil);
+                            }
+                        }else{
+                            imgPerfil.setImageResource(R.drawable.ic_persona);
+                        }
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
         if (esMensajeGlobal.equals("1")){
             btnbloquerCliente.setVisibility(View.GONE);
             btnDesbloquearCliente.setVisibility(View.GONE);

@@ -82,7 +82,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:drawableTop="@drawable/ic_local_vendedor"
                                 android:text="Local"
                                 android:textSize="8sp" />
 
@@ -180,18 +180,21 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView39">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Filtrar por:" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Filtrar por:" />
 
                 <RadioGroup
                     android:id="@+id/radioGroup"
@@ -199,6 +202,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <RadioButton
+                        android:id="@+id/radioTodosPedidoVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="Todos"
+                        android:textSize="10sp" />
 
                     <RadioButton
                         android:id="@+id/radioPagadoPedidoVendedor"
@@ -232,16 +243,11 @@
                         android:text="Cancelados"
                         android:textSize="10sp" />
 
-                    <RadioButton
-                        android:id="@+id/radioTodosPedidoVendedor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Todos"
-                        android:textSize="10sp" />
+
 
                 </RadioGroup>
 
+            </LinearLayout>
             </LinearLayout>
         </HorizontalScrollView>
 

@@ -84,7 +84,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:drawableTop="@drawable/ic_local_vendedor"
                                 android:text="Local"
                                 android:textSize="8sp" />
 
@@ -169,7 +169,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.44" />
 
-        <GridView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gridMensajeriaGlobalVendedor"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -199,6 +199,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             app:icon="@drawable/ic_enviar_mensajes"
+            app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txtTextiMensajeriaGlobalVendedor"
@@ -212,6 +213,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             app:icon="@drawable/ic_selecionar_imagen"
+            app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txtTextiMensajeriaGlobalVendedor"
             app:layout_constraintHorizontal_bias="0.7"

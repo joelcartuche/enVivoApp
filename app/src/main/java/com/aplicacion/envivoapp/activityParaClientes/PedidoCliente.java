@@ -4,15 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridPedidoCliente;
+import com.aplicacion.envivoapp.adaptadores.AdapterListarVendedores;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
+import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +40,7 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
     private List<Pedido> listPedido = new ArrayList<>();
     private GridView gridViewPedido;
     private AdapterGridPedidoCliente gridAdapterPedido;
+    private EditText buscarVendedor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +50,11 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
         firebaseAuth = FirebaseAuth.getInstance(); //intanciamos el usuario logeado
         firebaseDatabase = FirebaseDatabase.getInstance(); //intanciamos la base de datos firebase
         databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
-        storage = FirebaseStorage.getInstance();//inicializamos la variable storage
+        storage = FirebaseStorage.getInstance();//inicializamos la variable storage}
+
 
         gridViewPedido = findViewById(R.id.gridProductoCliente);
+        buscarVendedor = findViewById(R.id.buscarVendedorPedidoCliente);
 
         listarProductos();
         //Damos funcionalidad al menu
@@ -62,7 +71,6 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
                 btnSalir,
                 btnMensje,
                 PedidoCliente.this,firebaseAuth,databaseReference);
-
 
     }
     private void borrarGrid(){

@@ -66,6 +66,8 @@ public class CuadroEditarStraming {
         Button btnCancelarVideo = dialog.findViewById(R.id.btnCancelarCuadroStreamings);
         Button btnIrVideo = dialog.findViewById(R.id.btnIrStreamingCuadroStreraming);
 
+        txtEditarUrlVideo.setHint("https://youtu.be/8wV32B34N_I");
+
         if (videoStreaming != null) {
             if (videoStreaming.getIniciado()) {
                 activarVideo.setChecked(true);
@@ -96,9 +98,14 @@ public class CuadroEditarStraming {
         btnGuardarVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if (!txtEditarUrlVideo.getText().toString().equals("")
                         && !txtEditarFechaVideo.getText().toString().equals("")
                         && !txtEditarHoraVideo.getText().toString().equals("")) {
+
+                    if(txtEditarUrlVideo.getText().toString().contains("https://youtu.be/") ||
+                            txtEditarUrlVideo.getText().toString().contains("https://youtube.com/")){
 
                     reference.child("Vendedor").addValueEventListener(new ValueEventListener() {
                         @Override
@@ -156,7 +163,9 @@ public class CuadroEditarStraming {
 
                         }
                     });
-
+                    }else{
+                        Toast.makeText(context, "El url del video no es correcto", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(context, "Asegurese de aver ingresado todos los datos", Toast.LENGTH_LONG).show();
                 }
@@ -167,44 +176,60 @@ public class CuadroEditarStraming {
             @Override
             public void onClick(View v) {
 
-                String[] fecha = txtEditarFechaVideo.getText().toString().split("/");//separamos la fecha en un arreglo
-                if(Integer.parseInt(fecha[0])<10){
-                    fecha[0]="0"+fecha[0]; //añadimos un cero en caso de que la fecha se una sola unidad
-                }
-                if(Integer.parseInt(fecha[1])<10){
-                    fecha[1]="0"+fecha[1]; //añadimos un cero en la fecha en caso de que sea una solo unidad
-                }
+                if (!txtEditarUrlVideo.getText().toString().equals("")
+                        && !txtEditarFechaVideo.getText().toString().equals("")
+                        && !txtEditarHoraVideo.getText().toString().equals("")) {
 
-                String fechaFormat = fecha[0]+"-"+fecha[1]+"-"+fecha[2]+" "+txtEditarHoraVideo.getText().toString(); //le damos formato a la fecha
-                Date fechaTransmision = null;//creamos una variable de tipo date para luego almacenarla en  la clase videoStreaming
-                try {
-                    fechaTransmision = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(fechaFormat); //almacenamos la fecha Date
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                fechaTransmision.setMonth(Integer.parseInt(fecha[1]));//editamos el mes ya que presenta error en la base
-                fechaTransmision.setYear(Integer.parseInt(fecha[2])); //editamos el año por error en la base
+                    if (txtEditarUrlVideo.getText().toString().contains("https://youtu.be/") ||
+                            txtEditarUrlVideo.getText().toString().contains("https://youtube.com/")) {
 
-                Map<String,Object> videoStreamingMap = new HashMap<>(); //almacena los datos que van a ser editados
 
-                videoStreamingMap.put("urlVideoStreaming",txtEditarUrlVideo.getText().toString());//setiamos el url del video
-                videoStreamingMap.put("fechaTransmision",fechaTransmision);//seteamos la fecha de trasmision
-                videoStreamingMap.put("idVideoStreaming",videoStreaming.getIdVideoStreaming());//seteamos el id
-                videoStreamingMap.put("iniciado",activarVideo.isChecked());
-                firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).updateChildren(videoStreamingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(context, "Datos actualizados con exito", Toast.LENGTH_LONG).show();
+
+                        String[] fecha = txtEditarFechaVideo.getText().toString().split("/");//separamos la fecha en un arreglo
+                        if (Integer.parseInt(fecha[0]) < 10) {
+                            fecha[0] = "0" + fecha[0]; //añadimos un cero en caso de que la fecha se una sola unidad
+                        }
+                        if (Integer.parseInt(fecha[1]) < 10) {
+                            fecha[1] = "0" + fecha[1]; //añadimos un cero en la fecha en caso de que sea una solo unidad
+                        }
+
+                        String fechaFormat = fecha[0] + "-" + fecha[1] + "-" + fecha[2] + " " + txtEditarHoraVideo.getText().toString(); //le damos formato a la fecha
+                        Date fechaTransmision = null;//creamos una variable de tipo date para luego almacenarla en  la clase videoStreaming
+                        try {
+                            fechaTransmision = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(fechaFormat); //almacenamos la fecha Date
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        fechaTransmision.setMonth(Integer.parseInt(fecha[1]));//editamos el mes ya que presenta error en la base
+                        fechaTransmision.setYear(Integer.parseInt(fecha[2])); //editamos el año por error en la base
+
+                        Map<String, Object> videoStreamingMap = new HashMap<>(); //almacena los datos que van a ser editados
+
+                        videoStreamingMap.put("urlVideoStreaming", txtEditarUrlVideo.getText().toString());//setiamos el url del video
+                        videoStreamingMap.put("fechaTransmision", fechaTransmision);//seteamos la fecha de trasmision
+                        videoStreamingMap.put("idVideoStreaming", videoStreaming.getIdVideoStreaming());//seteamos el id
+                        videoStreamingMap.put("iniciado", activarVideo.isChecked());
+
+
+                        firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).updateChildren(videoStreamingMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(context, "Datos actualizados con exito", Toast.LENGTH_LONG).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, "No se pudo actualizar los datos intentelo de nuevo", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    }else{
+                        Toast.makeText(context, "El url del video no es correcto", Toast.LENGTH_LONG).show();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "No se pudo actualizar los datos intentelo de nuevo", Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                }
             }
         });
+
         if (videoStreaming != null) {
             if (!videoStreaming.getEliminado()) {//en caso de que el video no este eliminado
                 btnGuardarVideo.setVisibility(View.GONE);

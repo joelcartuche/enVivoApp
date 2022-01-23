@@ -1,5 +1,7 @@
 package com.aplicacion.envivoapp.modelos;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,5 +74,11 @@ public class Vendedor {
 
     public void setUidUsuario(String uidUsuario) {
         this.uidUsuario = uidUsuario;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return nombre;
     }
 }

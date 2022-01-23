@@ -136,11 +136,26 @@
             android:text="Carrito de compra"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/gridProductoCliente"
+            app:layout_constraintBottom_toTopOf="@+id/buscarVendedorPedidoCliente"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/buscarVendedorPedidoCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:ems="10"
+            android:hint="Ingrese el nombre del vendedor"
+            android:inputType="textPersonName"
+            android:drawableLeft="@android:drawable/ic_menu_search"
+
+            app:layout_constraintBottom_toTopOf="@+id/gridProductoCliente"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView39"/>
 
         <GridView
             android:id="@+id/gridProductoCliente"
@@ -148,11 +163,12 @@
             android:layout_height="468dp"
             android:layout_marginTop="4dp"
             android:horizontalSpacing="12dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView39">
+            app:layout_constraintTop_toBottomOf="@+id/buscarVendedorPedidoCliente">
 
         </GridView>
     </androidx.constraintlayout.widget.ConstraintLayout>

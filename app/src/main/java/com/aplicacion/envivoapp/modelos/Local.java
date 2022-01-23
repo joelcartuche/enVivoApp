@@ -1,15 +1,61 @@
 package com.aplicacion.envivoapp.modelos;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Local {
     String idLocal;
     String Nombre;
-    String Direccion;
+    String CallePrincipal;
+    String CalleSecundaria;
+    String Referencia;
+    Double Latitud;
+    Double Longitud;
     String Telefono;
     String Celular;
     String idVendedor;
 
     public Local() {
     }
+
+    public String getCallePrincipal() {
+        return CallePrincipal;
+    }
+
+    public void setCallePrincipal(String callePrincipal) {
+        CallePrincipal = callePrincipal;
+    }
+
+    public String getCalleSecundaria() {
+        return CalleSecundaria;
+    }
+
+    public void setCalleSecundaria(String calleSecundaria) {
+        CalleSecundaria = calleSecundaria;
+    }
+
+    public String getReferencia() {
+        return Referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        Referencia = referencia;
+    }
+
+    public Double getLatitud() {
+        return Latitud;
+    }
+
+    public Double getLongitud() {
+        return Longitud;
+    }
+
+    public void setLatitud(double latitud){
+        Latitud= latitud;
+    }
+    public void  setLongitud(double longitud){
+        Longitud = longitud;
+    }
+
 
     public String getNombre() {
         return Nombre;
@@ -33,14 +79,6 @@ public class Local {
 
     public void setIdLocal(String idLocal) {
         this.idLocal = idLocal;
-    }
-
-    public String getDireccion() {
-        return Direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        Direccion = direccion;
     }
 
     public String getTelefono() {

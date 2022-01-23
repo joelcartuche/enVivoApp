@@ -98,6 +98,7 @@
             android:id="@+id/cardImgIniciarSesion"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="10dp"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"
             app:cardCornerRadius="200dp"
@@ -238,6 +239,7 @@
             android:id="@+id/cardImgCrearCuenta"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="10dp"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="10dp"
             app:cardCornerRadius="300dp"
@@ -252,6 +254,7 @@
                 android:id="@+id/imageViewCrearCuenta"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_margin="10dp"
                 app:srcCompat="@mipmap/ic_img_logo_principal_foreground" />
         </androidx.cardview.widget.CardView>
 

@@ -2,13 +2,14 @@
     <!-- Base application theme. -->
     <style name="Theme.EnVivoApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#556BFF</item>
-        <item name="colorPrimaryVariant">#52E38C</item>
+        <item name="colorPrimary">#00a7c7</item>
+        <item name="colorPrimaryVariant">#000000</item>
         <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorOnSurface">#feab6b</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#E37452</item>
-        <item name="colorSecondaryVariant">#A75AFA</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">#f3e9e7</item>
+        <item name="colorSecondaryVariant">#9bcfe0</item>
+        <item name="colorOnSecondary">#e76f3d</item>e76f3d
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

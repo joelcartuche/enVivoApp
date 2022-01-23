@@ -243,6 +243,7 @@
             android:layout_marginBottom="2dp"
             android:drawableBottom="@drawable/ic_minimizar"
             app:backgroundTint="#2979FF"
+            app:cornerRadius="20dp"
             app:layout_constraintBottom_toTopOf="@+id/textView41"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

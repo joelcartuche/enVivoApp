@@ -8,14 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.Cliente;
@@ -32,7 +31,29 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdapterMensajeriaGlobal extends BaseAdapter {
+public class AdapterMensajeriaGlobal extends RecyclerView.Adapter<AdapterMensajeriaGlobal.ViewHolder>  {
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public  TextView nombreMensaje;
+        public TextView fechaMensaje;
+        public TextView mensajeGlobal;
+        public ImageView imgMensajeriaGlobal;
+        public ConstraintLayout contenedorMensajeria;
+        public ImageView imgUsuario;
+
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            nombreMensaje = itemView.findViewById(R.id.txtItemNombreMensajeGlobbal);
+            fechaMensaje  = itemView.findViewById(R.id.txtItemFechaMensajeCliente);
+            mensajeGlobal = itemView.findViewById(R.id.txtItemMensajeGlobal);
+            imgMensajeriaGlobal = itemView.findViewById(R.id.imgMensajeriaGlobal);
+            contenedorMensajeria = itemView.findViewById(R.id.cardMensajeriaGlobal);
+            imgUsuario = itemView.findViewById(R.id.imgItemMensajeGlobal);
+        }
+    }
+
 
     private Context context;
     private List<Mensaje> listaMensajeGlobal;
@@ -47,35 +68,24 @@ public class AdapterMensajeriaGlobal extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return listaMensajeGlobal.size();
+    public AdapterMensajeriaGlobal.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View vistaMensaje = inflater.inflate(R.layout.item_list_mensajeria_global,parent,false);
+        ViewHolder viewHolder = new ViewHolder(vistaMensaje);
+        return viewHolder;
     }
 
     @Override
-    public Object getItem(int position) {
-        return listaMensajeGlobal.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            LayoutInflater layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_list_mensajeria_global,null);
-        }
-
+    public void onBindViewHolder(AdapterMensajeriaGlobal.ViewHolder convertView, int position) {
         Mensaje mensaje = listaMensajeGlobal.get(position);//para manejar que elemento estamos clickeando
         //inicializamos las variables
-        TextView nombreMensaje = convertView.findViewById(R.id.txtItemNombreMensajeGlobbal);
-        TextView fechaMensaje  = convertView.findViewById(R.id.txtItemFechaMensajeCliente);
-        TextView mensajeGlobal = convertView.findViewById(R.id.txtItemMensajeGlobal);
-        ImageView imgMensajeriaGlobal = convertView.findViewById(R.id.imgMensajeriaGlobal);
-        ConstraintLayout contenedorMensajeria = convertView.findViewById(R.id.cardMensajeriaGlobal);
-        ImageView imgUsuario = convertView.findViewById(R.id.imgItemMensajeGlobal);
+        TextView nombreMensaje = convertView.nombreMensaje;
+        TextView fechaMensaje  = convertView.fechaMensaje;
+        TextView mensajeGlobal = convertView.mensajeGlobal;
+        ImageView imgMensajeriaGlobal = convertView.imgMensajeriaGlobal;
+        ConstraintLayout contenedorMensajeria = convertView.contenedorMensajeria;
+        ImageView imgUsuario = convertView.imgUsuario;
 
         if (mensaje.getImagen() == null){
             imgMensajeriaGlobal.setVisibility(View.GONE);
@@ -119,7 +129,7 @@ public class AdapterMensajeriaGlobal extends BaseAdapter {
                                     }
                                     if (usuario != null){
                                         Uri uri = Uri.parse(usuario.getImagen());
-                                        Picasso.with(context).load(uri).into(imgUsuario);
+                                        Picasso.with(context).load(uri).resize(100,100).into(imgUsuario);
                                     }
 
                                 }
@@ -170,7 +180,7 @@ public class AdapterMensajeriaGlobal extends BaseAdapter {
                                     }
                                     if (usuario != null){
                                         Uri uri = Uri.parse(usuario.getImagen());
-                                        Picasso.with(context).load(uri).into(imgUsuario);
+                                        Picasso.with(context).load(uri).resize(100,100).into(imgUsuario);
                                     }
 
                                 }
@@ -193,7 +203,25 @@ public class AdapterMensajeriaGlobal extends BaseAdapter {
                 }
             });
         }
-
-        return convertView;
     }
+
+    @Override
+    public int getItemCount() {
+        return listaMensajeGlobal.size();
+    }
+
+
+
+    /*
+    // allows clicks events to be caught
+    void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+     */
+
 }

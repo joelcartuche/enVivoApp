@@ -59,6 +59,14 @@ public class PedidoVendedor extends AppCompatActivity {
         filtrarTodos = findViewById(R.id.radioTodosPedidoVendedor);
         filtrarPagados = findViewById(R.id.radioPagadoPedidoVendedor);
         filtrarFechaPasado = findViewById(R.id.radioPasadosFecha);
+        if(filtrarTodos.isChecked()){
+            filtrarTodos.setChecked(true);
+            filtrarAceptados.setChecked(false);
+            filtrarEliminados.setChecked(false);
+            filtrarPagados.setChecked(false);
+            filtrarFechaPasado.setChecked(false);
+            listarPedidos();
+        }
 
         filtrarAceptados.setOnClickListener(new View.OnClickListener() {
             @Override

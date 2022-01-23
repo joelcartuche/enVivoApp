@@ -158,11 +158,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Añadir local"
-            app:backgroundTint="#FF6D00"
+            app:cornerRadius="20dp"
+            app:backgroundTint="@color/quinto"
             app:icon="@android:drawable/ic_menu_add" />
 
         <GridView
             android:id="@+id/gridLocal"
+            android:background="@color/tercero"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

@@ -297,8 +297,6 @@ public class ReporteVendedor extends AppCompatActivity {
                                         rutaArchivo.setVisibility(View.GONE);
                                         irRutaArchivo.setVisibility(View.GONE);
                                     }
-
-
                                 }
                             }
                         });

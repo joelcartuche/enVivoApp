@@ -103,6 +103,7 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
         aceptar = convertView.findViewById(R.id.btnAceptarMensajeVendedor);
         cancelar = convertView.findViewById(R.id.btnCancelarMensajeVendedor);
         bloquearCliente = convertView.findViewById(R.id.btnBloquearClienteMensajeriaVendedor);
+        imagenPedido.setVisibility(View.GONE);
 
         //en caso de que el usuario tenga ya un pedido cancelado o aceptado
 
@@ -227,6 +228,7 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()){
+                        imagenPedido.setVisibility(View.GONE);
                         Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
                         nombreClienteMensaje.setText(vendedor.getNombre());
                         fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
@@ -251,6 +253,7 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()){
+                        imagenPedido.setVisibility(View.GONE);
                         Cliente cliente= snapshot.getValue(Cliente.class);
                         nombreClienteMensaje.setText(cliente.getNombre());
                         fechaClienteMensaje.setText(mensaje.getFecha().getDate() + "/" +
@@ -258,12 +261,22 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                                 mensaje.getFecha().getHours() + ":" + mensaje.getFecha().getMinutes() + ":" +
                                 mensaje.getFecha().getSeconds());
                         mensajeClienteMensaje.setText(mensaje.getTexto());
-                        storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Picasso.with(context).load(uri).into(imagenPedido);
-                            }
-                        });
+                        if(mensaje.getImagen()!=null || mensaje.getImagen()!="") {
+                            storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    imagenPedido.setVisibility(View.VISIBLE);
+                                    Picasso.with(context).load(uri).into(imagenPedido);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    imagenPedido.setVisibility(View.GONE);
+                                }
+                            });
+                        }else{
+                            imagenPedido.setVisibility(View.GONE);
+                        }
 
 
                     }else{

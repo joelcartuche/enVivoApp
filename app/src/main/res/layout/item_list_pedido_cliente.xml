@@ -42,6 +42,16 @@
                         android:background="#FFFFFF"
                         android:padding="15dp">
 
+                        <ImageView
+                            android:id="@+id/imgPerfilVendedorPedidoCliente"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toTopOf="@+id/textView49"
+                            app:layout_constraintEnd_toStartOf="@+id/txtNombreVendedorItemPedidoCliente"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtColorFechaVendedorItemPedidoCliente"
+                            tools:srcCompat="@tools:sample/avatars" />
+
                         <TextView
                             android:id="@+id/txtColorFechaVendedorItemPedidoCliente"
                             android:layout_width="0dp"
@@ -57,10 +67,12 @@
                             android:id="@+id/txtNombreVendedorItemPedidoCliente"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginLeft="5dp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@+id/txtCodigoItemPedidoCliente"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imgPerfilVendedorPedidoCliente"
                             app:layout_constraintTop_toBottomOf="@+id/txtColorFechaVendedorItemPedidoCliente" />
 
                         <TextView
@@ -264,6 +276,9 @@
                             android:layout_marginBottom="8dp"
                             android:text="Cancelar pedido"
                             app:backgroundTint="#FF1744"
+                            app:cornerRadius="20dp"
+                            app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                            app:iconGravity="start"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -276,6 +291,9 @@
                             android:layout_marginTop="1dp"
                             android:layout_marginBottom="7dp"
                             android:text="Conversar con el vendedor"
+                            app:cornerRadius="20dp"
+                            app:icon="@drawable/ic_enviar_mensajes"
+                            app:iconGravity="start"
                             app:layout_constraintBottom_toTopOf="@+id/btnCancelarItemPedidoCliente"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

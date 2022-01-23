@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,8 +66,9 @@ public class MensajeriaGlobal extends AppCompatActivity {
     private StorageReference storageReference;
 
     private List<Mensaje> listMensaje = new ArrayList<>();
-    private GridView gridViewMensaje;
+    private RecyclerView gridViewMensaje;
     private AdapterMensajeriaGlobal gridAdapterMensaje;
+
 
     private TextView tituloMesaje;
     private EditText mensajeEnv;
@@ -89,6 +94,7 @@ public class MensajeriaGlobal extends AppCompatActivity {
         enviar = findViewById(R.id.btnEnviarMensajeriaGlobal);
         gridViewMensaje = findViewById(R.id.gridMensajeriaGlobal);
         imagen = findViewById(R.id.btnImagenGlobalMensajeria);
+
 
         Bundle vendedor = MensajeriaGlobal.this.getIntent().getExtras();
         idVendedor = vendedor.getString("vendedor"); //recogemos los datos del vendedor
@@ -192,6 +198,7 @@ public class MensajeriaGlobal extends AppCompatActivity {
         //Inicialisamos el adaptador
         gridAdapterMensaje = new AdapterMensajeriaGlobal(MensajeriaGlobal.this, listMensaje, databaseReference, storage);
         gridViewMensaje.setAdapter(gridAdapterMensaje); //configuramos el view
+        gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaGlobal.this));
     }
 
     private void leerMensaje() {
@@ -225,11 +232,14 @@ public class MensajeriaGlobal extends AppCompatActivity {
                                             listMensaje.add(mensaje);
                                         }
                                     }
+
                                     if (listMensaje.size() == 0){
                                         borrarGrid();
                                     }else {
                                         gridAdapterMensaje = new AdapterMensajeriaGlobal(MensajeriaGlobal.this, listMensaje, databaseReference, storage);
-                                        gridViewMensaje.setAdapter(gridAdapterMensaje); //configuramos el view
+                                        gridViewMensaje.setAdapter(gridAdapterMensaje); //configuramos el view}
+                                        gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaGlobal.this));
+                                        gridViewMensaje.getLayoutManager().scrollToPosition(listMensaje.size()-1);
                                     }
                                 }
 

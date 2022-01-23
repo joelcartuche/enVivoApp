@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.Cliente;
@@ -34,7 +35,27 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class AdapterMensajeriaGlobalVendedores extends BaseAdapter {
+public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<AdapterMensajeriaGlobalVendedores.ViewHolder> {
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        TextView nombreMensaje;
+        TextView fechaMensaje;
+        TextView mensajeGlobal;
+        ConstraintLayout contenedorMensajeria;
+        ImageView imgMensajeriaGlobal;
+        ImageView imgUsuario;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            nombreMensaje = itemView.findViewById(R.id.txtItemNombreMensajeGlobbal);
+            fechaMensaje  = itemView.findViewById(R.id.txtItemFechaMensajeCliente);
+            mensajeGlobal = itemView.findViewById(R.id.txtItemMensajeGlobal);
+            contenedorMensajeria = itemView.findViewById(R.id.cardMensajeriaGlobal);
+            imgMensajeriaGlobal = itemView.findViewById(R.id.imgMensajeriaGlobal);
+            imgUsuario = itemView.findViewById(R.id.imgItemMensajeGlobal);
+        }
+    }
+
     private Context context;
     private List<Mensaje> listaMensajeGlobal;
     private DatabaseReference databaseReference;
@@ -54,13 +75,8 @@ public class AdapterMensajeriaGlobalVendedores extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return listaMensajeGlobal.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return listaMensajeGlobal.get(position);
     }
 
     @Override
@@ -69,20 +85,27 @@ public class AdapterMensajeriaGlobalVendedores extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            LayoutInflater layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_list_mensajeria_global,null);
-        }
+    public AdapterMensajeriaGlobalVendedores.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View vistaMensaje = inflater.inflate(R.layout.item_list_mensajeria_global,parent,false);
+        AdapterMensajeriaGlobalVendedores.ViewHolder viewHolder = new AdapterMensajeriaGlobalVendedores.ViewHolder(vistaMensaje);
+        return viewHolder;
+    }
+
+
+    @Override
+    public void onBindViewHolder(AdapterMensajeriaGlobalVendedores.ViewHolder convertView, int position) {
+
 
         Mensaje mensaje = listaMensajeGlobal.get(position);//para manejar que elemento estamos clickeando
         //inicializamos las variables
-        TextView nombreMensaje = convertView.findViewById(R.id.txtItemNombreMensajeGlobbal);
-        TextView fechaMensaje  = convertView.findViewById(R.id.txtItemFechaMensajeCliente);
-        TextView mensajeGlobal = convertView.findViewById(R.id.txtItemMensajeGlobal);
-        ConstraintLayout contenedorMensajeria = convertView.findViewById(R.id.cardMensajeriaGlobal);
-        ImageView imgMensajeriaGlobal = convertView.findViewById(R.id.imgMensajeriaGlobal);
-        ImageView imgUsuario = convertView.findViewById(R.id.imgItemMensajeGlobal);
+        TextView nombreMensaje = convertView.nombreMensaje;
+        TextView fechaMensaje  = convertView.fechaMensaje;
+        TextView mensajeGlobal = convertView.mensajeGlobal;
+        ConstraintLayout contenedorMensajeria = convertView.contenedorMensajeria;
+        ImageView imgMensajeriaGlobal = convertView.imgMensajeriaGlobal;
+        ImageView imgUsuario = convertView.imgUsuario;
 
 
 
@@ -204,7 +227,5 @@ public class AdapterMensajeriaGlobalVendedores extends BaseAdapter {
                 }
             });
         }
-
-        return convertView;
     }
 }

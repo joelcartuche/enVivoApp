@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
 import com.aplicacion.envivoapp.adaptadores.AdapterListarVendedores;
+import com.aplicacion.envivoapp.adaptadores.AdapterVideoStreaming;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroListarVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Vendedor;
@@ -14,14 +16,20 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +49,7 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
     private DatabaseReference databaseReference;
 
     private List<Vendedor> listVendedor = new ArrayList<>();
+    private EditText buscarVendedor;
     private ListAdapter adapterListVendedor;
     private GridView listaVendedorView;
     private String   esMensajeGlobal=null;
@@ -57,6 +66,8 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
         databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
 
         listaVendedorView = findViewById(R.id.listVendedores);
+        buscarVendedor = findViewById(R.id.busquedaVendedor);
+
 
         Bundle vendedor = ListarVendedores.this.getIntent().getExtras(); //recogemos si es o no un mensaje global
         esMensajeGlobal = vendedor!=null?vendedor.getString("global"):null; //recogemos los datos del vendedor
@@ -76,7 +87,12 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
             listaVendedorView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    new CuadroListarVendedor(ListarVendedores.this, listVendedor.get(position),databaseReference,ListarVendedores.this);
+                    new CuadroListarVendedor(ListarVendedores.this,
+                            listVendedor.get(position),
+                            databaseReference,
+                            firebaseAuth,
+                            ListarVendedores.this.getIntent().getExtras(),
+                            ListarVendedores.this);
                 }
             });
         }
@@ -91,6 +107,45 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
         Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarVendedor);
 
         Button btnHome = findViewById(R.id.btn_Home_Listar_Vendedores);
+
+
+        //le damos funcionalidad al buscador
+        buscarVendedor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<Vendedor> listaAux = new ArrayList<>();
+
+                for (Vendedor vd : listVendedor) {
+
+                    if (vd.toString().toLowerCase().indexOf(s.toString().toLowerCase()) == 0) {
+                        listaAux.add(vd);
+                    }
+                }
+
+                if (listaAux.size() != 0) {
+                    //Inicialisamos el adaptador
+                    adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this, listaAux, databaseReference);
+                    listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
+                }else{
+                    //Inicialisamos el adaptador
+                    adapterListVendedor = new AdapterListarVendedores(ListarVendedores.this,   listVendedor, databaseReference);
+                    listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
 
         new Utilidades().cargarToolbar(btnHome,
                 btnListarVendedore,

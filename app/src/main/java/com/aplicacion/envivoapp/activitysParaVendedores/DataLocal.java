@@ -16,7 +16,9 @@ import android.widget.GridView;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -68,6 +70,7 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
                                 }
                             }
                             if (vendedor!= null){
+                                ((MyFirebaseApp) getBaseContext().getApplicationContext()).setLatLng(null);
                                 new CuadroEditarLocal(DataLocal.this,null,vendedor,true,databaseReference,DataLocal.this);
                             }
                         }
@@ -81,36 +84,7 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
             }
         });
 
-        gridViewLocal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Local local = listLocal.get(position);
-                databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            Vendedor vendedor = null;
-                            for (DataSnapshot ds:snapshot.getChildren()){
-                                Vendedor vendedorAux = ds.getValue(Vendedor.class);
-                                if (vendedorAux!=null){
-                                    if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                                        vendedor = vendedorAux;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (vendedor!= null){
-                                new CuadroEditarLocal(DataLocal.this,local,vendedor,false,databaseReference,DataLocal.this);
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
-            }
-        });
 
         //le damos funcionalidad al toolbar
         //le damos funcionalidad al toolbar
@@ -146,7 +120,6 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listLocal.clear();
                 if (snapshot.exists()){
-
                     for (DataSnapshot ds:snapshot.getChildren()){
                         Local local = ds.getValue(Local.class);
                         if (local != null){// en caso de que exista el local
@@ -166,8 +139,9 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
                                         if (vendedor!= null){
                                             if(local.getIdVendedor().equals(vendedor.getIdVendedor())) {
                                                 listLocal.add(local);
-                                                gridAdapterLocal = new AdapterListarLocal(DataLocal.this, listLocal, databaseReference);
+                                                gridAdapterLocal = new AdapterListarLocal(DataLocal.this, listLocal,firebaseAuth, databaseReference);
                                                 gridViewLocal.setAdapter(gridAdapterLocal); //configuramos el view
+                                                funcionalidadGrid();
                                             }
                                         }
                                     }
@@ -182,7 +156,7 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
                     }
                 }else{
 
-                    gridAdapterLocal = new AdapterListarLocal(DataLocal.this, listLocal, databaseReference);
+                    gridAdapterLocal = new AdapterListarLocal(DataLocal.this, listLocal, firebaseAuth,databaseReference);
                     gridViewLocal.setAdapter(gridAdapterLocal); //configuramos el view
                 }
             }
@@ -195,5 +169,38 @@ public class DataLocal extends AppCompatActivity implements CuadroEditarLocal.re
     @Override
     public void resultado() {
 
+    }
+
+    public void funcionalidadGrid(){
+        gridViewLocal.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Local local = listLocal.get(position);
+                databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            Vendedor vendedor = null;
+                            for (DataSnapshot ds:snapshot.getChildren()){
+                                Vendedor vendedorAux = ds.getValue(Vendedor.class);
+                                if (vendedorAux!=null){
+                                    if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
+                                        vendedor = vendedorAux;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (vendedor!= null){
+                                new CuadroEditarLocal(DataLocal.this,local,vendedor,false,databaseReference,DataLocal.this);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
     }
 }

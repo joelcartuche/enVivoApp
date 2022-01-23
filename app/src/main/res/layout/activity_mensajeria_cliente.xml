@@ -154,23 +154,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoYoutubeMensajeriaCliente" />
 
-        <GridView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gridMensajeCliente"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
             android:gravity="center"
             android:horizontalSpacing="0dp"
             android:numColumns="1"
+            android:scrollbarAlwaysDrawVerticalTrack="false"
             android:stretchMode="columnWidth"
             android:verticalSpacing="0dp"
             app:layout_constraintBottom_toTopOf="@+id/btnQuieroComprarMensajeCliente"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView41" >
+            app:layout_constraintTop_toBottomOf="@+id/textView41">
 
-        </GridView>
+        </androidx.recyclerview.widget.RecyclerView>
 
         <EditText
             android:id="@+id/txtMensajeCliente"
@@ -180,8 +180,15 @@
             android:layout_marginLeft="5dp"
             android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
-            android:inputType="textPersonName"
             android:padding="12dp"
+
+            android:autoSizeTextType="uniform"
+            android:lines="5" android:minLines="1"
+            android:gravity="top|left"
+            android:maxLines="10"
+            android:scrollbars="none"
+            android:inputType="textMultiLine|textCapSentences"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnEnviarMensajeCliente"
             app:layout_constraintStart_toStartOf="parent"
@@ -195,6 +202,7 @@
             android:layout_marginRight="4dp"
             android:background="#FFFFFF"
             app:backgroundTint="#3D5AFE"
+            app:cornerRadius="20dp"
             app:icon="@android:drawable/ic_menu_send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -216,6 +224,9 @@
             android:layout_height="44dp"
             android:text="Quiero Comprar"
             app:backgroundTint="#E37452"
+            app:cornerRadius="20dp"
+            app:icon="@drawable/ic_quiero_comprar"
+            app:iconGravity="start"
             app:layout_constraintBottom_toTopOf="@+id/txtMensajeCliente"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.304"

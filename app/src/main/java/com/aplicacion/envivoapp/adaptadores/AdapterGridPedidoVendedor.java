@@ -24,11 +24,15 @@ import com.aplicacion.envivoapp.activitysParaVendedores.ListarClientes;
 import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaGlobalVendedor;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCambiarPedido;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
+import com.aplicacion.envivoapp.cuadroDialogo.CuadroEditarLocal;
+import com.aplicacion.envivoapp.cuadroDialogo.CuadroSeleccionarUbicacion;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -43,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCancelarPedidoCliente.resultadoDialogo{
+public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCancelarPedidoCliente.resultadoDialogo,CuadroSeleccionarUbicacion.resultadoDialogo{
 
     private Context context;
     private List<Pedido> listaPedidoVendedor;
@@ -99,6 +103,7 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
         Button btnEliminarPedido = convertView.findViewById(R.id.btnEliminarItemPedidoVendedor);
         ImageView imagenPedido = convertView.findViewById(R.id.imgListPedidoVendedor);
         Button btnConversarComprador = convertView.findViewById(R.id.btnConversarVendedorListPedidoVendedor);
+        Button btnVerUbicacion = convertView.findViewById(R.id.btnDireccionClienteListPedidoV);
         CardView cardView = convertView.findViewById(R.id.cardItemPedidoVendor);
         ScrollView scrollView = convertView.findViewById(R.id.scrollListPedidoVendedor);
 
@@ -112,6 +117,36 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
 
         //damos funcion al boton conversar comprador
         conversarComprador(btnConversarComprador,position,context);
+
+        //funcionalidad para el boton ver ubicación
+        btnVerUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseReference.child("Cliente").child(pedido.getIdCliente()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            Cliente cliente = snapshot.getValue(Cliente.class);
+
+                            if (cliente!= null){
+                                LatLng aux = new LatLng(cliente.getLatitud(),cliente.getLongitud());
+                                ((MyFirebaseApp) context.getApplicationContext()).setLatLng(aux);
+                                new CuadroSeleccionarUbicacion(context,aux,databaseReference,AdapterGridPedidoVendedor.this::resultado,false);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
+
+            }
+        });
+
 
         //llenamos los textView con los datos correspondientes
         databaseReference.child("Cliente").child(pedido.getIdCliente()).addValueEventListener(new ValueEventListener() {
@@ -402,5 +437,11 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
                 context.startActivity(streamingsIntent);
             }
         });
+    }
+
+
+    @Override
+    public void resultado(Boolean seActualizoCoordena) {
+        //resultado del cuadro de dialogo para mostrar el mapa
     }
 }

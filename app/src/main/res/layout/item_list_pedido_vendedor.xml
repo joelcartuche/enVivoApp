@@ -45,14 +45,16 @@
 
                         <Button
                             android:id="@+id/btnPagadoPedidoVendedor"
-                            android:layout_width="357dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="Pedido pagado"
+                            app:cornerRadius="20dp"
+                            app:icon="@drawable/com_facebook_button_like_icon_selected"
                             app:layout_constraintBottom_toTopOf="@+id/btnCambiarPedidoVendedor"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.466"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/btnConversarVendedorListPedidoVendedor" />
+                            app:layout_constraintTop_toBottomOf="@+id/btnDireccionClienteListPedidoV" />
 
                         <Button
                             android:id="@+id/btnConversarVendedorListPedidoVendedor"
@@ -60,8 +62,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
                             android:text="Conversar con el comprador"
-                            app:layout_constraintBottom_toTopOf="@+id/btnPagadoPedidoVendedor"
+                            app:cornerRadius="20dp"
+                            app:icon="@drawable/ic_enviar_mensajes"
+                            app:iconGravity="start"
+                            app:layout_constraintBottom_toTopOf="@id/btnDireccionClienteListPedidoV"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.533"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/imgListPedidoVendedor" />
 
@@ -71,6 +77,8 @@
                             android:layout_height="wrap_content"
                             android:text="Cambiar pedido"
                             app:backgroundTint="#00C853"
+                            app:cornerRadius="20dp"
+                            app:icon="@android:drawable/ic_menu_manage"
                             app:layout_constraintBottom_toTopOf="@+id/btnHabilitarPedidoVendedor"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.466"
@@ -83,6 +91,8 @@
                             android:layout_height="wrap_content"
                             android:text="Habilitar pedido"
                             app:backgroundTint="#00C853"
+                            app:cornerRadius="20dp"
+                            app:icon="@android:drawable/ic_lock_power_off"
                             app:layout_constraintBottom_toTopOf="@+id/btnEliminarItemPedidoVendedor"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.466"
@@ -95,6 +105,9 @@
                             android:layout_height="wrap_content"
                             android:text="Eliminar pedido"
                             app:backgroundTint="#FF1744"
+                            app:cornerRadius="20dp"
+                            app:icon="@android:drawable/ic_menu_delete"
+                            app:iconGravity="start"
                             app:layout_constraintBottom_toTopOf="@+id/btnCancelarItemPedidoVendedor"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.466"
@@ -107,6 +120,9 @@
                             android:layout_height="44dp"
                             android:text="Cancelar pedido"
                             app:backgroundTint="#FF1744"
+                            app:cornerRadius="20dp"
+                            app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                            app:iconGravity="start"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.466"
@@ -276,6 +292,20 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/txtDescripcionItemPedidoVendedor" />
+
+                        <Button
+                            android:id="@+id/btnDireccionClienteListPedidoV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Ver ubicación"
+                            app:cornerRadius="20dp"
+                            app:icon="@android:drawable/ic_menu_mylocation"
+                            app:iconGravity="start"
+                            app:layout_constraintBottom_toTopOf="@+id/btnPagadoPedidoVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.498"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnConversarVendedorListPedidoVendedor" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>

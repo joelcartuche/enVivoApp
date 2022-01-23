@@ -1,15 +1,16 @@
 package com.aplicacion.envivoapp.modelos;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Cliente {
     private String idCliente;
     private String nombre;
     private String cedula;
     private String celular;
     private String telefono;
-    private String direccion;
+    private  Double latitud;
+    private Double longitud;
+    private String callePrincipal;
+    private String calleSecundaria;
+    private String referencia;
     private String uidUsuario;
     private Boolean bloqueado;
 
@@ -18,6 +19,45 @@ public class Cliente {
     }
 
 
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
+
+    public String getCallePrincipal() {
+        return callePrincipal;
+    }
+
+    public void setCallePrincipal(String callePrincipal) {
+        this.callePrincipal = callePrincipal;
+    }
+
+    public String getCalleSecundaria() {
+        return calleSecundaria;
+    }
+
+    public void setCalleSecundaria(String calleSecundaria) {
+        this.calleSecundaria = calleSecundaria;
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
 
     public Boolean getBloqueado() {
         return bloqueado;
@@ -75,11 +115,8 @@ public class Cliente {
         this.telefono = telefono;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    @Override
+    public String toString() {
+        return nombre+" "+celular;
     }
 }

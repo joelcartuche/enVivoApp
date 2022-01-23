@@ -154,6 +154,67 @@
             android:inputType="textPersonName" />
 
         <TextView
+            android:id="@+id/textView26"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dirección:" />
+
+        <fragment
+            android:id="@+id/fragment"
+            android:name="com.aplicacion.envivoapp.utilidades.MapsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calle principal" />
+
+        <EditText
+            android:id="@+id/txtcallePricipalDataCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Ingrese calle principal" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calle secundaria" />
+
+        <EditText
+            android:id="@+id/txtcalleSecundariaDataCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Ingrese calle secundaria" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Referencia" />
+
+        <EditText
+            android:id="@+id/txtreferenciaDataCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Ingresar referencia"/>
+
+        <TextView
             android:id="@+id/textView23"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -165,7 +226,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Ingrese su número de cédula"
-            android:inputType="textPersonName" />
+            android:inputType="numberSigned" />
 
         <TextView
             android:id="@+id/textView24"
@@ -195,25 +256,18 @@
             android:hint="Ingrese su número de teléfono"
             android:inputType="phone" />
 
-        <TextView
-            android:id="@+id/textView26"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Dirección:" />
+                <Button
+                    android:id="@+id/btnGuardarCliente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Guardar"
+                    app:backgroundTint="#00C853"
+                    app:cornerRadius="20dp"
+                    app:icon="@android:drawable/ic_menu_save"
+                    app:iconGravity="start" />
+            </LinearLayout>
+        </ScrollView>
 
-        <EditText
-            android:id="@+id/txtDireccionCliente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Ingrese su dirección"
-            android:inputType="textPersonName" />
-
-        <Button
-            android:id="@+id/btnGuardarCliente"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Guardar" />
 
     </LinearLayout>
 

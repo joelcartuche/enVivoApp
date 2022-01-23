@@ -3,7 +3,9 @@ package com.aplicacion.envivoapp.activityParaClientes;
 import android.content.Intent;
 import android.os.Bundle;
 import com.aplicacion.envivoapp.modelos.Cliente;
+import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import androidx.annotation.NonNull;
@@ -29,7 +31,7 @@ public class DataCliente extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private EditText nombre, cedula, direccion, telefono, celular;
+    private EditText nombre, cedula, callePrincipa,calleSecundaria,referencia, telefono, celular;
     private Button guardar;
     private Toolbar toolbar;
 
@@ -45,7 +47,9 @@ public class DataCliente extends AppCompatActivity {
         //Inicializacion de variables
         nombre = findViewById(R.id.txtNombreCliente);
         cedula = findViewById(R.id.txtCedulaCliente);
-        direccion = findViewById(R.id.txtDireccionCliente);
+        callePrincipa = findViewById(R.id.txtcallePricipalDataCliente);
+        calleSecundaria = findViewById(R.id.txtcalleSecundariaDataCliente);
+        referencia = findViewById(R.id.txtreferenciaDataCliente);
         telefono = findViewById(R.id.txtTelefonoCliente);
         celular = findViewById(R.id.txtCelularCliente);
         guardar = findViewById(R.id.btnGuardarCliente);
@@ -75,24 +79,35 @@ public class DataCliente extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(nombre.getText().toString().isEmpty()){
-                    Toast.makeText(DataCliente.this,"Igrese su nombre",Toast.LENGTH_LONG).show();
+                    Toast.makeText(DataCliente.this,"Ingrese su nombre",Toast.LENGTH_LONG).show();
                 }else if (cedula.getText().toString().isEmpty()){
-                    Toast.makeText(DataCliente.this,"Igrese su número de cédula",Toast.LENGTH_LONG).show();
-                }else if (direccion.getText().toString().isEmpty()){
-                    Toast.makeText(DataCliente.this,"Igrese su dirección",Toast.LENGTH_LONG).show();
+                    Toast.makeText(DataCliente.this,"Ingrese su número de cédula",Toast.LENGTH_LONG).show();
+                }else if (callePrincipa.getText().toString().isEmpty()){
+                    Toast.makeText(DataCliente.this,"Ingrese calle principal",Toast.LENGTH_LONG).show();
+                }else if (referencia.getText().toString().isEmpty()){
+                    Toast.makeText(DataCliente.this,"Ingrese una referencia",Toast.LENGTH_LONG).show();
+                }else if (((MyFirebaseApp)getBaseContext().getApplicationContext()).getLatLng()== null){
+                    Toast.makeText(DataCliente.this,"Error al obtener coordenadas del mapa",Toast.LENGTH_LONG).show();
                 }else if (telefono.getText().toString().isEmpty() && celular.getText().toString().isEmpty()){
-                    Toast.makeText(DataCliente.this,"Igrese su telefono o celular",Toast.LENGTH_LONG).show();
+                    Toast.makeText(DataCliente.this,"Ingrese su teléfono o celular",Toast.LENGTH_LONG).show();
                 }
                 if (!nombre.getText().toString().isEmpty()
                         &&!cedula.getText().toString().isEmpty()
-                        &&!direccion.getText().toString().isEmpty()
+                        &&!callePrincipa.getText().toString().isEmpty()
+                        &&!referencia.getText().toString().isEmpty()
+                        &&((MyFirebaseApp)getBaseContext().getApplicationContext()).getLatLng()!=null
                         &&!(telefono.getText().toString().isEmpty() && celular.getText().toString().isEmpty())){
 
                     Cliente cliente = new Cliente();
                     cliente.setIdCliente(UUID.randomUUID().toString());
                     cliente.setNombre(nombre.getText().toString());
                     cliente.setCedula(cedula.getText().toString());
-                    cliente.setDireccion(direccion.getText().toString());
+                    cliente.setCallePrincipal(callePrincipa.getText().toString());
+                    cliente.setCalleSecundaria(calleSecundaria.getText().toString());
+                    LatLng aux = ((MyFirebaseApp)getBaseContext().getApplicationContext()).getLatLng();
+                    cliente.setLatitud(aux.latitude);
+                    cliente.setLongitud(aux.longitude);
+
                     cliente.setTelefono(telefono.getText().toString());
                     cliente.setCelular(celular.getText().toString());
                     cliente.setUidUsuario(firebaseAuth.getCurrentUser().getUid());
@@ -130,9 +145,12 @@ public class DataCliente extends AppCompatActivity {
                     if (cliente != null){
                         nombre.setText(cliente.getNombre());
                         cedula.setText(cliente.getCedula());
-                        direccion.setText(cliente.getDireccion());
+                        callePrincipa.setText(cliente.getCallePrincipal());
+                        calleSecundaria.setText(cliente.getCalleSecundaria());
+                        referencia.setText(cliente.getReferencia());
                         telefono.setText(cliente.getTelefono());
                         celular.setText(cliente.getCelular());
+                        ((MyFirebaseApp)getBaseContext().getApplicationContext()).setLatLng(new LatLng(cliente.getLatitud(),cliente.getLongitud()));
                         //actualizamos los datos del cliente
                         Cliente finalCliente = cliente;
                         guardar.setOnClickListener(new View.OnClickListener() {
@@ -142,29 +160,47 @@ public class DataCliente extends AppCompatActivity {
                                     Toast.makeText(DataCliente.this,"Igrese su nombre",Toast.LENGTH_LONG).show();
                                 }else if (cedula.getText().toString().isEmpty()){
                                     Toast.makeText(DataCliente.this,"Igrese su número de cédula",Toast.LENGTH_LONG).show();
-                                }else if (direccion.getText().toString().isEmpty()){
-                                    Toast.makeText(DataCliente.this,"Igrese su dirección",Toast.LENGTH_LONG).show();
+                                }else if (callePrincipa.getText().toString().isEmpty()){
+                                    Toast.makeText(DataCliente.this,"Igrese la calle principal",Toast.LENGTH_LONG).show();
+                                }else if (referencia.getText().toString().isEmpty()){
+                                    Toast.makeText(DataCliente.this,"Igrese una referencia",Toast.LENGTH_LONG).show();
+                                }else if (((MyFirebaseApp) getBaseContext().getApplicationContext()).getLatLng()!=null){
+                                    Toast.makeText(DataCliente.this,"Error al obtener coordenadas del mapa",Toast.LENGTH_LONG).show();
                                 }else if (telefono.getText().toString().isEmpty() && celular.getText().toString().isEmpty()){
                                     Toast.makeText(DataCliente.this,"Igrese su telefono o celular",Toast.LENGTH_LONG).show();
                                 }
                                 if (!nombre.getText().toString().isEmpty()
                                         &&!cedula.getText().toString().isEmpty()
-                                        &&!direccion.getText().toString().isEmpty()
+                                        &&!callePrincipa.getText().toString().isEmpty()
+                                        &&!referencia.getText().toString().isEmpty()
                                         &&!(telefono.getText().toString().isEmpty() && celular.getText().toString().isEmpty())){
 
                                     //creamos el cliente
                                     Cliente clienteAux = new Cliente();
                                     clienteAux.setNombre(nombre.getText().toString());
                                     clienteAux.setCedula(cedula.getText().toString());
-                                    clienteAux.setDireccion(direccion.getText().toString());
+                                    clienteAux.setCallePrincipal(callePrincipa.getText().toString());
+                                    if (!calleSecundaria.getText().toString().isEmpty()
+                                            ||calleSecundaria.getText().toString().equals("")) {clienteAux.setCalleSecundaria(calleSecundaria.getText().toString());}
+                                    clienteAux.setReferencia(referencia.getText().toString());
                                     clienteAux.setTelefono(telefono.getText().toString());
                                     clienteAux.setCelular(celular.getText().toString());
+
+                                    LatLng latLng = ((MyFirebaseApp) getBaseContext().getApplicationContext()).getLatLng();
+                                    clienteAux.setLatitud(latLng.latitude);
+                                    clienteAux.setLongitud(latLng.longitude);
 
                                     //ingresamos en un map los datos que van a ser actualizados
                                     Map<String,Object> clienteActualizar= new HashMap<>();
                                     clienteActualizar.put("cedula",clienteAux.getCedula());
                                     clienteActualizar.put("celular",clienteAux.getCelular());
-                                    clienteActualizar.put("direccion",clienteAux.getDireccion());
+                                    clienteActualizar.put("callePrincipal",clienteAux.getCallePrincipal());
+                                    clienteActualizar.put("calleSecundaria",clienteAux.getCalleSecundaria());
+                                    clienteActualizar.put("referencia",clienteAux.getReferencia());
+
+                                    clienteActualizar.put("latitud",clienteAux.getLatitud());
+                                    clienteActualizar.put("longitud",clienteAux.getLongitud());
+
                                     clienteActualizar.put("nombre",clienteAux.getNombre());
                                     clienteActualizar.put("telefono",clienteAux.getTelefono());
 

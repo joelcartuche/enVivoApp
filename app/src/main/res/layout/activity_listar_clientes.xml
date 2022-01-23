@@ -86,7 +86,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:drawableTop="@drawable/ic_local_vendedor"
                                 android:text="Local"
                                 android:textSize="8sp" />
 
@@ -159,6 +159,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp">
+        <EditText
+            android:id="@+id/busquedaCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:ems="10"
+            android:hint="Ingrese el nombre del vendedor"
+            android:inputType="textPersonName"
+            android:drawableLeft="@android:drawable/ic_menu_search" />
 
 
         <TextView

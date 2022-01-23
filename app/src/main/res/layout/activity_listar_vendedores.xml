@@ -141,6 +141,15 @@
             android:text="Lista de vendedores"
             android:textSize="18sp"
             android:textStyle="bold" />
+        <EditText
+            android:id="@+id/busquedaVendedor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:ems="10"
+            android:hint="Ingrese el nombre del vendedor"
+            android:inputType="textPersonName"
+            android:drawableLeft="@android:drawable/ic_menu_search" />
 
         <GridView
             android:id="@+id/listVendedores"

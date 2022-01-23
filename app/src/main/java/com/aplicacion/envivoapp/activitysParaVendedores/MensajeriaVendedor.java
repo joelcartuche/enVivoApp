@@ -197,17 +197,29 @@ public class MensajeriaVendedor extends  YouTubeBaseActivity implements YouTubeP
 
             }
         });
-
-
-
     }
-
 
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean fueRestaurado) {
         if(!fueRestaurado){
-            youTubePlayer.cueVideo("QN7BKarpltI");//https://www.youtube.com/watch?v=QN7BKarpltI
+            String resultado = urlStreaming;
+
+            if(resultado.contains("https://youtu.be/")){
+                resultado = resultado.replace("https://youtu.be/","");
+            }
+            if(resultado.contains("https://youtube.com/")){
+                resultado = resultado.replace("https://youtube.com/","");
+            }
+            if(resultado.contains("watch?v=")){
+                resultado =  resultado.replace("watch?v=","");
+            }
+            if(resultado.contains("&")){
+                resultado = resultado.split("&")[0];
+
+            }
+
+            youTubePlayer.cueVideo(resultado);//https://www.youtube.com/watch?v=QN7BKarpltI
         }
     }
 

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -61,7 +63,7 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
     private StorageReference storageReference;
 
     private List<Mensaje> listMensaje = new ArrayList<>();
-    private GridView gridViewMensaje;
+    private RecyclerView gridViewMensaje;
     private AdapterMensajeriaGlobalVendedores gridAdapterMensaje;
 
     private Button enviar,imagen;
@@ -190,6 +192,7 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
                 storage,
                 firebaseAuth);
         gridViewMensaje.setAdapter(gridAdapterMensaje); //configuramos el view
+        gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaGlobalVendedor.this));
     }
     private void leerMensaje() {
             databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
@@ -227,6 +230,8 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
                                             storage,
                                             firebaseAuth);
                                     gridViewMensaje.setAdapter(gridAdapterMensaje); //configuramos el view
+                                    gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaGlobalVendedor.this));
+                                    gridViewMensaje.getLayoutManager().scrollToPosition(listMensaje.size()-1);
 
                                 }
 

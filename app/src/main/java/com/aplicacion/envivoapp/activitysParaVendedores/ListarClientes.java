@@ -6,9 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -43,6 +47,7 @@ public class ListarClientes extends AppCompatActivity {
     private List<Cliente> listCliente = new ArrayList<>();
     private AdapterListarClientes adapterListCliente;
     private GridView listaClienteView;
+    private EditText buscarCliente;
     private  String esMensajeGlobal;
 
     @Override
@@ -55,6 +60,8 @@ public class ListarClientes extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
 
         listaClienteView = findViewById(R.id.gridClientes);
+        buscarCliente = findViewById(R.id.busquedaCliente);
+
         listarVendedores();
 
         Bundle vendedor = ListarClientes.this.getIntent().getExtras(); //recogemos si es o no un mensaje global
@@ -98,6 +105,42 @@ public class ListarClientes extends AppCompatActivity {
                 ListarClientes.this,
                 firebaseAuth);
 
+        //le damos funcionalidad al buscador
+        buscarCliente.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<Cliente> listaAux = new ArrayList<>();
+
+                for (Cliente vd : listCliente) {
+
+                    if (vd.toString().toLowerCase().indexOf(s.toString().toLowerCase()) == 0) {
+                        listaAux.add(vd);
+                    }
+                }
+
+                if (listaAux.size() != 0) {
+                    //Inicialisamos el adaptador
+
+                    adapterListCliente = new AdapterListarClientes(ListarClientes.this,listaAux,databaseReference,esMensajeGlobal);
+                    listaClienteView.setAdapter(adapterListCliente); //configuramos el view
+                }else{
+                    //Inicialisamos el adaptador
+                    adapterListCliente = new AdapterListarClientes(ListarClientes.this,listaAux,databaseReference,esMensajeGlobal);
+                    listaClienteView.setAdapter(adapterListCliente); //configuramos el view
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 

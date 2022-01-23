@@ -12,9 +12,47 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="12dp">
+
+        <Button
+            android:id="@+id/btnCuadroListaVendedorCancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Atrás"
+            app:backgroundTint="#D50000"
+            app:cornerRadius="20dp"
+            app:icon="@drawable/abc_vector_test" />
+
+        <Button
+            android:id="@+id/btnCuadroListaVendedorVerStreamings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:text="Ver Streamings"
+            app:cornerRadius="20dp"
+            app:backgroundTint="#FF6D00"
+            app:icon="@android:drawable/ic_menu_slideshow" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView57"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtCuadroListaVendedorNombreVendedor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,25 +90,6 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView57"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre: "
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtCuadroListaVendedorNombreVendedor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
         <TextView
             android:id="@+id/textView60"
             android:layout_width="match_parent"
@@ -84,23 +103,6 @@
             android:layout_height="wrap_content">
 
         </GridView>
-
-        <Button
-            android:id="@+id/btnCuadroListaVendedorVerStreamings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:text="Ver Streamings"
-            app:backgroundTint="#FF6D00"
-            app:icon="@android:drawable/ic_menu_slideshow" />
-
-        <Button
-            android:id="@+id/btnCuadroListaVendedorCancelar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Atras"
-            app:backgroundTint="#D50000"
-            app:icon="@android:drawable/ic_media_rew" />
 
     </LinearLayout>
 

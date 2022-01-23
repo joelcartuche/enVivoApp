@@ -181,8 +181,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Ingrese su número de cedula"
-            android:inputType="textPersonName" />
+            android:hint="Ingrese su número de cedula" />
 
         <TextView
             android:id="@+id/textView9"
@@ -224,13 +223,17 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Ingrese el número de dias para cancelar el pedido"
-            android:inputType="number" />
+            android:inputType="numberSigned|number" />
 
         <Button
             android:id="@+id/btnGuardar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Guardar" />
+            android:text="Guardar"
+            app:backgroundTint="#00C853"
+            app:cornerRadius="20dp"
+            app:icon="@android:drawable/ic_menu_save"
+            app:iconGravity="start" />
     </LinearLayout>
 
 

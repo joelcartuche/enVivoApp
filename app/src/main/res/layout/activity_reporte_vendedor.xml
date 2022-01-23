@@ -80,7 +80,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_listar_vendedores"
+                                android:drawableTop="@drawable/ic_local_vendedor"
                                 android:text="Local"
                                 android:textSize="8sp" />
 
@@ -261,6 +261,7 @@
             android:layout_marginTop="5dp"
             android:text="Abrir carpeta contenedora"
             app:icon="@drawable/ic_baseline_folder_open_24"
+            app:cornerRadius="20dp"
             app:iconGravity="start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -275,6 +276,7 @@
             android:layout_marginBottom="5dp"
             android:text="Generar archivo csv"
             app:backgroundTint="#00C853"
+            app:cornerRadius="20dp"
             app:icon="@drawable/ic_archivo"
             app:layout_constraintBottom_toTopOf="@+id/txtRutaArchivo"
             app:layout_constraintEnd_toEndOf="parent"

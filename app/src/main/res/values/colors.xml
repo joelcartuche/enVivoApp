@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="primerColor">#e76f3d</color>
+    <color name="segundo">#feab6b</color>
+    <color name="tercero">#f3e9e7</color>
+    <color name="cuarto">#9bcfe0</color>
+    <color name="quinto">#00a7c7</color>
+
+
+    <color name="primerBoton">#48E878</color>
+    <color name="segundoBoton">#389C56</color>
+    <color name="tercerBoton">#19679C</color>
+    <color name="cuartoBoton">#9C4019</color>
+    <color name="quintoBoton">#69483B</color>
 </resources>

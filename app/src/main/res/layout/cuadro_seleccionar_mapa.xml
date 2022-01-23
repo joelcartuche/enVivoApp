@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#64DD17"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapVisualizar"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+    <Button
+        android:id="@+id/btnSeleccionaUbicacionCuadro"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cornerRadius="20dp"
+        android:text="Guardar"/>
+
+        <Button
+            android:id="@+id/cancelarSeleccionUbicacionCuadro"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Atrás"
+            app:cornerRadius="20dp"
+            app:icon="@drawable/abc_vector_test"
+            app:iconGravity="start" />
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
+
+
+

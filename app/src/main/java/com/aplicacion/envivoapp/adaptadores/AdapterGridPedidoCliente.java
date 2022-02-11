@@ -27,10 +27,12 @@ import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Usuario;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
@@ -46,6 +48,7 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
     private List<Pedido> listaPedidoCliente;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     public AdapterGridPedidoCliente(Context context,
                                     List<Pedido> listaPedidoCliente,
@@ -118,7 +121,11 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
                     cantidad.setText(pedido.getCantidadProducto()+"");
                     precio.setText(pedido.getPrecioProducto()+"");
                     descripcion.setText(pedido.getDescripcionProducto());
-                    nombreVendedor.setText(vendedor.getNombre());
+                    try {
+                        nombreVendedor.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     fechaPedido.setText(pedido.getFechaPedido().getDate() +"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear());
                     fechaFinalPedido.setText(pedido.getFechaFinalPedido().getDate() +"/"+pedido.getFechaFinalPedido().getMonth()+"/"+pedido.getFechaFinalPedido().getYear());
                     storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -128,16 +135,15 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
                         }
                     });
                     //Cargamos la imagen del usuario
-                    databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
+                    Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
+                    query.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 Usuario usuario = null;
                                 for (DataSnapshot ds : snapshot.getChildren()) {
-                                    Usuario usuarioAux = ds.getValue(Usuario.class);
-                                    if (usuarioAux.getUidUser().equals(vendedor.getUidUsuario())) {
-                                        usuario = usuarioAux;
-                                    }
+                                    usuario = ds.getValue(Usuario.class);
+
                                 }
                                 if (usuario != null) {
                                     Uri uri = Uri.parse(usuario.getImagen());

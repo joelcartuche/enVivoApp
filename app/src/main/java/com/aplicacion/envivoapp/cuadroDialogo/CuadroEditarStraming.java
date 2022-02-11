@@ -17,6 +17,7 @@ import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
@@ -35,6 +37,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CuadroEditarStraming {
+
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
     public interface resultadoDialogo{
         void resultado(Boolean isEliminado,Boolean isIrStreaming,VideoStreaming videoStreaming);
     }
@@ -98,71 +102,72 @@ public class CuadroEditarStraming {
         btnGuardarVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (!txtEditarUrlVideo.getText().toString().equals("")
                         && !txtEditarFechaVideo.getText().toString().equals("")
                         && !txtEditarHoraVideo.getText().toString().equals("")) {
 
                     if(txtEditarUrlVideo.getText().toString().contains("https://youtu.be/") ||
                             txtEditarUrlVideo.getText().toString().contains("https://youtube.com/")){
-
-                    reference.child("Vendedor").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists()){
-                                for(DataSnapshot ds:snapshot.getChildren()){
-                                    Vendedor vendedor = ds.getValue(Vendedor.class);
-                                    if (vendedor.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
+                        //creamos el query para buscar el vendedor
+                        Query query = reference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+                        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            @Override
+                            public void onSuccess(DataSnapshot snapshot) {
+                                if(snapshot.exists()){
+                                    Vendedor vendedor = null;
+                                    for(DataSnapshot ds:snapshot.getChildren()) {
+                                        vendedor = ds.getValue(Vendedor.class);
+                                    }
+                                    if (vendedor != null){
                                         VideoStreaming videoStreaming = new VideoStreaming();//inicializamos la variable que va a contener a la clase VideoStreaming
-                                        videoStreaming.setUrlVideoStreaming(txtEditarUrlVideo.getText().toString()); //setiamos el url del video
 
-                                        String[] fecha = txtEditarFechaVideo.getText().toString().split("/");//separamos la fecha en un arreglo
-                                        if(Integer.parseInt(fecha[0])<10){
-                                            fecha[0]="0"+fecha[0]; //añadimos un cero en caso de que la fecha se una sola unidad
-                                        }
-                                        if(Integer.parseInt(fecha[1])<10){
-                                            fecha[1]="0"+fecha[1]; //añadimos un cero en la fecha en caso de que sea una solo unidad
-                                        }
-
-                                        String fechaFormat = fecha[0]+"-"+fecha[1]+"-"+fecha[2]+" "+txtEditarHoraVideo.getText().toString(); //le damos formato a la fecha
-                                        Date fechaTransmision = null;//creamos una variable de tipo date para luego almacenarla en  la clase videoStreaming
                                         try {
-                                            fechaTransmision = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(fechaFormat); //almacenamos la fecha Date
-                                        } catch (ParseException e) {
+                                            videoStreaming.setUrlVideoStreaming(encriptacionDatos.encriptar(txtEditarUrlVideo.getText().toString())); //setiamos el url del video
+
+
+                                            String[] fecha = txtEditarFechaVideo.getText().toString().split("/");//separamos la fecha en un arreglo
+                                            if(Integer.parseInt(fecha[0])<10){
+                                                fecha[0]="0"+fecha[0]; //añadimos un cero en caso de que la fecha se una sola unidad
+                                            }
+                                            if(Integer.parseInt(fecha[1])<10){
+                                                fecha[1]="0"+fecha[1]; //añadimos un cero en la fecha en caso de que sea una solo unidad
+                                            }
+
+                                            String fechaFormat = fecha[0]+"-"+fecha[1]+"-"+fecha[2]+" "+txtEditarHoraVideo.getText().toString(); //le damos formato a la fecha
+                                            Date fechaTransmision = null;//creamos una variable de tipo date para luego almacenarla en  la clase videoStreaming
+                                            try {
+                                                fechaTransmision = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(fechaFormat); //almacenamos la fecha Date
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            fechaTransmision.setMonth(Integer.parseInt(fecha[1]));//editamos el mes ya que presenta error en la base
+                                            fechaTransmision.setYear(Integer.parseInt(fecha[2])); //editamos el año por error en la base
+                                            videoStreaming.setFechaTransmision(fechaTransmision);//seteamos la fecha de trasmision
+                                            videoStreaming.setIdVideoStreaming(UUID.randomUUID().toString()); //seteamos el id
+                                            videoStreaming.setIdVendedor(vendedor.getIdVendedor()); //seteamos el uid del vendedor
+                                            videoStreaming.setIniciado(activarVideo.isChecked());
+                                            reference.child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).setValue(videoStreaming).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(context, "Datos guardados con exito", Toast.LENGTH_LONG).show();
+                                                    dialog.dismiss();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(context, "A ocurrido un error al guardar los datos", Toast.LENGTH_LONG).show();
+                                                    Log.w("Error guardar","A ocurrido un error",e);
+                                                }
+                                            });
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
-                                        fechaTransmision.setMonth(Integer.parseInt(fecha[1]));//editamos el mes ya que presenta error en la base
-                                        fechaTransmision.setYear(Integer.parseInt(fecha[2])); //editamos el año por error en la base
-                                        videoStreaming.setFechaTransmision(fechaTransmision);//seteamos la fecha de trasmision
-                                        videoStreaming.setIdVideoStreaming(UUID.randomUUID().toString()); //seteamos el id
-                                        videoStreaming.setIdVendedor(vendedor.getIdVendedor()); //seteamos el uid del vendedor
-                                        videoStreaming.setIniciado(activarVideo.isChecked());
-                                        reference.child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).setValue(videoStreaming).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(context, "Datos guardados con exito", Toast.LENGTH_LONG).show();
-                                                dialog.dismiss();
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(context, "A ocurrido un error al guardar los datos", Toast.LENGTH_LONG).show();
-                                                Log.w("Error guardar","A ocurrido un error",e);
-                                            }
-                                        });
 
                                     }
-
                                 }
                             }
-                        }
+                        });
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
                     }else{
                         Toast.makeText(context, "El url del video no es correcto", Toast.LENGTH_LONG).show();
                     }
@@ -205,7 +210,11 @@ public class CuadroEditarStraming {
 
                         Map<String, Object> videoStreamingMap = new HashMap<>(); //almacena los datos que van a ser editados
 
-                        videoStreamingMap.put("urlVideoStreaming", txtEditarUrlVideo.getText().toString());//setiamos el url del video
+                        try {
+                            videoStreamingMap.put("urlVideoStreaming", encriptacionDatos.encriptar(txtEditarUrlVideo.getText().toString()));//setiamos el url del video
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         videoStreamingMap.put("fechaTransmision", fechaTransmision);//seteamos la fecha de trasmision
                         videoStreamingMap.put("idVideoStreaming", videoStreaming.getIdVideoStreaming());//seteamos el id
                         videoStreamingMap.put("iniciado", activarVideo.isChecked());
@@ -215,6 +224,7 @@ public class CuadroEditarStraming {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(context, "Datos actualizados con exito", Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

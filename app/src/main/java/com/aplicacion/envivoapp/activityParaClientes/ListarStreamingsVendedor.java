@@ -22,6 +22,7 @@ import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
 import com.aplicacion.envivoapp.adaptadores.AdapterVideoStreaming;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroDatosStreaming;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private  FirebaseAuth.AuthStateListener authStateListener;
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     private List<VideoStreaming> listStreaming = new ArrayList<>();
     private ListAdapter adapterListStreaming;
@@ -102,16 +105,21 @@ public class ListarStreamingsVendedor extends AppCompatActivity implements Cuadr
     }
 
     public void listarStreamings(){
-        databaseReference.child("VideoStreaming").addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.child("VideoStreaming").orderByChild("idVendedor").equalTo(idVendedor);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     listStreaming.clear();//borramos en caso de quedar algo en la cache
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                         VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);
-                        if (videoStreaming.getIdVendedor().equals(idVendedor)
-                                && !videoStreaming.getEliminado()) { //listamos los streamings del vendedor que no han sido eliminados
-                            listStreaming.add(videoStreaming);
+                        if (!videoStreaming.getEliminado()) { //listamos los streamings del vendedor que no han sido eliminados
+                            try {
+                               videoStreaming.setUrlVideoStreaming(encriptacionDatos.desencriptar(videoStreaming.getUrlVideoStreaming()));
+                                listStreaming.add(videoStreaming);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     //Inicialisamos el adaptador

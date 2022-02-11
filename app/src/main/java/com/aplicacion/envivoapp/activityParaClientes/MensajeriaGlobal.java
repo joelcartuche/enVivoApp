@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -42,6 +44,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -129,61 +132,59 @@ public class MensajeriaGlobal extends AppCompatActivity {
             public void onClick(View v) {
                 if (!mensajeEnv.getText().toString().equals("")){
                     //buscamos el cliente
-                    databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
+                    Query query = databaseReference.child("Cliente").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+                    query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onSuccess(DataSnapshot snapshot) {
                             if (snapshot.exists()) {
                                 Cliente cliente = null;
                                 for (DataSnapshot ds : snapshot.getChildren()) {
-                                    Cliente clienteAux = ds.getValue(Cliente.class);
-                                    if (clienteAux.getUidUsuario().equals(firebaseAuth.getUid())) {
-                                        cliente = clienteAux;
-                                        break;
+                                    cliente = ds.getValue(Cliente.class);
+                                }
+
+                                if (cliente != null) {
+                                    if (!cliente.getBloqueado()){
+                                        Cliente finalCliente = cliente;
+                                        Mensaje mensaje = new Mensaje(); //instanciamos el mensaje
+
+                                        LocalDateTime tiempoActual = LocalDateTime.now(); //obtenemos la hora y fecha actual
+                                        // creamos la fecha
+                                        Date fecha = new Date();
+                                        fecha.setDate(tiempoActual.getDayOfMonth());
+                                        fecha.setMonth(tiempoActual.getMonth().getValue());
+                                        fecha.setYear(tiempoActual.getYear());
+                                        fecha.setHours(tiempoActual.getHour());
+                                        fecha.setMinutes(tiempoActual.getMinute());
+                                        fecha.setSeconds(tiempoActual.getSecond());
+
+                                        //creamo el mensaje
+                                        mensaje.setFecha(fecha);
+                                        String idMensaje = databaseReference.push().getKey();
+                                        mensaje.setIdMensaje(idMensaje);
+                                        mensaje.setTexto(mensajeEnv.getText().toString());
+                                        mensaje.setIdcliente(finalCliente.getIdCliente());
+                                        mensaje.setIdvendedor(idVendedor);
+                                        mensaje.setIdStreaming(null);
+                                        mensaje.setEsGlobal(true);
+                                        mensaje.setEsVededor(false);
+                                        mensajeEnv.setText("");
+                                        databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(MensajeriaGlobal.this,"Error al enviar el mensaje",Toast.LENGTH_LONG).show();
+                                            }
+                                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                gridViewMensaje.setVerticalScrollbarPosition(listMensaje.size());
+                                            }
+                                        });
+                                    }else{
+                                        Dialog dialog = new Utilidades().cuadroError(MensajeriaGlobal.this,"Usted ha sido bloqueado contactese con el vendedor");
+                                        dialog.show();
                                     }
                                 }
-                                if (cliente != null) {
-                                    Cliente finalCliente = cliente;
-                                    Mensaje mensaje = new Mensaje(); //instanciamos el mensaje
-
-                                    LocalDateTime tiempoActual = LocalDateTime.now(); //obtenemos la hora y fecha actual
-                                    // creamos la fecha
-                                    Date fecha = new Date();
-                                    fecha.setDate(tiempoActual.getDayOfMonth());
-                                    fecha.setMonth(tiempoActual.getMonth().getValue());
-                                    fecha.setYear(tiempoActual.getYear());
-                                    fecha.setHours(tiempoActual.getHour());
-                                    fecha.setMinutes(tiempoActual.getMinute());
-                                    fecha.setSeconds(tiempoActual.getSecond());
-
-                                    //creamo el mensaje
-                                    mensaje.setFecha(fecha);
-                                    String idMensaje = databaseReference.push().getKey();
-                                    mensaje.setIdMensaje(idMensaje);
-                                    mensaje.setTexto(mensajeEnv.getText().toString());
-                                    mensaje.setIdcliente(finalCliente.getIdCliente());
-                                    mensaje.setIdvendedor(idVendedor);
-                                    mensaje.setIdStreaming(null);
-                                    mensaje.setEsGlobal(true);
-                                    mensaje.setEsVededor(false);
-                                    mensajeEnv.setText("");
-                                    databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(MensajeriaGlobal.this,"Error al enviar el mensaje",Toast.LENGTH_LONG).show();
-                                        }
-                                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            gridViewMensaje.setVerticalScrollbarPosition(listMensaje.size());
-                                        }
-                                    });
-                                }
                             }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            borrarGrid();
                         }
                     });
 
@@ -203,51 +204,55 @@ public class MensajeriaGlobal extends AppCompatActivity {
 
     private void leerMensaje() {
         borrarGrid();
-            databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.child("Cliente").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     listMensaje.clear();
                     if (snapshot.exists()) {
                         Cliente cliente = null;
                         for (DataSnapshot ds : snapshot.getChildren()) {
-                            Cliente clienteAux = ds.getValue(Cliente.class);
-                            if (clienteAux.getUidUsuario().equals(firebaseAuth.getUid())) {
-                                cliente = clienteAux;
-                                break;
-                            }
+                            cliente = ds.getValue(Cliente.class);
                         }
+
                         if (cliente != null) {
-                            Cliente finalCliente = cliente;
-                            databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                   borrarGrid();
-                                    Mensaje mensaje = null;
-                                    for (DataSnapshot ds1 : snapshot.getChildren()) {
-                                        Mensaje mensajeAux = ds1.getValue(Mensaje.class);
-                                        if (mensajeAux.getIdcliente().equals(finalCliente.getIdCliente())) {
-                                            mensaje = mensajeAux;
-                                        }
-                                        if (mensaje != null && mensaje.getEsGlobal()) {
-                                            listMensaje.add(mensaje);
-                                        }
-                                    }
-
-                                    if (listMensaje.size() == 0){
+                            if (!cliente.getBloqueado()) {
+                                Query queryMensaje = databaseReference.child("Mensaje").orderByChild("idcliente").equalTo(cliente.getIdCliente());
+                                queryMensaje.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         borrarGrid();
-                                    }else {
-                                        gridAdapterMensaje = new AdapterMensajeriaGlobal(MensajeriaGlobal.this, listMensaje, databaseReference, storage);
-                                        gridViewMensaje.setAdapter(gridAdapterMensaje); //configuramos el view}
-                                        gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaGlobal.this));
-                                        gridViewMensaje.getLayoutManager().scrollToPosition(listMensaje.size()-1);
-                                    }
-                                }
+                                        Mensaje mensaje = null;
+                                        for (DataSnapshot ds1 : snapshot.getChildren()) {
+                                            Mensaje mensajeAux = ds1.getValue(Mensaje.class);
+                                            if (mensajeAux.getIdvendedor().equals(idVendedor)&&
+                                                    !mensajeAux.getEsEliminado()) {
+                                                mensaje = mensajeAux;
+                                            }
+                                            if (mensaje != null && mensaje.getEsGlobal()) {
+                                                listMensaje.add(mensaje);
+                                            }
+                                        }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    borrarGrid();
-                                }
-                            });
+                                        if (listMensaje.size() == 0) {
+                                            borrarGrid();
+                                        } else {
+                                            gridAdapterMensaje = new AdapterMensajeriaGlobal(MensajeriaGlobal.this, listMensaje, databaseReference, storage);
+                                            gridViewMensaje.setAdapter(gridAdapterMensaje); //configuramos el view}
+                                            gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaGlobal.this));
+                                            gridViewMensaje.getLayoutManager().scrollToPosition(listMensaje.size() - 1);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        borrarGrid();
+                                    }
+                                });
+                            }else{
+                                Dialog dialog = new Utilidades().cuadroError(MensajeriaGlobal.this,"Usted ha sido bloqueado contactese con el vendedor");
+                                dialog.show();
+                            }
                         }else{
                             borrarGrid();
                         }
@@ -284,18 +289,15 @@ public class MensajeriaGlobal extends AppCompatActivity {
                 if (resultCode == RESULT_OK){
                     Uri pathArchivo = data.getData(); //Obtenemos el uri de la imagen seleccionada
                     //cargamos el bitmap
-                    databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
+                    Query query = databaseReference.child("Cliente").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+                    query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onSuccess(DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 Cliente cliente = null;
                                 for (DataSnapshot ds:snapshot.getChildren()){
-                                    Cliente clienteAux = ds.getValue(Cliente.class);
-                                    if (clienteAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                                        cliente = clienteAux;
-                                        break;
-                                    }
+                                    cliente = ds.getValue(Cliente.class);
                                 }
                                 if (cliente!=null){
                                     // creamos el mensaje
@@ -349,18 +351,12 @@ public class MensajeriaGlobal extends AppCompatActivity {
                                         }
 
                                     }
-
-
-
                                 }
                             }
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
                     });
+
+
 
                 }
                 break;
@@ -375,5 +371,7 @@ public class MensajeriaGlobal extends AppCompatActivity {
         parcelFileDescriptor.close();
         return image;
     }
+
+
 
 }

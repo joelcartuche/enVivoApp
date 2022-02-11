@@ -26,12 +26,14 @@ import android.widget.RadioButton;
 import android.widget.SearchView;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -47,6 +49,7 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
     private DatabaseReference databaseReference;
     private List<VideoStreaming> listStreaming = new ArrayList<>();
     private AdapterVideoStreaming adapterListStreaming;
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
 
     private GridView listaStreamingView;
@@ -184,38 +187,47 @@ public class GestionVideos extends AppCompatActivity implements CuadroEditarStra
         listaStreamingView.setAdapter(adapterListStreaming); //configuramos el view
     }
     public void listarStreamings(){
-        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                limpiarGrid();
                 if (snapshot.exists()){
                     Vendedor vendedor= null;
                     for (DataSnapshot ds:snapshot.getChildren()){
-                        Vendedor vendedorAux = ds.getValue(Vendedor.class);
-                        if(vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                            vendedor=vendedorAux;
-                            break;
-                        }
+                        vendedor = ds.getValue(Vendedor.class);
                     }
                     if(vendedor!=null){
-                        Vendedor finalVendedor = vendedor;
                         idVendedor = vendedor.getIdVendedor();
-                        databaseReference.child("VideoStreaming").addValueEventListener(new ValueEventListener() {
+                        Query queryVideo = databaseReference.child("VideoStreaming").orderByChild("idVendedor").equalTo(vendedor.getIdVendedor());
+                        queryVideo.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
-                                    listStreaming.clear();
+                                    limpiarGrid();
                                     for (DataSnapshot ds:snapshot.getChildren()){
                                         VideoStreaming videoStreaming = ds.getValue(VideoStreaming.class);
-                                        if (videoStreaming.getIdVendedor().equals(finalVendedor.getIdVendedor())){
+                                        if (videoStreaming != null){
                                             if (anadidos.isChecked() && !eliminados.isChecked()) {//en caso de que el filtro añadidos este habilitado
                                                 if (!videoStreaming.getEliminado()) {
-                                                    listStreaming.add(videoStreaming);
+                                                    try {
+                                                        videoStreaming.setUrlVideoStreaming(encriptacionDatos.desencriptar(videoStreaming.getUrlVideoStreaming()));
+                                                        listStreaming.add(videoStreaming);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+
                                                 }
                                             } else if (eliminados.isChecked() && !anadidos.isChecked()) {//en caso de que el filtro eliminados este habilitado
-                                                    if (videoStreaming.getEliminado()) {
+                                                if (videoStreaming.getEliminado()) {
+                                                    try {
+                                                        videoStreaming.setUrlVideoStreaming(encriptacionDatos.desencriptar(videoStreaming.getUrlVideoStreaming()));
                                                         listStreaming.add(videoStreaming);
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
                                                     }
                                                 }
+                                            }
                                         }
                                     }
                                         //Inicialisamos el adaptador

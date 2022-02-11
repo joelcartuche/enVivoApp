@@ -25,6 +25,7 @@ import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -76,16 +77,14 @@ public class AdapterListarVendedores extends BaseAdapter {
         TextView celularVendedor = view.findViewById(R.id.txtItemListarVendedoresCelularVendedor);
         ImageView imgPerfil = view.findViewById(R.id.imgPerfilVendedor);
         //CArgamos la imagen del usuario
-        reference.child("Usuario").addValueEventListener(new ValueEventListener() {
+        Query query = reference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     Usuario usuario = null;
                     for (DataSnapshot ds: snapshot.getChildren()){
-                        Usuario usuarioAux = ds.getValue(Usuario.class);
-                        if (usuarioAux.getUidUser().equals(vendedor.getUidUsuario())){
-                            usuario = usuarioAux;
-                        }
+                        usuario = ds.getValue(Usuario.class);
                     }
                     if (usuario != null){
                         Uri uri = Uri.parse(usuario.getImagen());

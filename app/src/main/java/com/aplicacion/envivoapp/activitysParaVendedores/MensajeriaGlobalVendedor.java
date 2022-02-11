@@ -29,6 +29,7 @@ import com.aplicacion.envivoapp.adaptadores.AdapterMensajeriaGlobalVendedores;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +38,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -61,6 +63,7 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseStorage storage ; //para la insersion de archivos
     private StorageReference storageReference;
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     private List<Mensaje> listMensaje = new ArrayList<>();
     private RecyclerView gridViewMensaje;
@@ -102,18 +105,15 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!textoMensaje.getText().toString().equals("")){
-                    databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
+                    Query queryVendedor = databaseReference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+                    queryVendedor.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onSuccess(DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 Vendedor vendedor = null;
                                 for (DataSnapshot ds:snapshot.getChildren()){
-                                    Vendedor vendedorAux = ds.getValue(Vendedor.class);
-                                    if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                                        vendedor = vendedorAux;
-                                        break;
-                                    }
-                                }
+                                    vendedor = ds.getValue(Vendedor.class);
+                                                                    }
                                 if (vendedor!=null){
                                     // creamos el mensaje
                                     Mensaje mensaje = new Mensaje(); //instanciamos el mensaje
@@ -132,25 +132,33 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
                                     mensaje.setFecha(fecha);
                                     String idMensaje = databaseReference.push().getKey();
                                     mensaje.setIdMensaje(idMensaje);
-                                    mensaje.setTexto(textoMensaje.getText().toString());
+                                    try {
+                                        mensaje.setTexto(encriptacionDatos.encriptar(textoMensaje.getText().toString()));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                     mensaje.setIdcliente(idCliente);
                                     mensaje.setIdvendedor(vendedor.getIdVendedor());
                                     mensaje.setIdStreaming(null);
                                     mensaje.setEsGlobal(true);
                                     mensaje.setEsVededor(true);
-                                    textoMensaje.setText("");
-                                    databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje);
 
-
+                                    databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            textoMensaje.setText("");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(MensajeriaGlobalVendedor.this,"Error al enviar el mensaje intentelo de nuevo",Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                                 }
                             }
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
                     });
+
                 }
             }
         });
@@ -186,7 +194,7 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
     private void borrarGrid(){
         listMensaje.clear();//borramos en caso de quedar algo en la cache
         //Inicialisamos el adaptador
-        gridAdapterMensaje = new AdapterMensajeriaGlobalVendedores(MensajeriaGlobalVendedor.this,
+        gridAdapterMensaje = new AdapterMensajeriaGlobalVendedores(MensajeriaGlobalVendedor.this,null,
                 listMensaje,
                 databaseReference,
                 storage,
@@ -195,36 +203,71 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
         gridViewMensaje.setLayoutManager(new LinearLayoutManager(MensajeriaGlobalVendedor.this));
     }
     private void leerMensaje() {
-            databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
+        Query queryMensajeVendedro = databaseReference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+            queryMensajeVendedro.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     listMensaje.clear();
                     if (snapshot.exists()) {
                         Vendedor vendedor = null;
                         for (DataSnapshot ds : snapshot.getChildren()) {
-                            Vendedor vendedorAux = ds.getValue(Vendedor.class);
-                            if (vendedorAux.getUidUsuario().equals(firebaseAuth.getUid())) {
-                                vendedor = vendedorAux;
+                            vendedor = ds.getValue(Vendedor.class);
+                            if (vendedor !=null) {
+                                try {
+                                    vendedor.setCedula(encriptacionDatos.desencriptar(vendedor.getCedula()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    vendedor.setCelular(encriptacionDatos.desencriptar(vendedor.getCelular()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    vendedor.setNombre(encriptacionDatos.desencriptar(vendedor.getNombre()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    vendedor.setTelefono(encriptacionDatos.desencriptar(vendedor.getTelefono()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }else{
+                                Log.e("Error","Mesajeria global vendedor vendedor null 237");
                             }
                         }
                         if (vendedor != null) {
+                            Query queryMensaje = databaseReference.child("Mensaje").orderByChild("idvendedor").equalTo(vendedor.getIdVendedor());
                             Vendedor finalVendedor = vendedor;
-                            databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
+                            queryMensaje.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     borrarGrid();
-                                    Mensaje mensaje = null;
                                     for (DataSnapshot ds1 : snapshot.getChildren()) {
                                         Mensaje mensajeAux = ds1.getValue(Mensaje.class);
-                                        if (mensajeAux.getIdvendedor().equals(finalVendedor.getIdVendedor())
-                                            && mensajeAux.getIdcliente().equals(idCliente)) {
-                                            mensaje = mensajeAux;
-                                        }
-                                        if (mensaje != null && mensaje.getEsGlobal()) {
-                                            listMensaje.add(mensaje);
+                                        if (mensajeAux !=null
+                                            && mensajeAux.getIdcliente().equals(idCliente)
+                                            && !mensajeAux.getEsEliminado()
+                                            && mensajeAux.getEsGlobal()) {
+                                            try {
+                                                mensajeAux.setImagen(encriptacionDatos.desencriptar(mensajeAux.getImagen()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                mensajeAux.setTexto(encriptacionDatos.desencriptar(mensajeAux.getTexto()));
+                                                listMensaje.add(mensajeAux);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }else{
+                                            Log.e("Error","Mensajeria global null 266");
                                         }
                                     }
-                                    gridAdapterMensaje = new AdapterMensajeriaGlobalVendedores(MensajeriaGlobalVendedor.this,
+
+                                    gridAdapterMensaje = new AdapterMensajeriaGlobalVendedores(MensajeriaGlobalVendedor.this, finalVendedor,
                                             listMensaje,
                                             databaseReference,
                                             storage,
@@ -272,24 +315,19 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
         switch (requestCode){
             case PICKER:
                 if (resultCode == RESULT_OK){
-
-
                     Uri pathArchivo = data.getData();
                     //cargamos el bitmap
-
-                    databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
+                    Query queryVendedor = databaseReference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+                    queryVendedor.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        public void onSuccess(DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 Vendedor vendedor = null;
                                 for (DataSnapshot ds:snapshot.getChildren()){
-                                    Vendedor vendedorAux = ds.getValue(Vendedor.class);
-                                    if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                                        vendedor = vendedorAux;
-                                        break;
-                                    }
+                                    vendedor = ds.getValue(Vendedor.class);
                                 }
+
                                 if (vendedor!=null){
                                     // creamos el mensaje
                                     Mensaje mensaje = new Mensaje(); //instanciamos el mensaje
@@ -308,14 +346,18 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
                                     mensaje.setFecha(fecha);
                                     String idMensaje = databaseReference.push().getKey();
                                     mensaje.setIdMensaje(idMensaje);
-                                    mensaje.setTexto("");
+                                    try {
+                                        mensaje.setTexto(encriptacionDatos.encriptar(""));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                     mensaje.setIdcliente(idCliente);
                                     mensaje.setIdvendedor(vendedor.getIdVendedor());
                                     mensaje.setIdStreaming(null);
                                     mensaje.setEsGlobal(true);
                                     mensaje.setEsVededor(true);
                                     if (!pathArchivo.equals("")){
-
+                                        //cargamos la imagen
                                         try {
                                             StorageReference storageRef = storage.getReference().child(idMensaje);//creamos la referencia para subir datos
                                             mensaje.setImagen(storageRef.getPath());
@@ -327,12 +369,20 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
                                             uploadTask.addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception exception) {
+                                                    Toast.makeText(MensajeriaGlobalVendedor.this,"Error al subir la imagen intentelo de nuevo",Toast.LENGTH_LONG).show();
                                                     Log.w("ImagenError","Error al cargar la imagen",exception);
                                                 }
                                             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                                 @Override
                                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                    databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje);
+                                                    try {
+                                                        mensaje.setImagen(encriptacionDatos.encriptar(mensaje.getImagen()));
+                                                        databaseReference.child("Mensaje").child(idMensaje).setValue(mensaje);
+                                                    } catch (Exception e) {
+                                                        Toast.makeText(MensajeriaGlobalVendedor.this,"Error al subir la imagen intentelo de nuevo",Toast.LENGTH_LONG).show();
+                                                        e.printStackTrace();
+                                                    }
+
                                                 }
                                             });
 
@@ -344,16 +394,12 @@ public class MensajeriaGlobalVendedor extends AppCompatActivity {
 
 
                                     }
+                                }else{
+                                    Log.e("Error","Mensajeria Global Vendedor null 398");
                                 }
                             }
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
                     });
-
                 }
                 break;
         }

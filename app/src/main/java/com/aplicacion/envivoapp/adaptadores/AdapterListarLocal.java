@@ -29,10 +29,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
@@ -106,7 +108,7 @@ public class AdapterListarLocal extends BaseAdapter implements CuadroSeleccionar
         visualizarMapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CuadroSeleccionarUbicacion(context,ubicacion,databaseReference,AdapterListarLocal.this::resultado,true);
+                new CuadroSeleccionarUbicacion(context,ubicacion,false,local.getNombre(),AdapterListarLocal.this::resultado,true);
             }
         });
 
@@ -128,32 +130,22 @@ public class AdapterListarLocal extends BaseAdapter implements CuadroSeleccionar
 
 
     public void abrirCuadroDialogo(Local local, FirebaseAuth firebaseAuth,Context context){
-        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onSuccess(DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     Vendedor vendedor = null;
                     for (DataSnapshot ds:snapshot.getChildren()){
-                        Vendedor vendedorAux = ds.getValue(Vendedor.class);
-                        if (vendedorAux!=null){
-                            if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                                vendedor = vendedorAux;
-                                break;
-                            }
-                        }
+                        vendedor = ds.getValue(Vendedor.class);
                     }
                     if (vendedor!= null){
-                        LatLng aux = new LatLng(local.getLatitud(),local.getLongitud());
-                        ((MyFirebaseApp) context.getApplicationContext()).setLatLng(aux);
                         new CuadroEditarLocal(context,local,vendedor,false,databaseReference,AdapterListarLocal.this::resultado);
                     }
                 }
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
         });
+
     }
 
     @Override

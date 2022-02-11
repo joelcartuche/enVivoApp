@@ -159,9 +159,8 @@
             android:layout_height="wrap_content"
             android:text="Dirección:" />
 
-        <fragment
-            android:id="@+id/fragment"
-            android:name="com.aplicacion.envivoapp.utilidades.MapsFragment"
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapDataCliente"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
 

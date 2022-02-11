@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +38,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private EncriptacionDatos encriptacionDatos= new EncriptacionDatos();
 
     private List<Vendedor> listVendedor = new ArrayList<>();
     private EditText buscarVendedor;
@@ -146,8 +149,9 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
         });
 
 
-
-        new Utilidades().cargarToolbar(btnHome,
+        Utilidades util = new Utilidades();
+        util.buscarClientebloqueado(ListarVendedores.this,firebaseAuth,databaseReference);
+        util.cargarToolbar(btnHome,
                 btnListarVendedore,
                 btnPerfil,
                 btnPedido,
@@ -166,6 +170,22 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
                     listVendedor.clear();//borramos en caso de quedar algo en la cache
                     for (final DataSnapshot ds : snapshot.getChildren()) {
                         Vendedor vendedor = ds.getValue(Vendedor.class);//obtenemos el objeto video streaming
+                        try {
+                            vendedor.setCedula(encriptacionDatos.desencriptar(vendedor.getCedula()));
+                            vendedor.setNombre(encriptacionDatos.desencriptar(vendedor.getNombre()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            vendedor.setCelular(encriptacionDatos.desencriptar(vendedor.getCelular()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            vendedor.setTelefono(encriptacionDatos.desencriptar(vendedor.getTelefono()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         listVendedor.add(vendedor);
                     }
                     //Inicialisamos el adaptador
@@ -187,16 +207,15 @@ public class ListarVendedores extends AppCompatActivity implements CuadroListarV
     @Override
     public void resultado(Boolean isVerStreamings, Vendedor vendedor) {
         if(isVerStreamings){
-            databaseReference.child("Cliente").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            Query query = databaseReference.child("Cliente").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+            query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
                 public void onSuccess(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()){
                         Cliente cliente =null;
                         for ( DataSnapshot ds : dataSnapshot.getChildren()) {
-                            Cliente clienteAux = ds.getValue(Cliente.class);//obtenemos el objeto cliente
-                            if (clienteAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                                cliente= clienteAux;
-                            }
+                            cliente = ds.getValue(Cliente.class);//obtenemos el objeto cliente
+
                         }
                         if (cliente !=null){
                             Bundle parametros = new Bundle();

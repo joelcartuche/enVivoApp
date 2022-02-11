@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.hardware.location.gps" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
     <application
         android:name=".utilidades.MyFirebaseApp"
@@ -37,6 +38,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activityParaClientes.HomeCliente" />
+        <activity android:name=".cuadroDialogo.CuadroCambiarPedido" />
         <activity android:name=".activitysParaVendedores.HomeVendedor" />
         <activity android:name=".Reportes.ReporteVendedor" />
         <activity android:name=".activitysParaVendedores.MensajeriaGlobalVendedor" />
@@ -82,6 +84,17 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"
             tools:replace="android:value" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.aplicacion.envivoapp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+
     </application>
 
 </manifest>

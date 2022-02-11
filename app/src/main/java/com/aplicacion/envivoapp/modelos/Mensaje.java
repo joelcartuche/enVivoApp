@@ -17,6 +17,8 @@ public class Mensaje {
     private Boolean esGlobal;
     private Boolean esClienteBloqueado;
     private String imagen;
+    private Boolean esEliminado;
+    private String clienteBloqueado_esGlobal_idCliente_idVendedor;
 
     public Mensaje() {
         this.pedidoAceptado = false;
@@ -27,6 +29,23 @@ public class Mensaje {
         this.esGlobal = false;
         this.esClienteBloqueado = false;
         this.imagen=null;
+        this.esEliminado = false;
+    }
+
+    public String getClienteBloqueado_esGlobal_idCliente_idVendedor() {
+        return clienteBloqueado_esGlobal_idCliente_idVendedor;
+    }
+
+    public void setClienteBloqueado_esGlobal_idCliente_idVendedor(String clienteBloqueado_esGlobal_idCliente_idVendedor) {
+        this.clienteBloqueado_esGlobal_idCliente_idVendedor = clienteBloqueado_esGlobal_idCliente_idVendedor;
+    }
+
+    public Boolean getEsEliminado() {
+        return esEliminado;
+    }
+
+    public void setEsEliminado(Boolean esEliminado) {
+        this.esEliminado = esEliminado;
     }
 
     public String getImagen() {
@@ -44,6 +63,8 @@ public class Mensaje {
     public void setEsClienteBloqueado(Boolean esClienteBloqueado) {
         this.esClienteBloqueado = esClienteBloqueado;
     }
+
+
 
     public Boolean getEsGlobal() {
         return esGlobal;

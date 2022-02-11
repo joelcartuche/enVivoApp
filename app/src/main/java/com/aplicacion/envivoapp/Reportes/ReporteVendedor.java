@@ -3,13 +3,18 @@ package com.aplicacion.envivoapp.Reportes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RadioButton;
@@ -22,6 +27,7 @@ import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,14 +53,15 @@ public class ReporteVendedor extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private File nuevaCarpeta;
     private  Date fecha;
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
 
     private RadioButton reportePedidosCancelados,reportePedidosFinalizados,reportePedidosEliminados;
     private Button generarReporte,irRutaArchivo;
     private TextView rutaArchivo;
-    private ArrayList<String> listDAta = new ArrayList<>();
+    private ArrayList<Pedido> listDAta = new ArrayList<>();
     private AdapterGridReporteVendedor adapterListDatos;
-    private GridView listaDatosView;
+    private RecyclerView listaDatosView;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -148,21 +155,24 @@ public class ReporteVendedor extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    Dialog cargar = cargar(ReporteVendedor.this);
+                    cargar.show();
 
                     for (int i = 0; i < listDAta.size(); i += 7) {
+                        Pedido pedido = listDAta.get(i);
                         String[] dato = new String[]{
-                                listDAta.get(i),
-                                listDAta.get(i + 1),
-                                listDAta.get(i + 2),
-                                listDAta.get(i + 3),
-                                listDAta.get(i + 4),
-                                listDAta.get(i + 5),
-                                listDAta.get(i + 6)
+                                pedido.getCodigoProducto(),
+                                pedido.getNombreProducto(),
+                                pedido.getPrecioProducto()+"",
+                                pedido.getCantidadProducto()+"",
+                                pedido.getDescripcionProducto(),
+                                pedido.getFechaPedido().getDate()+"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear(),
+                                pedido.getFechaPedido().getHours()+":"+pedido.getFechaPedido().getMinutes()
                         };
-
                         writer.writeNext(dato);
                     }
 
+                    cargar.dismiss();
                     Log.d("Directorio", csv);
                     accederRuta(csv,nuevaCarpeta.getPath());//le damos funcionaledad a los botones
                     try {
@@ -218,37 +228,46 @@ public class ReporteVendedor extends AppCompatActivity {
                     }
                     if (vendedor!=  null) {
                         Vendedor finalVendedor = vendedor;
+                        //cargamos el cuadro cargar
+                        Dialog cargar = cargar(ReporteVendedor.this);
+                        cargar.show();
                         databaseReference.child("Pedido").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
                             public void onSuccess(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()){
                                     listDAta.clear();
                                     adapterListDatos = new AdapterGridReporteVendedor(ReporteVendedor.this,listDAta);
-                                    listaDatosView.setNumColumns(7);
                                     listaDatosView.setAdapter(adapterListDatos); //configuramos el view
 
-
-                                    listDAta.add("Codigo");listDAta.add("Nombre");listDAta.add("Precio");listDAta.add("Cantidad");listDAta.add("Descripcion");listDAta.add("Fecha pedido");listDAta.add("Hora pedido"); //cargamos el encabezado del archivo
                                     for (DataSnapshot ds:dataSnapshot.getChildren()){
                                         Pedido pedido = ds.getValue(Pedido.class);
                                         if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())){
+                                            try {
+                                                pedido.setNombreProducto(encriptacionDatos.desencriptar(pedido.getNombreProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setCodigoProducto(encriptacionDatos.desencriptar(pedido.getCodigoProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setDescripcionProducto(encriptacionDatos.desencriptar(pedido.getDescripcionProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                             if (reportePedidosEliminados.isChecked()
                                                     &&!pedido.getCancelado()
                                                     &&!pedido.getAceptado()
                                                     &&!pedido.getPagado()
                                                     &&pedido.getEliminado()){
-                                                listDAta.add(pedido.getCodigoProducto());
-                                                listDAta.add(pedido.getNombreProducto());
-                                                listDAta.add(pedido.getPrecioProducto()+"");
-                                                listDAta.add(pedido.getCantidadProducto()+"");
-                                                listDAta.add(pedido.getDescripcionProducto());
-                                                listDAta.add(pedido.getFechaPedido().getDate()+"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear());
-                                                listDAta.add(pedido.getFechaPedido().getHours()+":"+pedido.getFechaPedido().getMinutes());
-                                                adapterListDatos = new AdapterGridReporteVendedor(ReporteVendedor.this,listDAta);
-                                                listaDatosView.setNumColumns(7);
-                                                listaDatosView.setAdapter(adapterListDatos); //configuramos el view
-                                                Toast.makeText(ReporteVendedor.this,"cargando datos...",Toast.LENGTH_SHORT).show();
-
+                                                listDAta.add(pedido);
                                             }
 
                                             if (reportePedidosCancelados.isChecked()
@@ -256,17 +275,7 @@ public class ReporteVendedor extends AppCompatActivity {
                                                     &&!pedido.getAceptado()
                                                     &&!pedido.getPagado()
                                                     &&!pedido.getEliminado()){
-                                                listDAta.add(pedido.getCodigoProducto());
-                                                listDAta.add(pedido.getNombreProducto());
-                                                listDAta.add(pedido.getPrecioProducto()+"");
-                                                listDAta.add(pedido.getCantidadProducto()+"");
-                                                listDAta.add(pedido.getDescripcionProducto());
-                                                listDAta.add(pedido.getFechaPedido().getDate()+"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear());
-                                                listDAta.add(pedido.getFechaPedido().getHours()+":"+pedido.getFechaPedido().getMinutes());
-                                                adapterListDatos = new AdapterGridReporteVendedor(ReporteVendedor.this,listDAta);
-                                                listaDatosView.setNumColumns(7);
-                                                listaDatosView.setAdapter(adapterListDatos); //configuramos el view
-                                                Toast.makeText(ReporteVendedor.this,"cargando datos...",Toast.LENGTH_SHORT).show();
+                                                listDAta.add(pedido);
                                             }
 
                                             if (reportePedidosFinalizados.isChecked()
@@ -274,22 +283,19 @@ public class ReporteVendedor extends AppCompatActivity {
                                                     &&!pedido.getAceptado()
                                                     &&pedido.getPagado()
                                                     &&!pedido.getEliminado()){
-                                                listDAta.add(pedido.getCodigoProducto());
-                                                listDAta.add(pedido.getNombreProducto());
-                                                listDAta.add(pedido.getPrecioProducto()+"");
-                                                listDAta.add(pedido.getCantidadProducto()+"");
-                                                listDAta.add(pedido.getDescripcionProducto());
-                                                listDAta.add(pedido.getFechaPedido().getDate()+"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear());
-                                                listDAta.add(pedido.getFechaPedido().getHours()+":"+pedido.getFechaPedido().getMinutes());
-                                                adapterListDatos = new AdapterGridReporteVendedor(ReporteVendedor.this,listDAta);
-                                                listaDatosView.setNumColumns(7);
-                                                listaDatosView.setAdapter(adapterListDatos); //configuramos el view
-                                                Toast.makeText(ReporteVendedor.this,"cargando datos...",Toast.LENGTH_SHORT).show();
+                                                listDAta.add(pedido);
                                             }
                                         }
                                     }
+                                    cargar.dismiss();
+                                    adapterListDatos = new AdapterGridReporteVendedor(ReporteVendedor.this,listDAta);
+                                    listaDatosView.setAdapter(adapterListDatos); //configuramos el view
+                                    listaDatosView.setLayoutManager(new LinearLayoutManager(ReporteVendedor.this));
+
+
+
                                     //ocultamos el boton generar reportes csv
-                                    if (listDAta.size() >= 8){
+                                    if (listDAta.size() >= 1){
                                         generarReporte.setVisibility(View.VISIBLE);
 
                                     }else{
@@ -297,6 +303,8 @@ public class ReporteVendedor extends AppCompatActivity {
                                         rutaArchivo.setVisibility(View.GONE);
                                         irRutaArchivo.setVisibility(View.GONE);
                                     }
+                                }else{
+                                    cargar.dismiss();
                                 }
                             }
                         });
@@ -349,5 +357,12 @@ public class ReporteVendedor extends AppCompatActivity {
             ,mensaje.getTexto()});
             Log.d("Directorio",csv);
             */
-
+    public Dialog cargar(Context context){
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//el dialogo se presenta sin el titulo
+        dialog.setCancelable(false); //impedimos el cancelamiento del dialogo
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
+        dialog.setContentView(R.layout.cuadro_cargando); //le asisganos el layout
+        return dialog;
+    }
 }

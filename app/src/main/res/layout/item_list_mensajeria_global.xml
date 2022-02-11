@@ -1,135 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/cardItemPedidoVendor"
-android:layout_width="match_parent"
-android:layout_height="wrap_content">
-
-<ScrollView
-    android:id="@+id/scrollListPedidoVendedor"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardItemPedidoVendor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollListPedidoVendedor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cardMensajeriaGlobal"
-                    android:layout_width="match_parent"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="15dp">
+                    android:layout_margin="12dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
-                        android:id="@+id/linearContenedorMensajeriaGlobal"
-                        android:layout_width="0dp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cardMensajeriaGlobal"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:paddingStart="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingEnd="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="15dp">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:id="@+id/linearContenedorMensajeriaGlobal"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/linearLayout2"
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/linearLayout2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <ImageView
+                                        android:id="@+id/imgItemMensajeGlobal"
+                                        android:layout_width="25dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginStart="5dp"
+                                        android:layout_marginTop="5dp"
+                                        android:layout_marginEnd="5dp"
+
+                                        android:layout_marginBottom="5dp"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/txtItemNombreMensajeGlobbal"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/txtItemFechaMensajeGlobal" />
+
+                                    <TextView
+                                        android:id="@+id/txtItemNombreMensajeGlobbal"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="5dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:autoSizeTextType="uniform"
+                                        android:gravity="top|left"
+                                        android:inputType="textMultiLine|textCapSentences"
+                                        android:lines="5"
+                                        android:maxLines="10"
+
+                                        android:minLines="1"
+                                        android:scrollbars="none"
+                                        android:textColor="#ffffff"
+
+                                        android:textColorHighlight="#ffffff"
+                                        android:textColorHint="#ffffff"
+                                        android:textColorLink="#ffffff"
+                                        android:textStyle="bold"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/imgItemMensajeGlobal"
+                                        app:layout_constraintTop_toBottomOf="@+id/txtItemFechaMensajeGlobal" />
+
+                                    <TextView
+                                        android:id="@+id/txtItemFechaMensajeGlobal"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="5dp"
+                                        android:layout_marginTop="5dp"
+                                        android:layout_marginEnd="5dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:gravity="right"
+
+                                        android:textColor="#ffffff"
+                                        android:textColorHighlight="#ffffff"
+                                        android:textColorHint="#ffffff"
+                                        android:textColorLink="#ffffff"
+                                        app:layout_constraintBottom_toTopOf="@+id/txtItemNombreMensajeGlobbal"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <TextView
+                                    android:id="@+id/txtItemMensajeGlobal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:autoSizeTextType="uniform"
+                                    android:gravity="top|left"
+                                    android:inputType="textMultiLine|textCapSentences"
+                                    android:lines="5"
+                                    android:maxLines="10"
+
+                                    android:minLines="1"
+                                    android:scrollbars="none"
+                                    android:textColor="#ffffff"
+                                    android:textColorHighlight="#ffffff"
+                                    android:textColorHint="#ffffff"
+                                    android:textColorLink="#ffffff"
+                                    android:textSize="16dp" />
 
                                 <ImageView
-                                    android:id="@+id/imgItemMensajeGlobal"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginStart="3dp"
-                                    android:layout_marginLeft="3dp"
-                                    android:layout_marginTop="3dp"
-                                    android:layout_marginEnd="5dp"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="3dp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@+id/txtItemNombreMensajeGlobbal"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                    android:id="@+id/imgMensajeriaGlobal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="200dp" />
 
-                                <TextView
-                                    android:id="@+id/txtItemNombreMensajeGlobbal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="0dp"
-                                    android:layout_marginStart="18dp"
-                                    android:layout_marginLeft="18dp"
-                                    android:layout_marginTop="3dp"
-                                    android:layout_marginBottom="3dp"
-                                    android:textColor="#FFFFFF"
-                                    android:textColorHighlight="#FFFFFF"
-                                    android:textColorHint="#FFFFFF"
-                                    android:textColorLink="#FFFFFF"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintStart_toEndOf="@+id/imgItemMensajeGlobal"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <TextView
-                                    android:id="@+id/txtItemFechaMensajeCliente"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="3dp"
-                                    android:layout_marginEnd="5dp"
-                                    android:layout_marginRight="5dp"
-                                    android:layout_marginBottom="3dp"
-                                    android:textColor="#FFFFFF"
-                                    android:textColorHighlight="#FFFFFF"
-                                    android:textColorHint="#FFFFFF"
-                                    android:textColorLink="#FFFFFF"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <TextView
-                                android:id="@+id/txtItemMensajeGlobal"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:textColor="#FFFFFF"
-                                android:textColorHighlight="#FFFFFF"
-                                android:textColorHint="#FFFFFF"
-                                android:textColorLink="#FFFFFF"
-                                android:textSize="16dp" />
-
-                            <ImageView
-                                android:id="@+id/imgMensajeriaGlobal"
-                                android:layout_width="match_parent"
-                                android:layout_height="200dp" />
+                            </LinearLayout>
 
                         </LinearLayout>
-
-                    </LinearLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-</ScrollView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.cardview.widget.CardView>

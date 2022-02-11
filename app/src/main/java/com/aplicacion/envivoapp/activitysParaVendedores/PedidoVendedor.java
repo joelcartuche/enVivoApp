@@ -4,30 +4,52 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridPedidoVendedor;
+import com.aplicacion.envivoapp.cuadroDialogo.CuadroCambiarPedido;
+import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PedidoVendedor extends AppCompatActivity {
 
@@ -35,6 +57,7 @@ public class PedidoVendedor extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage ; //para la insersion de archivos
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     private List<Pedido> listPedido = new ArrayList<>();
     private GridView gridViewPedido;
@@ -159,23 +182,22 @@ public class PedidoVendedor extends AppCompatActivity {
     }
     private void listarPedidos() {
         borrarGrid();//borramos los datos del grid
-        databaseReference.child("Vendedor").addValueEventListener(new ValueEventListener() {
+
+        Query queryVendedor = databaseReference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+
+
+        queryVendedor.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     Vendedor vendedor = null;
                     for (DataSnapshot ds:snapshot.getChildren()){
-                        Vendedor vendedorAux = ds.getValue(Vendedor.class);
-                        if (vendedorAux!=null){
-                            if (vendedorAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                                vendedor=vendedorAux;
-                                break;
-                            }
-                        }
-                    }
+                        vendedor = ds.getValue(Vendedor.class);
+                                            }
                     if (vendedor!= null){
                         Vendedor finalVendedor = vendedor;
-                        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() {
+                        Query queryPedido = databaseReference.child("Pedido").orderByChild("idVendedor").equalTo(vendedor.getIdVendedor());
+                        queryPedido.addValueEventListener(new ValueEventListener() {
                             @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -183,58 +205,77 @@ public class PedidoVendedor extends AppCompatActivity {
                                     listPedido.clear();
                                     for (DataSnapshot ds:snapshot.getChildren()){
                                         Pedido pedido = ds.getValue(Pedido.class);
-                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())
-                                                && !pedido.getEliminado()
-                                                && filtrarTodos.isChecked()){
-                                            listPedido.add(pedido);
+                                        try {
+                                            pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())
-                                                && filtrarEliminados.isChecked()
-                                                && !pedido.getAceptado()
-                                                && pedido.getCancelado()
-                                                && !pedido.getEliminado()){
-                                            listPedido.add(pedido);
+                                        try {
+                                            pedido.setCodigoProducto(encriptacionDatos.desencriptar(pedido.getCodigoProducto()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())
-                                                && pedido.getAceptado()
-                                                && !pedido.getCancelado()
-                                                &&filtrarAceptados.isChecked()
-                                                &&!pedido.getEliminado()){
-                                            listPedido.add(pedido);
+                                        try {
+                                            pedido.setDescripcionProducto(encriptacionDatos.desencriptar(pedido.getDescripcionProducto()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())
-                                                && !pedido.getAceptado()
-                                                && !pedido.getCancelado()
-                                                &&filtrarPagados.isChecked()
-                                                &&!pedido.getEliminado()
-                                                && pedido.getPagado()){
-                                            listPedido.add(pedido);
+                                        try {
+                                            pedido.setNombreProducto(encriptacionDatos.desencriptar(pedido.getNombreProducto()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
                                         }
-                                        if (pedido.getIdVendedor().equals(finalVendedor.getIdVendedor())
-                                                &&  pedido.getAceptado()
-                                                && !pedido.getCancelado()
-                                                && filtrarFechaPasado.isChecked()
-                                                && !pedido.getEliminado()
-                                                && !pedido.getPagado()){//filtramos por pedido que es aceptado y pasado de fecha
 
-                                            //creamos el date en base la hora actual
-                                            LocalDateTime tiempoActual = LocalDateTime.now();//obtenemos la fecha actual
-                                            Date fecha = new Date();
-                                            fecha.setDate(tiempoActual.getDayOfMonth());
-                                            fecha.setMonth(tiempoActual.getMonth().getValue());
-                                            fecha.setYear(tiempoActual.getYear());
-                                            fecha.setHours(tiempoActual.getHour());
-                                            fecha.setMinutes(tiempoActual.getMinute());
-                                            fecha.setSeconds(tiempoActual.getSecond());
 
-                                            if (pedido.getFechaFinalPedido().after(fecha)){//comparamos las fechas
+
+
+
+                                            if (!pedido.getEliminado()
+                                                    && filtrarTodos.isChecked()){
                                                 listPedido.add(pedido);
                                             }
+                                            if (filtrarEliminados.isChecked()
+                                                    && !pedido.getAceptado()
+                                                    && pedido.getCancelado()
+                                                    && !pedido.getEliminado()){
+                                                listPedido.add(pedido);
+                                            }
+                                            if (pedido.getAceptado()
+                                                    && !pedido.getCancelado()
+                                                    &&filtrarAceptados.isChecked()
+                                                    &&!pedido.getEliminado()){
+                                                listPedido.add(pedido);
+                                            }
+                                            if (pedido.getAceptado()
+                                                    && !pedido.getCancelado()
+                                                    &&filtrarPagados.isChecked()
+                                                    &&!pedido.getEliminado()
+                                                    && pedido.getPagado()){
+                                                listPedido.add(pedido);
+                                            }
+                                            if (pedido.getAceptado()
+                                                    && !pedido.getCancelado()
+                                                    && filtrarFechaPasado.isChecked()
+                                                    && !pedido.getEliminado()
+                                                    && !pedido.getPagado()){//filtramos por pedido que es aceptado y pasado de fecha
 
-                                        }
+                                                //creamos el date en base la hora actual
+                                                LocalDateTime tiempoActual = LocalDateTime.now();//obtenemos la fecha actual
+                                                Date fecha = new Date();
+                                                fecha.setDate(tiempoActual.getDayOfMonth());
+                                                fecha.setMonth(tiempoActual.getMonth().getValue());
+                                                fecha.setYear(tiempoActual.getYear());
+                                                fecha.setHours(tiempoActual.getHour());
+                                                fecha.setMinutes(tiempoActual.getMinute());
+                                                fecha.setSeconds(tiempoActual.getSecond());
+
+                                                if (pedido.getFechaFinalPedido().after(fecha)){//comparamos las fechas
+                                                    listPedido.add(pedido);
+                                                }
+
+                                            }
 
                                     }
-
                                     //Inicialisamos el adaptador
                                     gridAdapterPedido = new AdapterGridPedidoVendedor(PedidoVendedor.this, listPedido,databaseReference,storage);
                                     gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
@@ -265,5 +306,6 @@ public class PedidoVendedor extends AppCompatActivity {
             }
         });
     }
+
 
 }

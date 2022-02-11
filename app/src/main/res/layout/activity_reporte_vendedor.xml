@@ -152,11 +152,11 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView5"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:fillViewport="true"
             android:scrollbars="horizontal|vertical"
             app:layout_constraintBottom_toTopOf="@+id/btnGenerarReporteVendedor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -164,29 +164,34 @@
             app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <GridView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/gridDatosReporteVendedor"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
+                    />
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </HorizontalScrollView>
+
+
+
+
+
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView74">
+            app:layout_constraintTop_toBottomOf="@+id/textView74"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView5">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -272,7 +277,6 @@
             android:id="@+id/btnGenerarReporteVendedor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:text="Generar archivo csv"
             app:backgroundTint="#00C853"
@@ -281,7 +285,7 @@
             app:layout_constraintBottom_toTopOf="@+id/txtRutaArchivo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView5"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

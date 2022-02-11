@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -31,9 +34,12 @@ import android.widget.Toast;
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaVendedor;
 import com.aplicacion.envivoapp.adaptadores.AdapterGridMensajeriaCliente;
+import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.ScreenshotUtil;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -44,6 +50,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -67,6 +74,7 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage; //para la insersion de archivos
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     private Button enviarMensaje,quieroComprar;
     private EditText textoMensaje;
@@ -146,7 +154,8 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
             @Override
             public void onClick(View v) {
 
-                selectorImagenes();
+                //selectorImagenes();
+                textoMensaje.setText("Quiero comprar: ");
                 /*bitmapCapturaPantalla = tomarCapturaPantalla();
                 if(bitmapCapturaPantalla != null){
                     textoMensaje.setText("Quiero comprar: ");
@@ -219,7 +228,6 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
                 textoMensaje.setText("");
                 if (mensaje.getTexto().indexOf("Quiero comprar:") == 0) {
                     if (bitmapCapturaPantalla != null) {
-
                         StorageReference storageRef = storage.getReference().child(idMensaje);//creamos la referencia para subir datos
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         bitmapCapturaPantalla.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -288,7 +296,8 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
     }
 
     public void listarMensajes(){
-        databaseReference.child("Mensaje").orderByChild("fecha").addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
+        Query query = databaseReference.child("Mensaje").orderByChild("idcliente").equalTo(idCliente);
+        query.addValueEventListener(new ValueEventListener() { //buscamos todos los datos en la tabla Video Streaming
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -296,9 +305,18 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
                     listMensaje.clear();//borramos en caso de quedar algo en la cache
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Mensaje mensaje = ds.getValue(Mensaje.class);
-                        if(mensaje.getIdcliente() != null && mensaje.getIdStreaming() !=null) {
-                            if (mensaje.getIdcliente().equals(idCliente)
-                                    && mensaje.getIdStreaming().equals(idStreaming)) {//aceptamos los mensades que sean del cliente y de el streaming actual
+                        if(mensaje.getIdvendedor().equals(idVendedor) && mensaje.getIdStreaming() !=null) {
+                            if (mensaje.getIdStreaming().equals(idStreaming)) {//aceptamos los mensades que sean del cliente y de el streaming actual
+                                try {
+                                    mensaje.setImagen(encriptacionDatos.desencriptar(mensaje.getImagen()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    mensaje.setTexto(encriptacionDatos.desencriptar(mensaje.getTexto()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 listMensaje.add(mensaje);
                             }
                         }
@@ -438,6 +456,8 @@ public class MensajeriaCliente extends YouTubeBaseActivity implements YouTubePla
         parcelFileDescriptor.close();
         return image;
     }
+
+
 
 
 

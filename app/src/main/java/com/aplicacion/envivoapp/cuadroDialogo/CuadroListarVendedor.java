@@ -21,6 +21,7 @@ import com.aplicacion.envivoapp.adaptadores.AdapterListarLocalClientes;
 import com.aplicacion.envivoapp.modelos.Local;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,6 +44,7 @@ public class CuadroListarVendedor {
 
     List<Local> listLocal = new ArrayList<>(); //lista que contendra los locales del vendedor
     AdapterListarLocalClientes gridAdapterLocal; //iniciamos el adaptador del gridView
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     public interface resultadoDialogo{
         void resultado(Boolean isVerStreamings,Vendedor vendedor);
@@ -100,6 +102,24 @@ public class CuadroListarVendedor {
                         Local local = ds.getValue(Local.class);
                         if (local!=null){
                             if(local.getIdVendedor().equals(vendedor.getIdVendedor())){
+                                try {
+                                    local.setCallePrincipal(encriptacionDatos.desencriptar(local.getCallePrincipal()));
+                                    local.setCelular(encriptacionDatos.desencriptar(local.getCelular()));
+                                    local.setNombre(encriptacionDatos.desencriptar(local.getNombre()));
+                                    local.setReferencia(encriptacionDatos.desencriptar(local.getReferencia()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    local.setCalleSecundaria(encriptacionDatos.desencriptar(local.getCalleSecundaria()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    local.setTelefono(encriptacionDatos.desencriptar(local.getTelefono()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 listLocal.add(local);
                             }
                         }

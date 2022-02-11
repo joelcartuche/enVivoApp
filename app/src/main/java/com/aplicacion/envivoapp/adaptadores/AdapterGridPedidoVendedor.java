@@ -1,5 +1,6 @@
 package com.aplicacion.envivoapp.adaptadores;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activityParaClientes.ListarStreamingsVendedor;
+import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
 import com.aplicacion.envivoapp.activitysParaVendedores.ListarClientes;
 import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaGlobalVendedor;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCambiarPedido;
@@ -29,6 +32,7 @@ import com.aplicacion.envivoapp.cuadroDialogo.CuadroSeleccionarUbicacion;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.common.api.Api;
@@ -54,6 +58,7 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
     private DatabaseReference databaseReference;
     private  Boolean eliminado;
     private  FirebaseStorage storage;
+    private EncriptacionDatos encriptacionDatos= new EncriptacionDatos();
 
     public AdapterGridPedidoVendedor(Context context,
                                      List<Pedido> listaPedidoVendedor,
@@ -130,8 +135,12 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
 
                             if (cliente!= null){
                                 LatLng aux = new LatLng(cliente.getLatitud(),cliente.getLongitud());
-                                ((MyFirebaseApp) context.getApplicationContext()).setLatLng(aux);
-                                new CuadroSeleccionarUbicacion(context,aux,databaseReference,AdapterGridPedidoVendedor.this::resultado,false);
+                                try {
+                                    cliente.setNombre(encriptacionDatos.desencriptar(cliente.getNombre()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                new CuadroSeleccionarUbicacion(context,aux,true,"Nombre: "+cliente.getNombre(),AdapterGridPedidoVendedor.this::resultado,false);
                             }
                         }
                     }
@@ -160,13 +169,20 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
                         cantidad.setText(pedido.getCantidadProducto() + "");
                         precio.setText(pedido.getPrecioProducto() + "");
                         descripcion.setText(pedido.getDescripcionProducto());
-                        nombreCliente.setText(cliente.getNombre());
-                        storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Picasso.with(context).load(uri).into(imagenPedido);
-                            }
-                        });
+                        try {
+                            nombreCliente.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if(pedido.getImagen()!=null) {
+                            imagenPedido.setVisibility(View.VISIBLE);
+                            storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Picasso.with(context).load(uri).into(imagenPedido);
+                                }
+                            });
+                        }
                     }else{
                         cardView.setVisibility(View.GONE);//para no mostrar los pedidos de clientes bloqueados
                     }
@@ -185,6 +201,7 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
         btnCambiarPedido.setVisibility(View.GONE);
         btnEliminarPedido.setVisibility(View.GONE);
         btnCancelarPedido.setVisibility(View.GONE);
+        imagenPedido.setVisibility(View.GONE);
 
         if (pedido.getAceptado()&& !pedido.getPagado() && !pedido.getCancelado()) {//en caso de ser aceptado el pedido mostramos el boton de pagado
             btnCambiarPedido.setVisibility(View.VISIBLE);
@@ -287,7 +304,14 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
             @Override
             public void onClick(View v) {
                 if (pedido.getAceptado()) {
-                    new CuadroCambiarPedido(context, pedido, databaseReference);
+                    Bundle parametros = new Bundle();
+                    parametros.putString("idPedido",pedido.getIdPedido());
+                    Intent streamingsIntent = new Intent(context.getApplicationContext(), CuadroCambiarPedido.class);
+                    streamingsIntent.putExtras(parametros);
+                    context.startActivity(streamingsIntent);
+
+
+                    //new CuadroCambiarPedido(context, pedido, databaseReference,storage);
                 }
             }
         });

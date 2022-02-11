@@ -23,6 +23,7 @@ import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoMensajeCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -33,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -49,6 +51,7 @@ public class MensajeriaVendedor extends  YouTubeBaseActivity implements YouTubeP
     private  String idVendedor,idCliente,idStreaming,urlStreaming;
     private RadioButton filtrarPedido,filtrarTodos;
     private Button minimizarVideo;
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     private List<Mensaje> listMensaje = new ArrayList<>();
     private GridView gridViewMensaje;
@@ -158,14 +161,17 @@ public class MensajeriaVendedor extends  YouTubeBaseActivity implements YouTubeP
 
     public void listarMensajes(){
         borrarGrid();
-        databaseReference.child("Mensaje").addValueEventListener(new ValueEventListener() {
+        Query queryMensaje = databaseReference.child("Mensaje").orderByChild("idvendedor").equalTo(idVendedor);
+        queryMensaje.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     listMensaje.clear();
                     for (DataSnapshot ds:snapshot.getChildren()){
                         Mensaje mensaje= ds.getValue(Mensaje.class);
-                        if (mensaje!=null  && mensaje.getIdStreaming() != null && idStreaming !=null){
+                        if (mensaje!=null
+                                && mensaje.getIdStreaming() != null
+                                && idStreaming !=null){
                             if (!mensaje.getEsClienteBloqueado()
                                     && mensaje.getIdvendedor().equals(idVendedor)
                                     && mensaje.getIdStreaming().equals(idStreaming)) {//filtramos los mensajes de los clientes bloqueados
@@ -173,11 +179,32 @@ public class MensajeriaVendedor extends  YouTubeBaseActivity implements YouTubeP
                                         && !mensaje.getPedidoAceptado()
                                         && !mensaje.getPedidoCancelado()){//filtramos por pedido
                                     if (mensaje.getTexto().indexOf("Quiero comprar:") == 0){
-                                        listMensaje.add(mensaje);
+                                        try {
+                                            mensaje.setImagen(encriptacionDatos.desencriptar(mensaje.getImagen()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        try {
+                                            mensaje.setTexto(encriptacionDatos.desencriptar(mensaje.getTexto()));
+                                            listMensaje.add(mensaje);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
                                 }
                                 if (filtrarTodos.isChecked()){//filtramos a todos los usuarios
-                                    listMensaje.add(mensaje);
+                                    try {
+                                        mensaje.setImagen(encriptacionDatos.desencriptar(mensaje.getImagen()));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    try {
+                                        mensaje.setTexto(encriptacionDatos.desencriptar(mensaje.getTexto()));
+                                        listMensaje.add(mensaje);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         }
@@ -271,4 +298,6 @@ public class MensajeriaVendedor extends  YouTubeBaseActivity implements YouTubeP
     public void onSeekTo(int i) {
 
     }
+
+
 }

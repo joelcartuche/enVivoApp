@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,12 +29,14 @@ import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -61,7 +64,8 @@ public class CuadroSeleccionarUbicacion extends FragmentActivity {
 
     public CuadroSeleccionarUbicacion(Context context,
                                       LatLng latLng,
-                                      DatabaseReference reference,
+                                      Boolean esCliente,
+                                      String nombre,
                                       CuadroSeleccionarUbicacion.resultadoDialogo result, Boolean esListaLocal) {
         interfaceResultadoDialogo = result;
         final Dialog dialog = new Dialog(context);
@@ -100,11 +104,19 @@ public class CuadroSeleccionarUbicacion extends FragmentActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
+                Bitmap icon = null;
+                if (esCliente){
+                    icon = new Utilidades().cargarIconocliente();
+                }else{
+                    icon = new Utilidades().cargarIconoTienda();
+                }
+
                 googleMap.setMyLocationEnabled(true);
                 googleMap.addMarker(new MarkerOptions().
                         position(latLng).
                         title("Ubicación").
-                        snippet("Marker Description"));
+                        icon(BitmapDescriptorFactory.fromBitmap(icon)).
+                        snippet(nombre));
                 CameraPosition cameraPosition = new CameraPosition.Builder().
                         target(latLng).
                         zoom(17).
@@ -121,7 +133,6 @@ public class CuadroSeleccionarUbicacion extends FragmentActivity {
                 if (esListaLocal){
                     dialog.dismiss();
                 }else{
-
                     dialog.dismiss();
                 }
 

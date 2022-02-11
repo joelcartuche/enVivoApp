@@ -25,6 +25,7 @@ import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoMensajeCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.facebook.AccessTokenSource;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,7 +50,7 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
     private List<Mensaje> listaMensajeVendedor;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage ; //para la insersion de archivos
-
+    private EncriptacionDatos encriptacionDatos= new EncriptacionDatos();
 
     private  Button aceptar,cancelar,bloquearCliente;
     private Boolean filtrarTodos;
@@ -230,7 +231,13 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                     if(snapshot.exists()){
                         imagenPedido.setVisibility(View.GONE);
                         Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
-                        nombreClienteMensaje.setText(vendedor.getNombre());
+
+                        try {
+                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
                                 mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
                                 mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
@@ -255,7 +262,11 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                     if(snapshot.exists()){
                         imagenPedido.setVisibility(View.GONE);
                         Cliente cliente= snapshot.getValue(Cliente.class);
-                        nombreClienteMensaje.setText(cliente.getNombre());
+                        try {
+                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         fechaClienteMensaje.setText(mensaje.getFecha().getDate() + "/" +
                                 mensaje.getFecha().getMonth() + "/" + mensaje.getFecha().getYear() + " " +
                                 mensaje.getFecha().getHours() + ":" + mensaje.getFecha().getMinutes() + ":" +

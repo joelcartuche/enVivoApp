@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedor;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 public class HomeCliente extends AppCompatActivity {
 
@@ -40,7 +42,10 @@ public class HomeCliente extends AppCompatActivity {
         Button btnMensje = findViewById(R.id.btnMensajeriaGlobalHomeCliente);
         Button btnHome = findViewById(R.id.btn_Home_Home_Clinte);
 
-        new Utilidades().cargarToolbar(btnHome,
+        Utilidades util = new Utilidades();
+        util.buscarClientebloqueado(HomeCliente.this,firebaseAuth,databaseReference);
+
+        util.cargarToolbar(btnHome,
                 streaming,
                 btnPerfil,
                 pedido,
@@ -48,7 +53,7 @@ public class HomeCliente extends AppCompatActivity {
                 chat,
                 HomeCliente.this,firebaseAuth,databaseReference);
 
-        new Utilidades().cargarToolbar(btnHome,
+        util.cargarToolbar(btnHome,
                 btnListarVendedore,
                 btnPerfil,
                 btnPedido,

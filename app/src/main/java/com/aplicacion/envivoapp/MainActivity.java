@@ -29,6 +29,8 @@ import com.aplicacion.envivoapp.activitysParaVendedores.GestionVideos;
 import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Usuario;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
+import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         btnCrearCuentaGoogle = findViewById(R.id.btnCrearCuentaGoogle);
 
         esNuevo = false;
+
 
         //para el inicio se sesion con google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -351,6 +354,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void buscarUsuario(FirebaseUser firebaseUser){
         if (firebaseAuth.getCurrentUser() != null){
+            Utilidades util = new Utilidades();
+            EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
             String usuarioLogeado = firebaseAuth.getCurrentUser().getUid();//obtenemos el uid del usuario logeado
             databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
                 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -360,12 +365,17 @@ public class MainActivity extends AppCompatActivity {
                         Usuario usuario = null;
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             Usuario usuarioAux = ds.getValue(Usuario.class);
-                            if (usuarioAux.getUidUser().equals(usuarioLogeado)) {
-                                usuario = usuarioAux;
+                            try {
+                                if (usuarioAux.getUidUser().equals(usuarioLogeado)) {
+                                    usuario = usuarioAux;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                         if (usuario != null) {
                             if (usuario.getEsVendedor()) {
+
                                 startActivity(new Intent(MainActivity.this, HomeVendedor.class));
                                 finish();//para que el usuario no pueda regresar a activitys anteriores
                             } else {//buscamos si ya tiene un usuario ingresado
@@ -376,19 +386,27 @@ public class MainActivity extends AppCompatActivity {
                         }else if(usuario == null && esNuevo){
                             //if (snapshot.getValue() == null && usuario.getUidUser() == null){//en caso de que no existan elemntos usuario en la base de datos}
                             usuario = new Usuario();
-                            usuario.setEmail(firebaseUser.getEmail());//seteamos el email
-                            usuario.setEsVendedor(esVendedor.isChecked());// seteamos si es o no vendedor
-                            usuario.setUidUser(firebaseUser.getUid());//seteamos el usuario
-                            usuario.setImagen(firebaseUser.getPhotoUrl().toString());
+                            try {
+                                usuario.setEmail(encriptacionDatos.encriptar(firebaseUser.getEmail()));//seteamos el email
+                                usuario.setEsVendedor(esVendedor.isChecked());// seteamos si es o no vendedor
+                                usuario.setUidUser(firebaseUser.getUid());//seteamos el usuario
+                                usuario.setImagen(firebaseUser.getPhotoUrl().toString());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
 
                             Usuario finalUsuario = usuario;
                             databaseReference.child("Usuario").child(usuario.getUidUser()).setValue(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     if (finalUsuario.getEsVendedor()){
+
+
                                         startActivity(new Intent(MainActivity.this, DataVendedor.class));
 
                                     }else{
+
                                         startActivity(new Intent(MainActivity.this, DataCliente.class));
                                         //finish(); //para que el usuario no pueda regresar a activitys anteriores
                                     }

@@ -19,12 +19,14 @@ import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -36,6 +38,7 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage ; //para la insersion de archivos
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
     private List<Pedido> listPedido = new ArrayList<>();
     private GridView gridViewPedido;
@@ -65,7 +68,9 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
         Button btnMensje = findViewById(R.id.btnMensajeriaGlobalListarPedidoCliente);
         Button btnHome = findViewById(R.id.btn_Home_Pedido_Cliente);
 
-        new Utilidades().cargarToolbar(btnHome,btnListarVendedore,
+        Utilidades util = new Utilidades();
+        util.buscarClientebloqueado(PedidoCliente.this,firebaseAuth,databaseReference);
+        util.cargarToolbar(btnHome,btnListarVendedore,
                 btnPerfil,
                 btnPedido,
                 btnSalir,
@@ -84,32 +89,49 @@ public class PedidoCliente extends AppCompatActivity implements CuadroCancelarPe
 
     }
     public void listarProductos(){
-
-        databaseReference.child("Cliente").addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.child("Cliente").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     Cliente cliente =null;
                     for (final DataSnapshot ds : snapshot.getChildren()) {
-                         Cliente clienteAux= ds.getValue(Cliente.class);
-                         if (clienteAux.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())){
-                             cliente=clienteAux;
-                             break;
-                         }
+                         cliente= ds.getValue(Cliente.class);
                     }
 
                     if (cliente!= null){
-                        Cliente finalCliente = cliente;
-                        databaseReference.child("Pedido").addValueEventListener(new ValueEventListener() {
+
+                        Query queryPedido = databaseReference.child("Pedido").orderByChild("idCliente").equalTo(cliente.getIdCliente());
+                        queryPedido.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
                                     listPedido.clear();//borramos en caso de quedar algo en la cache
                                     for (final DataSnapshot ds : snapshot.getChildren()) {
                                         Pedido pedido = ds.getValue(Pedido.class);//obtenemos
-                                        if (pedido.getAceptado() && pedido.getIdCliente().equals(finalCliente.getIdCliente())) {
+
+                                            try {
+                                                pedido.setCodigoProducto(encriptacionDatos.desencriptar(pedido.getCodigoProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setDescripcionProducto(encriptacionDatos.desencriptar(pedido.getDescripcionProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setNombreProducto(encriptacionDatos.desencriptar(pedido.getNombreProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                             listPedido.add(pedido);
-                                        }
+
                                     }
                                     //Inicialisamos el adaptador
                                     gridAdapterPedido = new AdapterGridPedidoCliente(PedidoCliente.this,

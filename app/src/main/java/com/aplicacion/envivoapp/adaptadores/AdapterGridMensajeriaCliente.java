@@ -18,11 +18,13 @@ import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Usuario;
 import com.aplicacion.envivoapp.modelos.Vendedor;
+import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
@@ -32,6 +34,7 @@ import java.util.List;
 
 public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGridMensajeriaCliente.ViewHolder>  {
 
+    private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView nombreClienteMensaje;
         public TextView fechaClienteMensaje ;
@@ -104,7 +107,11 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
                     if(snapshot.exists()){
                         imagenPedido.setVisibility(View.GONE);
                         Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
-                        nombreClienteMensaje.setText(vendedor.getNombre());
+                        try {
+                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
                                 mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
                                 mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
@@ -112,16 +119,15 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
                         mensajeClienteMensaje.setText(mensaje.getTexto());
 
                         //CArgamos la imagen del usuario
-                        databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
+                        Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
+                        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            public void onSuccess(DataSnapshot snapshot) {
                                 if (snapshot.exists()){
                                     Usuario usuario = null;
                                     for (DataSnapshot ds: snapshot.getChildren()){
-                                        Usuario usuarioAux = ds.getValue(Usuario.class);
-                                        if (usuarioAux.getUidUser().equals(vendedor.getUidUsuario())){
-                                            usuario = usuarioAux;
-                                        }
+                                        usuario = ds.getValue(Usuario.class);
+
                                     }
                                     if (usuario != null){
                                         if (usuario.getImagen()!= null) {
@@ -131,11 +137,6 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
                                     }
 
                                 }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
                             }
                         });
 
@@ -156,45 +157,48 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
                     if(snapshot.exists()){
                         imagenPedido.setVisibility(View.GONE);
                         Cliente cliente = snapshot.getValue(Cliente.class); //instanciamos el cliente
-                        nombreClienteMensaje.setText(cliente.getNombre());
+                        try {
+                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
                                 mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
                                 mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
                                 mensaje.getFecha().getSeconds());
                         mensajeClienteMensaje.setText(mensaje.getTexto());
 
-                        storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                imagenPedido.setVisibility(View.VISIBLE);
-                                Picasso.with(context).load(uri).into(imagenPedido);
-                            }
-                        });
-
+                        /*
+                        if (mensaje.getImagen()!=null) {
+                            storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    imagenPedido.setVisibility(View.VISIBLE);
+                                    Picasso.with(context).load(uri).into(imagenPedido);
+                                }
+                            });
+                        }
+                        */
 
                         //CArgamos la imagen del usuario
-                        databaseReference.child("Usuario").addValueEventListener(new ValueEventListener() {
+                        Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(cliente.getUidUsuario());
+                        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            public void onSuccess(DataSnapshot snapshot) {
                                 if (snapshot.exists()){
                                     Usuario usuario = null;
                                     for (DataSnapshot ds: snapshot.getChildren()){
-                                        Usuario usuarioAux = ds.getValue(Usuario.class);
-                                        if (usuarioAux.getUidUser().equals(cliente.getUidUsuario())){
-                                            usuario = usuarioAux;
-                                        }
+                                        usuario = ds.getValue(Usuario.class);
+
                                     }
                                     if (usuario != null){
-                                        Uri uri = Uri.parse(usuario.getImagen());
-                                        Picasso.with(context).load(uri).into(imagenUsuario);
+                                        if (usuario.getImagen()!= null) {
+                                            Uri uri = Uri.parse(usuario.getImagen());
+                                            Picasso.with(context).load(uri).into(imagenUsuario);
+                                        }
                                     }
 
                                 }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
                             }
                         });
 

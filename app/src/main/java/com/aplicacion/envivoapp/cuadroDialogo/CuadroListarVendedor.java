@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -55,7 +54,6 @@ public class CuadroListarVendedor {
                                 Vendedor vendedor,
                                 DatabaseReference reference,
                                 FirebaseAuth firebaseAuth,
-                                Bundle bundle,
                                 CuadroListarVendedor.resultadoDialogo result){
         interfaceResultadoDialogo = result;
         final Dialog dialog = new Dialog(context);
@@ -127,10 +125,10 @@ public class CuadroListarVendedor {
 
 
 
-                    gridAdapterLocal = new AdapterListarLocalClientes(context, listLocal, firebaseAuth, bundle, reference);
+                    gridAdapterLocal = new AdapterListarLocalClientes(context, listLocal, firebaseAuth, reference);
                     localVendedorView.setAdapter(gridAdapterLocal); //configuramos el view
                 }else{
-                    gridAdapterLocal = new AdapterListarLocalClientes(context, listLocal,firebaseAuth, bundle, reference);
+                    gridAdapterLocal = new AdapterListarLocalClientes(context, listLocal,firebaseAuth, reference);
                     localVendedorView.setAdapter(gridAdapterLocal); //configuramos el view
                 }
             }

@@ -133,7 +133,11 @@ public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<Adap
 
         if (vendedor!=null) {
             if (mensaje.getEsVededor()) {//En caso de que el mensaje sea departe del vendedor
-                nombreMensaje.setText(vendedor.getNombre());
+                try {
+                    nombreMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 fechaMensaje.setText(mensaje.getFecha().getDate() + "/" +
                         mensaje.getFecha().getMonth() + "/" + mensaje.getFecha().getYear() + " " +
                         mensaje.getFecha().getHours() + ":" + mensaje.getFecha().getMinutes() + ":" +
@@ -148,7 +152,10 @@ public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<Adap
                         if (snapshot.exists()) {
                             Usuario usuario = null;
                             for (DataSnapshot ds : snapshot.getChildren()) {
-                                usuario = ds.getValue(Usuario.class);
+                                Usuario usuarioAux =ds.getValue(Usuario.class);
+                                if (usuarioAux.getUidUser().equals(vendedor.getUidUsuario())) {
+                                    usuario = usuarioAux;
+                                }
 
                             }
                             if (usuario != null) {
@@ -191,7 +198,10 @@ public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<Adap
                                         if (snapshot.exists()) {
                                             Usuario usuario = null;
                                             for (DataSnapshot ds : snapshot.getChildren()) {
-                                                usuario = ds.getValue(Usuario.class);
+                                                Usuario usuarioAux = ds.getValue(Usuario.class);
+                                                if (usuarioAux.getUidUser().equals(cliente.getUidUsuario())){
+                                                    usuario = usuarioAux;
+                                                }
                                             }
                                             if (usuario != null) {
                                                 Uri uri = Uri.parse(usuario.getImagen());

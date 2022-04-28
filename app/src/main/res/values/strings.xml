@@ -22,5 +22,30 @@
     <string name="title_activity_gestion_videos">GestionVideos</string>
     <string name="title_activity_data_cliente">DataCliente</string>
     <string name="title_activity_listar_vendedores">ListarVendedores</string>
+    <string name="title_activity_home_cliente_main">HomeClienteMain</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="data_cliente">Perfil</string>
+    <string name="home_cliente">Home</string>
+    <string name="lista_vendedores">Vendedores</string>
+    <string name="mensajeria_global_cliente">Mensajeria</string>
+    <string name="pedidos_cliente">Pedidos</string>
+    <string name="salir">Salir</string>
+
+    <string name="listar_clientes">Clientes</string>
+    <string name="local">Local</string>
+    <string name="videos">videos</string>
+
+
+
+
 
 </resources>

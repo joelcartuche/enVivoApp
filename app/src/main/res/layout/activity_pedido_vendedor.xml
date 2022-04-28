@@ -4,150 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activityParaClientes.PedidoCliente">
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:contentInsetStart="0dp">
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout3"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearLayout7"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/textView38"
-                        android:layout_width="300dp"
-                        android:layout_height="42dp"
-                        android:gravity="center"
-                        android:text="@string/app_name"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/btnMensajeriaGlobalPedidoVendedor"
-                        android:layout_width="50sp"
-                        android:layout_height="40sp"
-                        app:icon="@drawable/ic_enviar_mensajes"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textView38"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" >
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/btnHomeVendedorPedidoVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_home"
-                                android:text="Home"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnListarLocalPedidoVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_local_vendedor"
-                                android:text="Local"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnPerfilVendedorPedidoVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona"
-                                android:text="Perfil"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnPedidoPedidoVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_carrito_compra"
-                                android:text="Pedidos"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnVideosPedidoVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_videos_streaming"
-                                android:text="Videos"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnClientesPedidoVendedo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_clientes"
-                                android:text="Clientes"
-                                android:textSize="8sp" />
-                            <Button
-                                android:id="@+id/btnReportePedidoVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_reportes_vendedor"
-                                android:text="Reportes"
-                                android:textSize="8sp"/>
-
-                            <Button
-                                android:id="@+id/btnSalirPedidoVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona_salir"
-                                android:text="Salir"
-                                android:textSize="8sp" />
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-            </LinearLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-    </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -158,40 +16,41 @@
             android:id="@+id/textView39"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginBottom="5dp"
             android:text="Pedidos"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutContenedorRadiosPedido"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            app:layout_constraintBottom_toTopOf="@+id/gridPedidoVendedor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView39">
+
+
+
             <LinearLayout
+                android:id="@+id/linearLayoutContenedorRadiosPedido"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/gridPedidoVendedor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView39">
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Filtrar por:" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
+                android:text="Filtrar por:" />
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
@@ -248,8 +107,9 @@
                 </RadioGroup>
 
             </LinearLayout>
+                </HorizontalScrollView>
             </LinearLayout>
-        </HorizontalScrollView>
+
 
         <GridView
             android:id="@+id/gridPedidoVendedor"
@@ -262,7 +122,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutContenedorRadiosPedido">
 
         </GridView>
 

@@ -1,13 +1,16 @@
 package com.aplicacion.envivoapp.modelos;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Mensaje {
     private String idMensaje;
     private String texto;
     private Date fecha;
-    private String idcliente;
-    private String idvendedor;
+    private Cliente cliente;
+    private Vendedor vendedor;
     private String idStreaming;
     private Boolean pedidoAceptado;
     private Boolean pedidoCancelado;
@@ -17,8 +20,12 @@ public class Mensaje {
     private Boolean esGlobal;
     private Boolean esClienteBloqueado;
     private String imagen;
+    private String idcliente;
+    private String idvendedor;
     private Boolean esEliminado;
-    private String clienteBloqueado_esGlobal_idCliente_idVendedor;
+    private String idCliente_idVendedor;
+    private String idVendedor_idStreaming;
+    private Mensaje_Cliente_Vendedor ms_cliente_vendedor;
 
     public Mensaje() {
         this.pedidoAceptado = false;
@@ -32,12 +39,53 @@ public class Mensaje {
         this.esEliminado = false;
     }
 
-    public String getClienteBloqueado_esGlobal_idCliente_idVendedor() {
-        return clienteBloqueado_esGlobal_idCliente_idVendedor;
+
+    public String getIdvendedor() {
+        return idvendedor;
     }
 
-    public void setClienteBloqueado_esGlobal_idCliente_idVendedor(String clienteBloqueado_esGlobal_idCliente_idVendedor) {
-        this.clienteBloqueado_esGlobal_idCliente_idVendedor = clienteBloqueado_esGlobal_idCliente_idVendedor;
+    public void setIdvendedor(String idvendedor) {
+        this.idvendedor = idvendedor;
+    }
+
+    public String getIdVendedor_idStreaming() {
+        return idVendedor_idStreaming;
+    }
+
+    public String getIdcliente() {
+        return idcliente;
+    }
+
+    public void setIdcliente(String idcliente) {
+        this.idcliente = idcliente;
+    }
+
+    public void setIdVendedor_idStreaming(String idVendedor_idStreaming) {
+        this.idVendedor_idStreaming = idVendedor_idStreaming;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Vendedor getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(Vendedor vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public String getIdCliente_idVendedor() {
+        return idCliente_idVendedor;
+    }
+
+    public void setIdCliente_idVendedor(String idCliente_idVendedor) {
+        this.idCliente_idVendedor = idCliente_idVendedor;
     }
 
     public Boolean getEsEliminado() {
@@ -63,8 +111,6 @@ public class Mensaje {
     public void setEsClienteBloqueado(Boolean esClienteBloqueado) {
         this.esClienteBloqueado = esClienteBloqueado;
     }
-
-
 
     public Boolean getEsGlobal() {
         return esGlobal;
@@ -146,19 +192,4 @@ public class Mensaje {
         this.texto = texto;
     }
 
-    public String getIdcliente() {
-        return idcliente;
-    }
-
-    public void setIdcliente(String idcliente) {
-        this.idcliente = idcliente;
-    }
-
-    public String getIdvendedor() {
-        return idvendedor;
-    }
-
-    public void setIdvendedor(String idvendedor) {
-        this.idvendedor = idvendedor;
-    }
 }

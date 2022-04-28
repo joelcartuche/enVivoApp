@@ -4,128 +4,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardItemPedidoVendor"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
-    <ScrollView
-        android:id="@+id/scrollListPedidoVendedor"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardContenedorMensaje"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="12dp"
+            app:cardBackgroundColor="#2962FF"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/linearContenedorMensajeriaGlobal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardCornerRadius="15dp"
-                    app:cardElevation="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/linearContenedorMensajeriaGlobal"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/linearLayout2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
+                        android:layout_height="wrap_content">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:id="@+id/imgItemMensajeCliente"
+                            android:layout_width="25dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="5dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/txtItemNombreMensajeCliente"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtItemFechaMensajeCliente" />
+
+                        <TextView
+                            android:id="@+id/txtItemNombreMensajeCliente"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="5dp"
+                            android:autoSizeTextType="uniform"
+                            android:gravity="top|left"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:lines="5"
+                            android:maxLines="10"
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/linearLayout2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                            android:minLines="1"
+                            android:scrollbars="none"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/imgItemMensajeCliente"
+                            app:layout_constraintTop_toBottomOf="@+id/txtItemFechaMensajeCliente" />
 
-                                <ImageView
-                                    android:id="@+id/imgItemMensajeCliente"
-                                    android:layout_width="25dp"
-                                    android:layout_height="20dp"
-                                    android:layout_marginStart="3dp"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginEnd="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toStartOf="@+id/txtItemNombreMensajeCliente"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/txtItemFechaMensajeCliente" />
+                        <TextView
+                            android:id="@+id/txtItemFechaMensajeCliente"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp"
 
-                                <TextView
-                                    android:id="@+id/txtItemNombreMensajeCliente"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:autoSizeTextType="uniform"
-                                    android:gravity="top|left"
-                                    android:inputType="textMultiLine|textCapSentences"
-                                    android:lines="5"
-                                    android:maxLines="10"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="right"
+                            android:textColor="#FFFFFF"
+                            app:layout_constraintBottom_toTopOf="@id/txtItemNombreMensajeCliente"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                                    android:minLines="1"
-                                    android:scrollbars="none"
-                                    android:textStyle="bold"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@+id/imgItemMensajeCliente"
-                                    app:layout_constraintTop_toBottomOf="@+id/txtItemFechaMensajeCliente" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                                <TextView
-                                    android:id="@+id/txtItemFechaMensajeCliente"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginEnd="5dp"
+                    <TextView
+                        android:id="@+id/txtItemMensajeCliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:autoSizeTextType="uniform"
+                        android:gravity="top|left"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:lines="5"
+                        android:maxLines="10"
 
-                                    android:layout_marginBottom="5dp"
-                                    android:gravity="right"
-                                    app:layout_constraintBottom_toTopOf="@id/txtItemNombreMensajeCliente"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                        android:minLines="1"
+                        android:scrollbars="none"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16dp" />
 
-                            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/bitmapCapturaPantallaMensajeriaVendedor"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
 
-                            <TextView
-                                android:id="@+id/txtItemMensajeCliente"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:autoSizeTextType="uniform"
-                                android:gravity="top|left"
-                                android:inputType="textMultiLine|textCapSentences"
-                                android:lines="5"
-                                android:maxLines="10"
+                </LinearLayout>
 
-                                android:minLines="1"
-                                android:scrollbars="none"
-                                android:textSize="16dp" />
+            </LinearLayout>
 
-                            <ImageView
-                                android:id="@+id/bitmapCapturaPantallaMensajeriaVendedor"
-                                android:layout_width="match_parent"
-                                android:layout_height="200dp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-    </ScrollView>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
 

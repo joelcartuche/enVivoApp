@@ -22,7 +22,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="12dp">
 
@@ -149,16 +149,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bloquear Cliente"
-                app:cornerRadius="20dp"
-                app:backgroundTint="#D50000" />
+                app:backgroundTint="#D50000"
+                app:cornerRadius="20dp" />
 
             <Button
                 android:id="@+id/btnDesbloquearCliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Desbloquear Cliente"
-                app:cornerRadius="20dp"
-                app:backgroundTint="#00C853" />
+                app:backgroundTint="#00C853"
+                app:cornerRadius="20dp" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

@@ -13,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Pedido;
+import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +41,7 @@ public class CuadroCancelarPedidoCliente {
     public CuadroCancelarPedidoCliente(Context context,
                                        Pedido pedido,
                                        DatabaseReference reference,
+                                       Vendedor vendedor,
                                        CuadroCancelarPedidoCliente.resultadoDialogo result) {
         interfaceResultadoDialogo = result;
         final Dialog dialog = new Dialog(context);
@@ -61,55 +64,74 @@ public class CuadroCancelarPedidoCliente {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if(task.isSuccessful()){ //controlamos el cambio de pedido habilitado para que no se reenvie el mensaje
-                            //creamos el mensaje
-                            Mensaje  mensaje = new Mensaje();
-                            String idMensaje = reference.push().getKey();
-                            mensaje.setIdMensaje(idMensaje);
-                            mensaje.setIdStreaming(pedido.getIdStreaming());
-                            mensaje.setIdvendedor(pedido.getIdVendedor());
-                            mensaje.setIdcliente(pedido.getIdCliente());
-                            mensaje.setPedidoAceptado(true);
-                            mensaje.setPedidoCancelado(false);
-                            mensaje.setEsVededor(true);
-                            mensaje.setPedidoCancelado(true);
-                            mensaje.setPedidoAceptado(false);
 
-                            //creamos el date en base la hora actual
-                            LocalDateTime tiempoActual = LocalDateTime.now();//obtenemos la fecha actual
-                            Date fecha = new Date();
-                            fecha.setDate(tiempoActual.getDayOfMonth());
-                            fecha.setMonth(tiempoActual.getMonth().getValue());
-                            fecha.setYear(tiempoActual.getYear());
-                            fecha.setHours(tiempoActual.getHour());
-                            fecha.setMinutes(tiempoActual.getMinute());
-                            fecha.setSeconds(tiempoActual.getSecond());
 
-                            mensaje.setFecha(fecha);
-                            if(mensajeCancelacion.getText().toString().equals("")){ //en caso de que el cliente no ingrese un mensasje
-                                mensaje.setTexto("Su pedido ha sido eliminado");
-                            }else{
-                                mensaje.setTexto(mensajeCancelacion.getText().toString());
-                            }
-                            reference.child("Mensaje").child(idMensaje).setValue(mensaje);//enviamos el mensaje
-
-                            //Actualizamos el estado del mensaje
-                            Map<String,Object> mensajeCliente = new HashMap<>(); //almacena los datos que van a ser editados
-                            mensajeCliente.put("aceptado",false);//actualizamos el pedido aceptado
-                            mensajeCliente.put("cancelado",true);//actualizamos el pedido cancelado
-                            reference.child("Pedido").child(pedido.getIdPedido()).updateChildren(mensajeCliente).addOnSuccessListener(new OnSuccessListener<Void>() {//enviamos la cancelacion
+                            reference.child("Cliente").child(pedido.getIdCliente()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(context,"El pedido a sido cancelado con éxito",Toast.LENGTH_LONG).show();
+                                public void onSuccess(DataSnapshot snapshot) {
+                                    if (snapshot.exists()) {
+                                        Cliente cliente = snapshot.getValue(Cliente.class);
+                                        //creamos el mensaje
+                                        Mensaje mensaje = new Mensaje();
+                                        String idMensaje = reference.push().getKey();
+                                        mensaje.setIdMensaje(idMensaje);
+                                        mensaje.setIdStreaming(pedido.getIdStreaming());
+                                        mensaje.setVendedor(vendedor);
+                                        mensaje.setCliente(cliente);
+                                        mensaje.setPedidoAceptado(true);
+                                        mensaje.setPedidoCancelado(false);
+                                        mensaje.setEsVededor(true);
+                                        mensaje.setPedidoCancelado(true);
+                                        mensaje.setPedidoAceptado(false);
+                                        //creamos el date en base la hora actual
+                                        LocalDateTime tiempoActual = LocalDateTime.now();//obtenemos la fecha actual
+                                        Date fecha = new Date();
+                                        fecha.setDate(tiempoActual.getDayOfMonth());
+                                        fecha.setMonth(tiempoActual.getMonth().getValue());
+                                        fecha.setYear(tiempoActual.getYear());
+                                        fecha.setHours(tiempoActual.getHour());
+                                        fecha.setMinutes(tiempoActual.getMinute());
+                                        fecha.setSeconds(tiempoActual.getSecond());
+
+                                        mensaje.setFecha(fecha);
+                                        if (mensajeCancelacion.getText().toString().equals("")) { //en caso de que el cliente no ingrese un mensasje
+                                            mensaje.setTexto("Su pedido ha sido eliminado");
+                                        } else {
+                                            mensaje.setTexto(mensajeCancelacion.getText().toString());
+                                        }
+                                        reference.child("Mensaje").child(idMensaje).setValue(mensaje);//enviamos el mensaje
+
+                                        //Actualizamos el estado del mensaje
+                                        Map<String, Object> mensajeCliente = new HashMap<>(); //almacena los datos que van a ser editados
+                                        mensajeCliente.put("aceptado", false);//actualizamos el pedido aceptado
+                                        mensajeCliente.put("cancelado", true);//actualizamos el pedido cancelado
+                                        reference.child("Pedido").child(pedido.getIdPedido()).updateChildren(mensajeCliente).addOnSuccessListener(new OnSuccessListener<Void>() {//enviamos la cancelacion
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(context, "El pedido a sido cancelado con éxito", Toast.LENGTH_LONG).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(context, "A ocurrido un error al cancelar el pedido", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                        interfaceResultadoDialogo.resultado(true, false);
+                                        dialog.dismiss();
+                                    }else{
+                                       dialog.dismiss();
+                                    }
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(context, "A ocurrido un error al cancelar el pedido", Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
                                 }
                             });
-                            interfaceResultadoDialogo.resultado(true,false);
-                            dialog.dismiss();
+
+
                         }else{
+                            dialog.dismiss();
                             Toast.makeText(context,"No se a podido eliminar el pedido",Toast.LENGTH_LONG).show();
                         }
 

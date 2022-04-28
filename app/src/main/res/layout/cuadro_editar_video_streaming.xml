@@ -100,6 +100,27 @@
             </RadioGroup>
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tituloLinkAcceso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Link de acceso"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/txtLinkAcceso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sin link de acceso" />
+
+        <Button
+            android:id="@+id/btnEnviarMensaje"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar link de acceso"
+            app:cornerRadius="20dp"
+            app:backgroundTint="#25D366"
+            app:icon="@drawable/ic_menu_send" />
+
         <Button
             android:id="@+id/btnGuardarCuadroEditarStreaming"
             android:layout_width="match_parent"

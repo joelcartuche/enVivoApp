@@ -3,307 +3,292 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPedidoCliente"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.cardview.widget.CardView
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/contraintContendorPedidoCliente"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    app:cardCornerRadius="15dp"
-                    app:cardElevation="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:background="#3D5AFE"
+                    android:padding="15dp">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/imgPerfilVendedorPedidoCliente"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        app:layout_constraintBottom_toTopOf="@+id/textView49"
+                        app:layout_constraintEnd_toStartOf="@+id/txtNombreVendedorItemPedidoCliente"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:srcCompat="@tools:sample/avatars" />
+
+                    <TextView
+                        android:id="@+id/txtNombreVendedorItemPedidoCliente"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:background="#FFFFFF"
-                        android:padding="15dp">
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/txtCodigoItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imgPerfilVendedorPedidoCliente"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/imgPerfilVendedorPedidoCliente"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toTopOf="@+id/textView49"
-                            app:layout_constraintEnd_toStartOf="@+id/txtNombreVendedorItemPedidoCliente"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/txtColorFechaVendedorItemPedidoCliente"
-                            tools:srcCompat="@tools:sample/avatars" />
+                    <TextView
+                        android:id="@+id/txtFechaItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toTopOf="@+id/txtFechaFinalItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView54"
+                        app:layout_constraintTop_toBottomOf="@+id/txtDescripcionItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/txtColorFechaVendedorItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="10dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="#FFFFFF"
-                            app:layout_constraintBottom_toTopOf="@+id/txtNombreVendedorItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/txtDescripcionItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toTopOf="@+id/txtFechaItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView53"
+                        app:layout_constraintTop_toBottomOf="@+id/txtPrecioItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/txtNombreVendedorItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/txtCodigoItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/imgPerfilVendedorPedidoCliente"
-                            app:layout_constraintTop_toBottomOf="@+id/txtColorFechaVendedorItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/txtPrecioItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toTopOf="@+id/txtDescripcionItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView52"
+                        app:layout_constraintTop_toBottomOf="@+id/txtCantidadItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/txtFechaItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginTop="2dp"
-                            app:layout_constraintBottom_toTopOf="@+id/txtFechaFinalItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView54"
-                            app:layout_constraintTop_toBottomOf="@+id/txtDescripcionItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/txtCantidadItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toTopOf="@+id/txtPrecioItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView51"
+                        app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/txtDescripcionItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginTop="2dp"
-                            app:layout_constraintBottom_toTopOf="@+id/txtFechaItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView53"
-                            app:layout_constraintTop_toBottomOf="@+id/txtPrecioItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/txtCodigoItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toTopOf="@+id/txtNombreProductoItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView49"
+                        app:layout_constraintTop_toBottomOf="@+id/txtNombreVendedorItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/txtPrecioItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginTop="2dp"
-                            app:layout_constraintBottom_toTopOf="@+id/txtDescripcionItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView52"
-                            app:layout_constraintTop_toBottomOf="@+id/txtCantidadItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/txtNombreProductoItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toTopOf="@+id/txtCantidadItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView50"
+                        app:layout_constraintTop_toBottomOf="@+id/txtCodigoItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/txtCantidadItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginTop="2dp"
-                            app:layout_constraintBottom_toTopOf="@+id/txtPrecioItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView51"
-                            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/textView55"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Fecha final:"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/imgPedidoCliente"
+                        app:layout_constraintEnd_toStartOf="@+id/txtFechaFinalItemPedidoCliente"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView54" />
 
-                        <TextView
-                            android:id="@+id/txtCodigoItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginTop="2dp"
-                            app:layout_constraintBottom_toTopOf="@+id/txtNombreProductoItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView49"
-                            app:layout_constraintTop_toBottomOf="@+id/txtNombreVendedorItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/textView49"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Código:"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textView50"
+                        app:layout_constraintEnd_toStartOf="@+id/txtCodigoItemPedidoCliente"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtNombreVendedorItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/txtNombreProductoItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginTop="2dp"
-                            app:layout_constraintBottom_toTopOf="@+id/txtCantidadItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView50"
-                            app:layout_constraintTop_toBottomOf="@+id/txtCodigoItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/textView50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Nombre:"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textView51"
+                        app:layout_constraintEnd_toStartOf="@+id/txtNombreProductoItemPedidoCliente"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView49" />
 
-                        <TextView
-                            android:id="@+id/textView55"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Fecha final:"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/imgPedidoCliente"
-                            app:layout_constraintEnd_toStartOf="@+id/txtFechaFinalItemPedidoCliente"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView54" />
+                    <TextView
+                        android:id="@+id/textView51"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Cantidad:"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textView52"
+                        app:layout_constraintEnd_toStartOf="@+id/txtCantidadItemPedidoCliente"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView50" />
 
-                        <TextView
-                            android:id="@+id/textView49"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Código:"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/textView50"
-                            app:layout_constraintEnd_toStartOf="@+id/txtCodigoItemPedidoCliente"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/txtNombreVendedorItemPedidoCliente" />
+                    <TextView
+                        android:id="@+id/textView52"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Precio:"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textView53"
+                        app:layout_constraintEnd_toStartOf="@+id/txtPrecioItemPedidoCliente"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView51" />
 
-                        <TextView
-                            android:id="@+id/textView50"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Nombre:"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/textView51"
-                            app:layout_constraintEnd_toStartOf="@+id/txtNombreProductoItemPedidoCliente"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView49" />
+                    <TextView
+                        android:id="@+id/textView53"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Descripción:"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textView54"
+                        app:layout_constraintEnd_toStartOf="@+id/txtDescripcionItemPedidoCliente"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView52" />
 
-                        <TextView
-                            android:id="@+id/textView51"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Cantidad:"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/textView52"
-                            app:layout_constraintEnd_toStartOf="@+id/txtCantidadItemPedidoCliente"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView50" />
+                    <TextView
+                        android:id="@+id/textView54"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Fecha del pedido:"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textView55"
+                        app:layout_constraintEnd_toStartOf="@+id/txtFechaItemPedidoCliente"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView53" />
 
-                        <TextView
-                            android:id="@+id/textView52"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Precio:"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/textView53"
-                            app:layout_constraintEnd_toStartOf="@+id/txtPrecioItemPedidoCliente"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView51" />
+                    <TextView
+                        android:id="@+id/txtFechaFinalItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        app:layout_constraintBottom_toTopOf="@+id/imgPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/textView55"
+                        app:layout_constraintTop_toBottomOf="@+id/txtFechaItemPedidoCliente" />
 
-                        <TextView
-                            android:id="@+id/textView53"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Descripción:"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/textView54"
-                            app:layout_constraintEnd_toStartOf="@+id/txtDescripcionItemPedidoCliente"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView52" />
+                    <ImageView
+                        android:id="@+id/imgPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="300dp"
+                        android:layout_marginBottom="4dp"
+                        app:layout_constraintBottom_toTopOf="@+id/btnConvesarVendedor"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtFechaFinalItemPedidoCliente"
+                        tools:srcCompat="@tools:sample/avatars" />
 
-                        <TextView
-                            android:id="@+id/textView54"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Fecha del pedido:"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toTopOf="@+id/textView55"
-                            app:layout_constraintEnd_toStartOf="@+id/txtFechaItemPedidoCliente"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView53" />
+                    <Button
+                        android:id="@+id/btnCancelarItemPedidoCliente"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Cancelar pedido"
+                        app:backgroundTint="#FF1744"
+                        app:cornerRadius="20dp"
+                        app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                        app:iconGravity="start"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btnConvesarVendedor" />
 
-                        <TextView
-                            android:id="@+id/txtFechaFinalItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginLeft="2dp"
-                            android:layout_marginTop="2dp"
-                            app:layout_constraintBottom_toTopOf="@+id/imgPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/textView55"
-                            app:layout_constraintTop_toBottomOf="@+id/txtFechaItemPedidoCliente" />
+                    <Button
+                        android:id="@+id/btnConvesarVendedor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="7dp"
+                        android:text="Conversar con el vendedor"
+                        app:cornerRadius="20dp"
+                        app:icon="@drawable/ic_enviar_mensajes"
+                        app:iconGravity="start"
+                        app:layout_constraintBottom_toTopOf="@+id/btnCancelarItemPedidoCliente"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imgPedidoCliente" />
 
-                        <ImageView
-                            android:id="@+id/imgPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="300dp"
-                            android:layout_marginBottom="4dp"
-                            app:layout_constraintBottom_toTopOf="@+id/btnConvesarVendedor"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/txtFechaFinalItemPedidoCliente"
-                            tools:srcCompat="@tools:sample/avatars" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <Button
-                            android:id="@+id/btnCancelarItemPedidoCliente"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="7dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="Cancelar pedido"
-                            app:backgroundTint="#FF1744"
-                            app:cornerRadius="20dp"
-                            app:icon="@android:drawable/ic_menu_close_clear_cancel"
-                            app:iconGravity="start"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/btnConvesarVendedor" />
-
-                        <Button
-                            android:id="@+id/btnConvesarVendedor"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="7dp"
-                            android:text="Conversar con el vendedor"
-                            app:cornerRadius="20dp"
-                            app:icon="@drawable/ic_enviar_mensajes"
-                            app:iconGravity="start"
-                            app:layout_constraintBottom_toTopOf="@+id/btnCancelarItemPedidoCliente"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/imgPedidoCliente" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

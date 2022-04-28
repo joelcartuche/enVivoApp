@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -23,13 +22,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activitysParaVendedores.DataLocal;
-import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedor;
 import com.aplicacion.envivoapp.modelos.Local;
 import com.aplicacion.envivoapp.modelos.Vendedor;
-import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
-import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -57,6 +52,8 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
     private  GoogleMap myGoogleMap;
     private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
 
+    private EditText nombreLocal,telefonoLocal,celularLocal, callePricipal, calleSecundaria, referencia;
+
     @Override
     public void resultado(Boolean seActualizoCoordena) {
 
@@ -82,24 +79,46 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
         //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
         dialog.setContentView(R.layout.cuadro_editar_local); //le asisganos el layout
 
-        EditText nombreLocal = dialog.findViewById(R.id.txtNombreLocalCuadroLocal);
+        nombreLocal = dialog.findViewById(R.id.txtNombreLocalCuadroLocal);
         //EditText direccionLocal = dialog.findViewById(R.id.txtDireccionLocalCuadroLocal);
-        EditText telefonoLocal = dialog.findViewById(R.id.txtTelefonoCuadroLocal);
-        EditText celularLocal = dialog.findViewById(R.id.txtCelularCuadroLocal);
-        EditText callePricipal = dialog.findViewById(R.id.txtCallePrincipalCuadroEditarLocal);
-        EditText calleSecundaria = dialog.findViewById(R.id.txtCalleSecundariaCuadroEditarLocal);
-        EditText referencia = dialog.findViewById(R.id.txtReferenciaCuadroEditarLocal);
+        telefonoLocal = dialog.findViewById(R.id.txtTelefonoCuadroLocal);
+        celularLocal = dialog.findViewById(R.id.txtCelularCuadroLocal);
+        callePricipal = dialog.findViewById(R.id.txtCallePrincipalCuadroEditarLocal);
+        calleSecundaria = dialog.findViewById(R.id.txtCalleSecundariaCuadroEditarLocal);
+        referencia = dialog.findViewById(R.id.txtReferenciaCuadroEditarLocal);
 
         Button guardar = dialog.findViewById(R.id.btnGuardarCuadroEditarLocal);
         Button actualizar = dialog.findViewById(R.id.btnActualizarEdicionCuadroLocal);
         Button eliminar = dialog.findViewById(R.id.btnEliminarLocalCuadroLocal);
         Button cancelar = dialog.findViewById(R.id.btnCancelarCuadroLocal);
+        Button seleccionUbicacion = dialog.findViewById(R.id.btn_seleccionarUbicacionCuadroEditarLocal);
+        Button minimizarUbicacion = dialog.findViewById(R.id.btn_minimizarEditarLocal);
 
         MapView mapaEditarLocalizacion = dialog.findViewById(R.id.mapSeleccionarEditarLocal);
+        mapaEditarLocalizacion.setVisibility(View.GONE);
+        minimizarUbicacion.setVisibility(View.GONE);
 
         Intent intent = ((Activity) context).getIntent();
         mapaEditarLocalizacion.onCreate(intent.getExtras());
         mapaEditarLocalizacion.onResume();
+
+        seleccionUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapaEditarLocalizacion.setVisibility(View.VISIBLE);
+                minimizarUbicacion.setVisibility(View.VISIBLE);
+                seleccionUbicacion.setVisibility(View.GONE);
+            }
+        });
+
+        minimizarUbicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mapaEditarLocalizacion.setVisibility(View.GONE);
+                minimizarUbicacion.setVisibility(View.GONE);
+                seleccionUbicacion.setVisibility(View.VISIBLE);
+            }
+        });
 
         try {
             MapsInitializer.initialize(context.getApplicationContext());
@@ -166,7 +185,7 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
             eliminar.setVisibility(View.VISIBLE);
             nombreLocal.setText(local.getNombre());
             //direccionLocal.setText(local.getDireccion());
-            telefonoLocal.setText(local.getCelular());
+            telefonoLocal.setText(local.getTelefono());
             celularLocal.setText(local.getCelular());
             callePricipal.setText(local.getCallePrincipal());
             calleSecundaria.setText(local.getCalleSecundaria());
@@ -229,20 +248,7 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (nombreLocal.getText().toString().equals("")) {
-                    Toast.makeText(context, "Ingrese el nombre del local", Toast.LENGTH_LONG).show();
-                    //}else if (direccionLocal.getText().toString().equals("")){
-                    //   Toast.makeText(context,"Ingrese la direccion del local",Toast.LENGTH_LONG).show();
-                } else if (telefonoLocal.getText().toString().equals("")
-                        && celularLocal.getText().toString().equals("")) {
-                    Toast.makeText(context, "Asegurese de haber ingresado el local", Toast.LENGTH_LONG).show();
-                } else if (callePricipal.getText().toString().equals("")) {
-                    Toast.makeText(context, "Asegurese de haber ingresado la calle principal", Toast.LENGTH_LONG).show();
-                } else if (referencia.getText().toString().equals("")) {
-                    Toast.makeText(context, "Asegurese de haber ingresado una referencia", Toast.LENGTH_LONG).show();
-                } else if (latLng == null) {
-                    Toast.makeText(context, "Error de las coordenadas del mapa", Toast.LENGTH_LONG).show();
-                } else {
+                if (validarCampos(context)){
                     Local local = new Local();
                     String idLocal = reference.push().getKey();
 
@@ -304,19 +310,7 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
         actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (nombreLocal.getText().toString().equals("")) {
-                    Toast.makeText(context, "Ingrese el nombre del local", Toast.LENGTH_LONG).show();
-                    // }else if (direccionLocal.getText().toString().equals("")){
-                    //    Toast.makeText(context,"Ingrese la direccion del local",Toast.LENGTH_LONG).show();
-                } else if (telefonoLocal.getText().toString().equals("")
-                        && celularLocal.getText().toString().equals("")) {
-                    Toast.makeText(context, "Asegurese de haber ingresado el local", Toast.LENGTH_LONG).show();
-                } else if (callePricipal.getText().toString().equals("")) {
-                    Toast.makeText(context, "Asegurese de haber ingresado la calle principal", Toast.LENGTH_LONG).show();
-                } else if (referencia.getText().toString().equals("")) {
-                    Toast.makeText(context, "Asegurese de haber ingresado una referencia", Toast.LENGTH_LONG).show();
-                } else {
-
+                if (validarCampos(context)){
                     reference.child("Local").child(local.getIdLocal()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -324,7 +318,6 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
                                 Map<String, Object> map = new HashMap<>();
                                 try {
                                     map.put("nombre", encriptacionDatos.encriptar(nombreLocal.getText().toString()));
-
                                     map.put("callePrincipal", encriptacionDatos.encriptar(callePricipal.getText().toString()));
                                     map.put("referencia", encriptacionDatos.encriptar(referencia.getText().toString()));
 
@@ -338,7 +331,7 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
                                     e.printStackTrace();
                                 }
                                 try {
-                                    map.put("celular", encriptacionDatos.encriptar(telefonoLocal.getText().toString()));
+                                    map.put("celular", encriptacionDatos.encriptar(celularLocal.getText().toString()));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -424,6 +417,60 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
                 zoom(17).
                 build();
         myGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    private Boolean validarCampos(Context context){
+        if (nombreLocal.getText().toString().equals("")) {
+            nombreLocal.setError("Ingrese nombre");
+            return false;
+        } else if (callePricipal.getText().toString().equals("")) {
+            callePricipal.setError("Ingrese calle principal");
+            return false;
+        } else if (referencia.getText().toString().equals("")) {
+            referencia.setError("Ingrese referencia");
+            return false;
+        }else if (telefonoLocal.getText().toString().equals("")
+                && celularLocal.getText().toString().equals("")) {
+            telefonoLocal.setError("Ingrese telefono o celular");
+            celularLocal.setError("Ingrese celular");
+            return false;
+        } else if (!validarTelefono()){
+        }else if (!validarCelular()){
+        } else if (latLng == null) {
+            Toast.makeText(context, "Error de las coordenadas del mapa", Toast.LENGTH_LONG).show();
+            return false;
+        } else{
+            return  true;
+        }
+        return false;
+
+    }
+
+    public Boolean validarTelefono(){
+        if (!telefonoLocal.getText().toString().isEmpty()) {
+            if (telefonoLocal.getText().toString().length() != 7) {
+                if (telefonoLocal.getText().toString().length() != 9) {
+                    telefonoLocal.setError("Teléfono no válido");
+                    return false;
+                }
+            } else if (telefonoLocal.getText().toString().length() != 9) {
+                if (telefonoLocal.getText().toString().length() != 7) {
+                    telefonoLocal.setError("Teléfono no válido");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public Boolean validarCelular(){
+        if (!celularLocal.getText().toString().isEmpty()){
+            if (celularLocal.getText().toString().length() !=10){
+                celularLocal.setError("Celular no válido");
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -4,173 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activityParaClientes.PedidoCliente">
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+
+    <TextView
+        android:id="@+id/textView39"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentInsetStart="0dp">
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout3"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearLayout7"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-
-                    <TextView
-                        android:id="@+id/textView38"
-                        android:layout_width="300dp"
-                        android:layout_height="42dp"
-                        android:gravity="center"
-                        android:text="@string/app_name"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/btnMensajeriaGlobalListarPedidoCliente"
-                        android:layout_width="50sp"
-                        android:layout_height="40sp"
-                        app:icon="@drawable/ic_enviar_mensajes"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textView38"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent">
-
-                            <Button
-                                android:id="@+id/btn_Home_Pedido_Cliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_home"
-                                android:text="Home"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btn_listar_vendedores_PedidoCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_listar_vendedores"
-                                android:text="Vendedores"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btn_carrito_listar_PedidoCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_carrito_compra"
-                                android:text="Carrito"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btn_perfil_listar_PedidoCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona"
-                                android:text="Perfil"
-                                android:textSize="8sp" />
-
-
-
-                            <Button
-                                android:id="@+id/btn_salir_PedidoCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona_salir"
-                                android:text="Salir"
-                                android:textSize="8sp" />
-                        </LinearLayout>
-                    </HorizontalScrollView>
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.appbar.AppBarLayout>
-
-    </androidx.appcompat.widget.Toolbar>
+        android:layout_marginTop="8dp"
+        android:text="Carrito de compra"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="12dp">
-
-        <TextView
-            android:id="@+id/textView39"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Carrito de compra"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/buscarVendedorPedidoCliente"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
         <EditText
             android:id="@+id/buscarVendedorPedidoCliente"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableStart="@android:drawable/ic_menu_search"
             android:ems="10"
             android:hint="Ingrese el nombre del vendedor"
             android:inputType="textPersonName"
-            android:drawableLeft="@android:drawable/ic_menu_search"
-
-            app:layout_constraintBottom_toTopOf="@+id/gridProductoCliente"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView39"/>
-
-        <GridView
-            android:id="@+id/gridProductoCliente"
-            android:layout_width="wrap_content"
-            android:layout_height="468dp"
-            android:layout_marginTop="4dp"
-            android:horizontalSpacing="12dp"
-
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buscarVendedorPedidoCliente">
+            app:layout_constraintEnd_toStartOf="@+id/btnBuscarPedidoCliente"
 
-        </GridView>
+            />
+
+        <Button
+            android:id="@+id/btnBuscarPedidoCliente"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="Buscar"
+            app:icon="@android:drawable/ic_search_category_default"
+            app:iconSize = "30dp"
+            app:iconGravity="start"
+            app:cornerRadius ="60dp"
+            app:layout_constraintStart_toEndOf="@+id/buscarVendedorPedidoCliente"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"></Button>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <GridView
+        android:id="@+id/gridProductoCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+
+        android:horizontalSpacing="12dp">
+
+    </GridView>
 
 </LinearLayout>

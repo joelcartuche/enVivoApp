@@ -7,11 +7,13 @@
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="colorOnSurface">#feab6b</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#f3e9e7</item>
+        <item name="colorSecondary">#e76f3d</item>
         <item name="colorSecondaryVariant">#9bcfe0</item>
         <item name="colorOnSecondary">#e76f3d</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowStyle</item>
     </style>
 </resources>

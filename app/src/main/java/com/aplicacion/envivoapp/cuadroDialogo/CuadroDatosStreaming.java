@@ -9,17 +9,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.aplicacion.envivoapp.R;
+import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 
 public class CuadroDatosStreaming {
     public interface resultadoDialogo{
-        void resultado(Boolean isVerStreamings, String idVendedor,String idCliente,String idStreaming,String urlStreaming);
+        void resultado(Boolean isVerStreamings, Vendedor vendedor,Cliente cliente,String idStreaming,String urlStreaming);
     }
     private CuadroDatosStreaming.resultadoDialogo interfaceResultadoDialogo;
 
     public CuadroDatosStreaming(Context context,
-                                String idVendedor,
-                                String idCliente,
+                                Vendedor vendedor,
+                                Cliente cliente,
                                 String idStreaming,
                                 String url,
                                 String fecha,
@@ -46,11 +47,15 @@ public class CuadroDatosStreaming {
 
         Button verStreamings = dialog.findViewById(R.id.btnIrStreamingCuadroStreraming);
         Button atras = dialog.findViewById(R.id.btnCancelarCuadroStreamings);
-        interfaceResultadoDialogo.resultado(false,idVendedor,idCliente,idStreaming,urlStreaming.getText().toString());//enviamos falso ya que no se iso click en el boton ver streamings
+        interfaceResultadoDialogo.resultado(false,vendedor,cliente,idStreaming,urlStreaming.getText().toString());//enviamos falso ya que no se iso click en el boton ver streamings
         verStreamings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                interfaceResultadoDialogo.resultado(true,idVendedor,idCliente,idStreaming,urlStreaming.getText().toString());//cambiamos el estado de la bansera
+                interfaceResultadoDialogo.resultado(true,
+                        vendedor,
+                        cliente,
+                        idStreaming,
+                        urlStreaming.getText().toString());//cambiamos el estado de la bansera
                 dialog.dismiss();
             }
         });

@@ -12,9 +12,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.hardware.location.gps" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".utilidades.MyFirebaseApp"
@@ -24,6 +28,10 @@
         android:roundIcon="@mipmap/ic_img_principal_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnVivoApp">
+        <service
+            android:name=".Servicio"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -37,46 +45,37 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activityParaClientes.HomeCliente" />
-        <activity android:name=".cuadroDialogo.CuadroCambiarPedido" />
-        <activity android:name=".activitysParaVendedores.HomeVendedor" />
-        <activity android:name=".Reportes.ReporteVendedor" />
-        <activity android:name=".activitysParaVendedores.MensajeriaGlobalVendedor" />
-        <activity android:name=".activitysParaVendedores.ListarClientes" />
-        <activity android:name=".activityParaClientes.MensajeriaGlobal" />
-        <activity android:name=".activitysParaVendedores.PedidoVendedor" />
-        <activity android:name=".activityParaClientes.PedidoCliente" />
-        <activity android:name=".activitysParaVendedores.MensajeriaVendedor" />
-        <activity android:name=".activityParaClientes.ListarStreamingsVendedor" />
-        <activity android:name=".activityParaClientes.MensajeriaCliente" />
-        <activity
-            android:name=".activityParaClientes.ListarVendedores"
-            android:label="@string/title_activity_listar_vendedores"
-            android:theme="@style/Theme.EnVivoApp.NoActionBar" />
-        <activity
-            android:name=".activityParaClientes.DataCliente"
-            android:label="@string/title_activity_data_cliente"
-            android:theme="@style/Theme.EnVivoApp.NoActionBar" />
-        <activity
-            android:name=".activitysParaVendedores.GestionVideos"
-            android:label="@string/title_activity_gestion_videos"
-            android:theme="@style/Theme.EnVivoApp.NoActionBar" />
-        <activity
-            android:name=".activitysParaVendedores.DataLocal"
-            android:label="@string/title_activity_data_local"
-            android:theme="@style/Theme.EnVivoApp.NoActionBar" />
-        <activity
-            android:name=".activitysParaVendedores.DataVendedor"
-            android:label="@string/title_activity_data_vendedor"
-            android:theme="@style/Theme.EnVivoApp.NoActionBar" />
+        <activity android:name=".activityParaClientes.HomeClienteMain"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+
+        <activity android:name=".activitysParaVendedores.HomeVendedorMain"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.EnVivoApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="envivoapp.tk"
+                    android:scheme="https"/>
+                <data
+                    android:host="envivoapp.tk"
+                    android:scheme="http"/>
             </intent-filter>
         </activity>
 
@@ -92,9 +91,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

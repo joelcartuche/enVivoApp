@@ -18,12 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_marginLeft="25dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginRight="25dp"
             android:layout_marginBottom="10dp"
-            android:visibility="visible"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
             app:contentPadding="12dp"
@@ -31,8 +28,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardImgIniciarSesion"
-            tools:visibility="gone">
+            app:layout_constraintTop_toBottomOf="@+id/cardImgIniciarSesion">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -98,23 +94,18 @@
             android:id="@+id/cardImgIniciarSesion"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp"
-            app:cardCornerRadius="200dp"
-            app:cardElevation="20dp"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="30dp"
             app:layout_constraintBottom_toTopOf="@+id/cardIniciarSesion"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageViewIniciarSesion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="24dp"
                 android:visibility="visible"
                 app:srcCompat="@mipmap/ic_img_logo_principal_foreground"
                 tools:visibility="visible" />
@@ -125,20 +116,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:visibility="visible"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
             app:contentPadding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardImgCrearCuenta"
-            tools:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@+id/cardImgCrearCuenta">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -239,22 +226,18 @@
             android:id="@+id/cardImgCrearCuenta"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="10dp"
-            app:cardCornerRadius="300dp"
+            android:layout_margin="20dp"
+            app:cardCornerRadius="20dp"
             app:cardElevation="20dp"
             app:layout_constraintBottom_toTopOf="@+id/cardCrearCuenta"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible">
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageViewCrearCuenta"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
                 app:srcCompat="@mipmap/ic_img_logo_principal_foreground" />
         </androidx.cardview.widget.CardView>
 

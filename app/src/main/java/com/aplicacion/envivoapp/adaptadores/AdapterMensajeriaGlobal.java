@@ -23,6 +23,7 @@ import com.aplicacion.envivoapp.modelos.Usuario;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -104,100 +105,72 @@ public class AdapterMensajeriaGlobal extends RecyclerView.Adapter<AdapterMensaje
         }
 
         if (mensaje.getEsVededor()){//En caso de que el mensaje sea departe del vendedor
-            databaseReference.child("Vendedor").child(mensaje.getIdvendedor()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
 
-                        Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
-                        try {
-                            nombreMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
+            Vendedor vendedor = mensaje.getVendedor();
+            try {
+                nombreMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fechaMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                    mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                    mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                    mensaje.getFecha().getSeconds());
+            mensajeGlobal.setText(mensaje.getTexto());
+
+            contenedorMensajeria.setBackgroundColor(Color.parseColor("#47C1FF"));
+            Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
+            query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        Usuario usuario = null;
+                        for (DataSnapshot ds: snapshot.getChildren()){
+                            usuario = ds.getValue(Usuario.class);
+
                         }
-                        fechaMensaje.setText(mensaje.getFecha().getDate() +"/"+
-                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
-                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
-                                mensaje.getFecha().getSeconds());
-                        mensajeGlobal.setText(mensaje.getTexto());
-
-                        contenedorMensajeria.setBackgroundColor(Color.parseColor("#47C1FF"));
-
-                        Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
-                        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                            @Override
-                            public void onSuccess(DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Usuario usuario = null;
-                                    for (DataSnapshot ds: snapshot.getChildren()){
-                                        usuario = ds.getValue(Usuario.class);
-                                    }
-                                    if (usuario != null){
-                                        Uri uri = Uri.parse(usuario.getImagen());
-                                        Picasso.with(context).load(uri).resize(100,100).into(imgUsuario);
-                                    }
-
-                                }
+                        if (usuario != null){
+                            if (usuario.getImagen()!= null) {
+                                Uri uri = Uri.parse(usuario.getImagen());
+                                Picasso.with(context).load(uri).into(imgUsuario);
                             }
-                        });
+                        }
 
-                    }else{
-                        Log.d("ERROR","error en encontrar el vendedor para AdapterMensajeriaCliente");
                     }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }else{//En caso de que elmensaje sea departe del cliente
 
-            databaseReference.child("Cliente").child(mensaje.getIdcliente()).addValueEventListener(new ValueEventListener() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+            Cliente cliente = mensaje.getCliente(); //instanciamos el cliente
+            try {
+                nombreMensaje.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fechaMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                    mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                    mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                    mensaje.getFecha().getSeconds());
+            mensajeGlobal.setText(mensaje.getTexto());
+            mensajeGlobal.setTextDirection(View.TEXT_DIRECTION_RTL);
+
+            contenedorMensajeria.setBackgroundColor(Color.parseColor("#556BFF"));
+
+            Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(cliente.getUidUsuario());
+            query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        Cliente cliente = snapshot.getValue(Cliente.class); //instanciamos el cliente
-                        try {
-                            nombreMensaje.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                public void onSuccess(DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        Usuario usuario = null;
+                        for (DataSnapshot ds: snapshot.getChildren()){
+                            usuario = ds.getValue(Usuario.class);
                         }
-                        fechaMensaje.setText(mensaje.getFecha().getDate() +"/"+
-                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
-                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
-                                mensaje.getFecha().getSeconds());
-                        mensajeGlobal.setText(mensaje.getTexto());
-                        mensajeGlobal.setTextDirection(View.TEXT_DIRECTION_RTL);
+                        if (usuario != null){
+                            Uri uri = Uri.parse(usuario.getImagen());
+                            Picasso.with(context).load(uri).resize(100,100).into(imgUsuario);
+                        }
 
-                        contenedorMensajeria.setBackgroundColor(Color.parseColor("#556BFF"));
-
-                        Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(cliente.getUidUsuario());
-                        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                            @Override
-                            public void onSuccess(DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Usuario usuario = null;
-                                    for (DataSnapshot ds: snapshot.getChildren()){
-                                        usuario = ds.getValue(Usuario.class);
-                                    }
-                                    if (usuario != null){
-                                        Uri uri = Uri.parse(usuario.getImagen());
-                                        Picasso.with(context).load(uri).resize(100,100).into(imgUsuario);
-                                    }
-
-                                }
-                            }
-                        });
-
-                    }else{
-                        Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }

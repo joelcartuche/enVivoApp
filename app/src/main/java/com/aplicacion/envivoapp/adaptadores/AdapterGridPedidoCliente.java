@@ -1,11 +1,9 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +16,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activityParaClientes.ListarStreamingsVendedor;
-import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
-import com.aplicacion.envivoapp.activityParaClientes.MensajeriaGlobal;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoMensajeriaGlobal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Usuario;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
+import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,10 +38,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCancelarPedidoCliente.resultadoDialogo {
@@ -49,21 +46,33 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
     private DatabaseReference databaseReference;
     private FirebaseStorage storage;
     private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
+    private FragmentActivity activity;
+    private int codigoNotificacion;
+    private  String idPedido;
+
 
     public AdapterGridPedidoCliente(Context context,
                                     List<Pedido> listaPedidoCliente,
                                     DatabaseReference databaseReference,
-                                    FirebaseStorage storage){
+                                    FirebaseStorage storage,
+                                    FragmentActivity activity,
+                                    int codigoNotificacion,
+                                    String idPedido){
         this.context = context;
         this.listaPedidoCliente = listaPedidoCliente;
         this.databaseReference = databaseReference;
         this.storage=storage;
+        this.activity = activity;
+        this.codigoNotificacion = codigoNotificacion;
+        this.idPedido = idPedido;
+
     }
 
     @Override
     public int getCount() {
         return listaPedidoCliente.size();
     }
+
 
     @Override
     public Object getItem(int position) {
@@ -78,35 +87,63 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            LayoutInflater layoutInflater =(LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_list_pedido_cliente,null);
+        if (convertView == null) {
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.item_list_pedido_cliente, null);
         }
 
         Pedido pedido = listaPedidoCliente.get(position);//para manejar que elemento estamos clickeando
         //inicializamos las variables
-        TextView codigo =  convertView.findViewById(R.id.txtCodigoItemPedidoCliente);
+        TextView codigo = convertView.findViewById(R.id.txtCodigoItemPedidoCliente);
         TextView nombre = convertView.findViewById(R.id.txtNombreProductoItemPedidoCliente);
         TextView cantidad = convertView.findViewById(R.id.txtCantidadItemPedidoCliente);
-        TextView precio= convertView.findViewById(R.id.txtPrecioItemPedidoCliente);
+        TextView precio = convertView.findViewById(R.id.txtPrecioItemPedidoCliente);
         TextView descripcion = convertView.findViewById(R.id.txtDescripcionItemPedidoCliente);
         TextView nombreVendedor = convertView.findViewById(R.id.txtNombreVendedorItemPedidoCliente);
         TextView fechaPedido = convertView.findViewById(R.id.txtFechaItemPedidoCliente);
         TextView fechaFinalPedido = convertView.findViewById(R.id.txtFechaFinalItemPedidoCliente);
-        TextView colorFecha = convertView.findViewById(R.id.txtColorFechaVendedorItemPedidoCliente);
         ImageView imagenPedido = convertView.findViewById(R.id.imgPedidoCliente);
         Button btnCancelarPedido = convertView.findViewById(R.id.btnCancelarItemPedidoCliente);
         Button btnConversarVendedor = convertView.findViewById(R.id.btnConvesarVendedor);
         ImageView imgPerfilVendedor = convertView.findViewById(R.id.imgPerfilVendedorPedidoCliente);
+        ConstraintLayout contenedor = convertView.findViewById(R.id.contraintContendorPedidoCliente);
 
+        contenedor.setBackgroundColor(Color.parseColor("#FFFFFF"));//color defecto para actualizados
+
+        Log.d("PedidoNotifi",codigoNotificacion+" id "+ idPedido);
+        if (!idPedido.equals("")){
+            if (idPedido.equals(pedido.getIdPedido())){
+                if (codigoNotificacion==1){//codigo de creacion de pedido
+                    contenedor.setBackgroundColor(Color.parseColor("#A7FFEB"));
+                }else if (codigoNotificacion==2){//codigo de actualizacion
+                    contenedor.setBackgroundColor(Color.parseColor("#F4FF81"));
+                }
+                ((MyFirebaseApp) context.getApplicationContext()).setCodigo(0);
+                ((MyFirebaseApp) context.getApplicationContext()).setIdPedido("");
+            }
+        }
+
+
+        imagenPedido.setVisibility(View.GONE);
         btnConversarVendedor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle parametros = new Bundle();
-                parametros.putString("vendedor", pedido.getIdVendedor());
-                Intent streamingsIntent = new Intent(context, MensajeriaGlobal.class);
-                streamingsIntent.putExtras(parametros);
-                context.startActivity(streamingsIntent);
+                databaseReference.child("Vendedor").child(pedido.getIdVendedor()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            Vendedor vendedor = snapshot.getValue(Vendedor.class);
+                            ((MyFirebaseApp) context.getApplicationContext()).setVendedor(vendedor);
+                            Fragment fragment = new FragmentoMensajeriaGlobal();
+                            activity.getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                                    .replace(R.id.home_content, fragment)
+                                    .commit();
+                        }
+                    }
+                });
+
             }
         });
 
@@ -128,12 +165,15 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
                     }
                     fechaPedido.setText(pedido.getFechaPedido().getDate() +"/"+pedido.getFechaPedido().getMonth()+"/"+pedido.getFechaPedido().getYear());
                     fechaFinalPedido.setText(pedido.getFechaFinalPedido().getDate() +"/"+pedido.getFechaFinalPedido().getMonth()+"/"+pedido.getFechaFinalPedido().getYear());
-                    storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Picasso.with(context).load(uri).into(imagenPedido);
-                        }
-                    });
+                    if (pedido.getImagen()!=null) {
+                        storage.getReference().child(pedido.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                imagenPedido.setVisibility(View.VISIBLE);
+                                Picasso.with(context).load(uri).into(imagenPedido);
+                            }
+                        });
+                    }
                     //Cargamos la imagen del usuario
                     Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
                     query.addValueEventListener(new ValueEventListener() {
@@ -152,7 +192,6 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
                                             resize(100, 100).
                                             into(imgPerfilVendedor);
                                 }
-
                             }
                         }
 
@@ -175,16 +214,28 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
         btnCancelarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new CuadroCancelarPedidoCliente(context,
-                        pedido,
-                        databaseReference,
-                       AdapterGridPedidoCliente.this);//inciamos el cuadro de dialogo cancelar
+
+                databaseReference.child("Vendedor").child(pedido.getIdVendedor()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            Vendedor vendedor = snapshot.getValue(Vendedor.class);
+                            new CuadroCancelarPedidoCliente(context,
+                                    pedido,
+                                    databaseReference,
+                                    vendedor,
+                                    AdapterGridPedidoCliente.this);//inciamos el cuadro de dialogo cancelar
+                        }
+                    }
+                });
+
             }
         });
 
         return convertView;
 
     }
+
 
 
     @Override

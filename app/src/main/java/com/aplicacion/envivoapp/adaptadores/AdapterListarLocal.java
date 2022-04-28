@@ -1,8 +1,6 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,32 +8,19 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activitysParaVendedores.DataLocal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroEditarLocal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroSeleccionarUbicacion;
-import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Local;
 import com.aplicacion.envivoapp.modelos.Vendedor;
-import com.aplicacion.envivoapp.utilidades.MapsFragment;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -130,21 +115,11 @@ public class AdapterListarLocal extends BaseAdapter implements CuadroSeleccionar
 
 
     public void abrirCuadroDialogo(Local local, FirebaseAuth firebaseAuth,Context context){
-        Query query = databaseReference.child("Vendedor").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid());
-        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-            @Override
-            public void onSuccess(DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    Vendedor vendedor = null;
-                    for (DataSnapshot ds:snapshot.getChildren()){
-                        vendedor = ds.getValue(Vendedor.class);
-                    }
-                    if (vendedor!= null){
-                        new CuadroEditarLocal(context,local,vendedor,false,databaseReference,AdapterListarLocal.this::resultado);
-                    }
-                }
-            }
-        });
+        Vendedor vendedorGlobal = ((MyFirebaseApp) context.getApplicationContext()).getVendedor();
+        if (vendedorGlobal!=null){
+            new CuadroEditarLocal(context,local,vendedorGlobal,false,databaseReference,AdapterListarLocal.this::resultado);
+        }
+
 
     }
 

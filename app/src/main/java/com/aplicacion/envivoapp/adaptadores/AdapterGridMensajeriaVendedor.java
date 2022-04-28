@@ -1,6 +1,7 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -18,16 +19,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaVendedor;
-import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoMensajeCliente;
+import com.aplicacion.envivoapp.cuadroDialogo.CuadroAceptarPedidoVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
+import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
-import com.facebook.AccessTokenSource;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,29 +40,28 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdapterGridMensajeriaVendedor extends BaseAdapter implements CuadroAceptarPedidoMensajeCliente.resultadoDialogo {
+public class AdapterGridMensajeriaVendedor extends BaseAdapter implements CuadroAceptarPedidoVendedor.resultadoCuadroAceptarPedidoVendedor {
 
     private Context context;
     private List<Mensaje> listaMensajeVendedor;
     private DatabaseReference databaseReference;
     private FirebaseStorage storage ; //para la insersion de archivos
     private EncriptacionDatos encriptacionDatos= new EncriptacionDatos();
-
     private  Button aceptar,cancelar,bloquearCliente;
     private Boolean filtrarTodos;
+    private  Mensaje mensaje;
 
     public AdapterGridMensajeriaVendedor(Context context,
                                          List<Mensaje> listaMensajeVendedor,
                                          DatabaseReference databaseReference,
                                          Boolean filtrarTodos,
-                                         FirebaseStorage storage ){
+                                         FirebaseStorage storage){
         this.context = context;
         this.listaMensajeVendedor = listaMensajeVendedor;
         this.databaseReference = databaseReference;
@@ -93,7 +95,7 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
         }
 
         CardView card = convertView.findViewById(R.id.cardMensajeria);
-        Mensaje mensaje = listaMensajeVendedor.get(position);
+        mensaje = listaMensajeVendedor.get(position);
 
 
         //inicializamos las variables
@@ -105,6 +107,8 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
         cancelar = convertView.findViewById(R.id.btnCancelarMensajeVendedor);
         bloquearCliente = convertView.findViewById(R.id.btnBloquearClienteMensajeriaVendedor);
         imagenPedido.setVisibility(View.GONE);
+
+
 
         //en caso de que el usuario tenga ya un pedido cancelado o aceptado
 
@@ -118,15 +122,12 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
             @Override
             public void onClick(View v) {
                 //mostramos el cuadro para la acepatacion del pedido
-                new CuadroAceptarPedidoMensajeCliente(context,
-                        mensaje.getIdvendedor(),
-                        mensaje.getIdcliente(),
-                        mensaje.getIdStreaming(),
+
+                new CuadroAceptarPedidoVendedor(context,
                         position,
                         databaseReference,
                         AdapterGridMensajeriaVendedor.this,
-                        mensaje,
-                        storage);
+                        mensaje);
             }
         });
 
@@ -146,12 +147,16 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                         String idMensaje = databaseReference.push().getKey();
                         mensajeAux.setIdMensaje(idMensaje);
                         mensajeAux.setIdStreaming(mensaje.getIdStreaming());
-                        mensajeAux.setIdvendedor(mensaje.getIdvendedor());
-                        mensajeAux.setIdcliente(mensaje.getIdcliente());
+                        mensajeAux.setVendedor(mensaje.getVendedor());
+                        mensajeAux.setCliente(mensaje.getCliente());
                         mensajeAux.setPedidoAceptado(false);
                         mensajeAux.setPedidoCancelado(true);
                         mensajeAux.setEsVededor(true);
-                        mensajeAux.setTexto("Su pedido no ha sido aceptado");
+                        try {
+                            mensajeAux.setTexto(encriptacionDatos.encriptar("Su pedido no ha sido aceptado"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                         LocalDateTime tiempoActual = LocalDateTime.now();//obtenemos la fecha actual
                         Date fecha = new Date();
@@ -163,6 +168,8 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                         fecha.setSeconds(tiempoActual.getSecond());
 
                         mensajeAux.setFecha(fecha);
+
+
                         databaseReference.child("Mensaje").child(idMensaje).setValue(mensajeAux);
 
                         //Actualizamos el estado del mensaje
@@ -172,12 +179,13 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                         databaseReference.child("Mensaje").child(mensaje.getIdMensaje()).updateChildren(mensajeCliente).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(context, "Pedido Aceptado", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Pedido Cancelado", Toast.LENGTH_LONG).show();
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context, "A ocurrido un error al actualizar los datos", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "A ocurrido un error al cancelar el pedido", Toast.LENGTH_LONG).show();
                             }
                         });
                         dialogo1.dismiss();
@@ -196,19 +204,25 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
         bloquearCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String titulo = "Bloqueo de usuario";
-                String mensaje="¿Desea bloquear al cliente?";
+                String titulo = "Bloqueo de cliente";
+                String textoMensaje="¿Desea bloquear al cliente?";
                 DialogInterface.OnClickListener confirmar= new DialogInterface.OnClickListener() {//creamos la funcion para la confirmacion del vendedor
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        String idCliente_idVendedor =mensaje.getCliente().getIdCliente()+"_"+mensaje.getVendedor().getIdVendedor();
                         Map<String,Object> bloqueo = new HashMap<>();
-                        bloqueo.put("bloqueado",true);//actualizamos el estado bloqueado del cliente
-                        databaseReference.child("Cliente").child(listaMensajeVendedor.get(position).getIdcliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        bloqueo.put("Cliente/"+mensaje.getCliente().getIdCliente()+"/bloqueado",true);//actualizamos el estado bloqueado del cliente
+                        bloqueo.put("Mensaje_Cliente_Vendedor/"
+                                + idCliente_idVendedor
+                                +"/cliente/bloqueado",true);
+                        bloqueo.put("Mensaje_Cliente_Vendedor/"
+                                + idCliente_idVendedor
+                                +"/elVendedorBloqueoCliente",true);
+
+                        databaseReference.updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(context,"El cliente que realizo el mensaje fue bloqueado con exito",Toast.LENGTH_LONG).show();
-
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -216,98 +230,72 @@ public class AdapterGridMensajeriaVendedor extends BaseAdapter implements Cuadro
                                 Toast.makeText(context,"A ocurrido un error al bloquear el clinte",Toast.LENGTH_LONG).show();
                             }
                         });
-
                     }
                 };
 
-                new Utilidades().cuadroDialogo(context,confirmar,titulo,mensaje);
+                new Utilidades().cuadroDialogo(context,confirmar,titulo,textoMensaje);
             }
         });
 
         if (mensaje.getEsVededor()){//en caso de que el usuario es el vendedor
-            databaseReference.child("Vendedor").child(mensaje.getIdvendedor()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        imagenPedido.setVisibility(View.GONE);
-                        Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
+            imagenPedido.setVisibility(View.GONE);
 
-                        try {
-                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+            try {
+                nombreClienteMensaje.setText(encriptacionDatos.desencriptar(mensaje.getCliente().getNombre()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
-                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
-                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
-                                mensaje.getFecha().getSeconds());
-                        mensajeClienteMensaje.setText(mensaje.getTexto());
-                    }else{
-                        Log.d("ERROR","error en encontrar el vendedor para AdapterMensajeriaCliente");
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+            fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                    mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                    mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                    mensaje.getFecha().getSeconds());
+            mensajeClienteMensaje.setText(mensaje.getTexto());
 
         }else{//en caso de que el usuario es  el cliente
-
-            databaseReference.child("Cliente").child(mensaje.getIdcliente()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        imagenPedido.setVisibility(View.GONE);
-                        Cliente cliente= snapshot.getValue(Cliente.class);
-                        try {
-                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() + "/" +
-                                mensaje.getFecha().getMonth() + "/" + mensaje.getFecha().getYear() + " " +
-                                mensaje.getFecha().getHours() + ":" + mensaje.getFecha().getMinutes() + ":" +
-                                mensaje.getFecha().getSeconds());
-                        mensajeClienteMensaje.setText(mensaje.getTexto());
-                        if(mensaje.getImagen()!=null || mensaje.getImagen()!="") {
-                            storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    imagenPedido.setVisibility(View.VISIBLE);
-                                    Picasso.with(context).load(uri).into(imagenPedido);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    imagenPedido.setVisibility(View.GONE);
-                                }
-                            });
-                        }else{
-                            imagenPedido.setVisibility(View.GONE);
-                        }
-
-
-                    }else{
-                        Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
+            imagenPedido.setVisibility(View.GONE);
+            try {
+                nombreClienteMensaje.setText(encriptacionDatos.desencriptar(mensaje.getCliente().getNombre()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fechaClienteMensaje.setText(mensaje.getFecha().getDate() + "/" +
+                    mensaje.getFecha().getMonth() + "/" + mensaje.getFecha().getYear() + " " +
+                    mensaje.getFecha().getHours() + ":" + mensaje.getFecha().getMinutes() + ":" +
+                    mensaje.getFecha().getSeconds());
+            mensajeClienteMensaje.setText(mensaje.getTexto());
+            if(mensaje.getImagen()!=null || mensaje.getImagen()!="") {
+                storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        imagenPedido.setVisibility(View.VISIBLE);
+                        Picasso.with(context).load(uri).into(imagenPedido);
                     }
-                }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        imagenPedido.setVisibility(View.GONE);
+                    }
+                });
+            }else{
+                imagenPedido.setVisibility(View.GONE);
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
         }
         return convertView;
     }
 
 
     @Override
-    public void resultado(Boolean isAcepatado, Boolean isCancelado, int position) {
+    public void resultadoCuadroAceptarPedidoVendedor(Boolean isAcepatado, Boolean isCancelado, int position) {
+        if (isAcepatado){
 
+        }
     }
+
+
+
+
+
 
 }

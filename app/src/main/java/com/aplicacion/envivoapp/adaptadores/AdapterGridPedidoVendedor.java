@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,15 +18,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activityParaClientes.ListarStreamingsVendedor;
-import com.aplicacion.envivoapp.activityParaClientes.ListarVendedores;
-import com.aplicacion.envivoapp.activitysParaVendedores.ListarClientes;
-import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaGlobalVendedor;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoStreamigsVendedor;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoMensajeriaGlobalVendedor;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCambiarPedido;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
-import com.aplicacion.envivoapp.cuadroDialogo.CuadroEditarLocal;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroSeleccionarUbicacion;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
@@ -35,7 +33,6 @@ import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,16 +56,23 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
     private  Boolean eliminado;
     private  FirebaseStorage storage;
     private EncriptacionDatos encriptacionDatos= new EncriptacionDatos();
+    private FragmentActivity fragmentActivity;
+    private Vendedor vendedorGlobal;
+
 
     public AdapterGridPedidoVendedor(Context context,
                                      List<Pedido> listaPedidoVendedor,
                                      DatabaseReference databaseReference,
-                                     FirebaseStorage storage){
+                                     FirebaseStorage storage,
+                                     FragmentActivity fragmentActivity,
+                                     Vendedor vendedorGlobal){
         this.context = context;
         this.listaPedidoVendedor = listaPedidoVendedor;
         this.databaseReference = databaseReference;
         this.eliminado = eliminado;
         this.storage = storage;
+        this.fragmentActivity = fragmentActivity;
+        this.vendedorGlobal = vendedorGlobal;
     }
 
     @Override
@@ -295,6 +299,7 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
                     new CuadroCancelarPedidoCliente(context,
                             pedido,
                             databaseReference,
+                            vendedorGlobal,
                             AdapterGridPedidoVendedor.this);//inciamos el cuadro de dialogo cancelar
                 }
             }
@@ -304,13 +309,14 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
             @Override
             public void onClick(View v) {
                 if (pedido.getAceptado()) {
-                    Bundle parametros = new Bundle();
-                    parametros.putString("idPedido",pedido.getIdPedido());
-                    Intent streamingsIntent = new Intent(context.getApplicationContext(), CuadroCambiarPedido.class);
-                    streamingsIntent.putExtras(parametros);
-                    context.startActivity(streamingsIntent);
 
-
+                    ((MyFirebaseApp) fragmentActivity.getApplicationContext()).setIdPedido(pedido.getIdPedido());
+                    Fragment fragment = new CuadroCambiarPedido();
+                    fragmentActivity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                            .replace(R.id.home_content_vendedor, fragment)
+                            .commit();
                     //new CuadroCambiarPedido(context, pedido, databaseReference,storage);
                 }
             }
@@ -453,12 +459,24 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
         mensajear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle parametros = new Bundle();
-                parametros.putString("cliente", listaPedidoVendedor.get(position).getIdCliente());//enviamos el id para el activity
-                Intent streamingsIntent = new Intent(context,
-                        MensajeriaGlobalVendedor.class);
-                streamingsIntent.putExtras(parametros);
-                context.startActivity(streamingsIntent);
+                databaseReference.child("Cliente").child(listaPedidoVendedor.get(position).getIdCliente()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            Cliente cliente = snapshot.getValue(Cliente.class);
+                            ((MyFirebaseApp) fragmentActivity.getApplicationContext()).setCliente(cliente); //recogemos los datos del vendedor
+
+                            Fragment fragment = new FragmentoMensajeriaGlobalVendedor();
+
+                            fragmentActivity.getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                                    .replace(R.id.home_content_vendedor, fragment)
+                                    .commit();
+                        }
+                    }
+                });
+
             }
         });
     }

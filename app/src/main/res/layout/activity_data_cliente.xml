@@ -8,123 +8,6 @@
     android:orientation="vertical"
     tools:context=".activityParaClientes.DataCliente">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbaeDataCliente"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:contentInsetStart="0dp">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearLayout7"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/textView38"
-                        android:layout_width="300dp"
-                        android:layout_height="42dp"
-                        android:gravity="center"
-                        android:text="@string/app_name"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/btnMensajeriaGlobalDataCliente"
-                        android:layout_width="50sp"
-                        android:layout_height="40sp"
-                        app:icon="@drawable/ic_enviar_mensajes"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textView38"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent" >
-
-                            <Button
-                                android:id="@+id/btn_Home_Data_Clinte"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_home"
-                                android:text="Home"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btn_listar_vendedores_DataCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_listar_vendedores"
-                                android:text="Vendedores"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btn_carrito_DataCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_carrito_compra"
-                                android:text="Carrito"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btn_perfil_DataClienter"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona"
-                                android:text="Perfil"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btn_salir_DataCliente"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona_salir"
-                                android:text="Salir"
-                                android:textSize="8sp" />
-                        </LinearLayout>
-                    </HorizontalScrollView>
-
-                </LinearLayout>
-            </LinearLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-    </androidx.appcompat.widget.Toolbar>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -136,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edite sus datos personales"
+
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -151,7 +35,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Ingrese sus nombres"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:digits="aãâ áàbcçdeéfghiíjklmnoõôóòpqrstuvwxyzAÃÂÁÀBCÇDEÉFGHIÍJKLMNOÕÔÓÒPQRSTUVWXY"/>
 
         <TextView
             android:id="@+id/textView26"
@@ -159,10 +44,29 @@
             android:layout_height="wrap_content"
             android:text="Dirección:" />
 
+        <Button
+            android:id="@+id/maximizarUbicacionDataCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccione ubicación"
+            app:cornerRadius="20dp"
+            app:icon="@android:drawable/ic_dialog_map"
+            app:iconGravity="start" />
+
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapDataCliente"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
+
+        <Button
+            android:id="@+id/minimizarUbicacionDataCliente"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            app:cornerRadius="30dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            app:icon="@drawable/ic_minimizar"
+            app:iconGravity="start" />
 
         <ScrollView
             android:layout_width="match_parent"

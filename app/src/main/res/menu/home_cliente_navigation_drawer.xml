@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/home_cliente"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home_cliente" />
+
+        <item
+            android:id="@+id/data_cliente"
+            android:icon="@drawable/ic_persona"
+            android:title="@string/data_cliente" />
+
+        <item
+            android:id="@+id/pedido_cliente"
+            android:icon="@drawable/ic_carrito_compra"
+            android:title="@string/pedidos_cliente" />
+
+        <item
+            android:id="@+id/mensajeria_global_cliente"
+            android:icon="@drawable/ic_enviar_mensajes"
+            android:title="@string/mensajeria_global_cliente" />
+
+        <item
+            android:id="@+id/listar_vendedores_cliente"
+            android:icon="@drawable/ic_clientes"
+            android:title="@string/lista_vendedores" />
+
+        <item
+            android:id="@+id/salir_cliente"
+            android:icon="@drawable/ic_persona_salir"
+            android:title="@string/salir" />
+
+    </group>
+
+</menu>

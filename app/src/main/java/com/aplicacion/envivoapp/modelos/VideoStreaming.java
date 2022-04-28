@@ -9,11 +9,30 @@ public class VideoStreaming {
     private Date FechaTransmision;
     private String idVendedor;
     private Boolean eliminado;
+    private Boolean eliminadoCompleto;
     private Boolean iniciado;
+    private String linkAcceso;
 
     public VideoStreaming() {
         this.eliminado=false;
+        this.eliminadoCompleto = false;
         this.iniciado = false;
+    }
+
+    public String getLinkAcceso() {
+        return linkAcceso;
+    }
+
+    public Boolean getEliminadoCompleto() {
+        return eliminadoCompleto;
+    }
+
+    public void setEliminadoCompleto(Boolean eliminadoCompleto) {
+        this.eliminadoCompleto = eliminadoCompleto;
+    }
+
+    public void setLinkAcceso(String linkAcceso) {
+        this.linkAcceso = linkAcceso;
     }
 
     public Boolean getIniciado() {

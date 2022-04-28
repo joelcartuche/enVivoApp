@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +19,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activitysParaVendedores.MensajeriaGlobalVendedor;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoMensajeriaGlobalVendedor;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoMensajeriaVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
 import com.aplicacion.envivoapp.modelos.Usuario;
+import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
+import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -43,16 +50,22 @@ public class AdapterListarClientes extends BaseAdapter {
     private Context context;
     private List<Cliente> listaCliente;
     private DatabaseReference databaseReference;
-    private String esMensajeGlobal;
+    private Boolean esMensajeGlobal;
     private EncriptacionDatos encriptacionDatos = new EncriptacionDatos();
+    private FragmentActivity fragmentActivity;
+    private Vendedor vendedorGlobal;
     public AdapterListarClientes(Context context,
                                              List<Cliente> listaCliente,
                                              DatabaseReference databaseReference,
-                                 String esMensajeGlobal){
+                                 Boolean esMensajeGlobal,
+                                 Vendedor vendedorGlobal,
+                                 FragmentActivity fragmentActivity){
         this.context = context;
         this.listaCliente = listaCliente;
         this.databaseReference = databaseReference;
         this.esMensajeGlobal = esMensajeGlobal;
+        this.fragmentActivity = fragmentActivity;
+        this.vendedorGlobal = vendedorGlobal;
     }
 
     @Override
@@ -105,6 +118,89 @@ public class AdapterListarClientes extends BaseAdapter {
         }
 
         //Cargamos la imagen del usuario
+        cargarUsuario(cliente,imgPerfil);
+
+
+        if (esMensajeGlobal){
+            //llamamos la funcionalidad de la mensajeria global
+            mensajeriaGlobal(btnDesbloquearCliente,btnbloquerCliente,cliente);
+        }
+        if (!esMensajeGlobal){//en caso de que se desee listar al los clientes bloqueados
+            Log.d("Cliente",cliente.getIdCliente()+"_" +cliente.getBloqueado());
+            if (cliente.getBloqueado()){
+                btnDesbloquearCliente.setVisibility(View.VISIBLE);
+                btnbloquerCliente.setVisibility(View.GONE);
+                btnDesbloquearCliente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        DialogInterface.OnClickListener dialogBloqueo = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                bloquerDesbloquearCliente(false,dialog,cliente);
+                            }
+                        };
+                        new Utilidades().cuadroDialogo(context,dialogBloqueo,"Desbloquear cliente","¿Desea desbloquearlo al cliente?");
+                    }
+                });
+            }
+
+            if (!cliente.getBloqueado()) {//seteamos el mensaje y color del boton
+                btnDesbloquearCliente.setVisibility(View.GONE);
+                btnbloquerCliente.setVisibility(View.VISIBLE);
+                btnbloquerCliente.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        DialogInterface.OnClickListener dialogDesbloqueo = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                bloquerDesbloquearCliente(true,dialog,cliente);
+                            }
+                        };
+                        new Utilidades().cuadroDialogo(context,dialogDesbloqueo,"Bloquear cliente","¿Desea bloquearlo al cliente?");
+                    }
+                });
+            }
+        }
+
+        return convertView;
+    }
+
+
+    //funcionalidad de la mensajeria global
+    private void mensajeriaGlobal(Button btnDesbloquearCliente,
+                                  Button btnbloquerCliente,
+                                  Cliente cliente) {
+        //btnbloquerCliente.setVisibility(View.GONE);
+        btnDesbloquearCliente.setVisibility(View.VISIBLE);
+        btnbloquerCliente.setVisibility(View.VISIBLE);
+        btnbloquerCliente.setText("Eliminar mensajes");//cambiamos a eliminar mensajes
+        btnDesbloquearCliente.setText("Iniciar conversación");
+
+        //cambiamos la funcionalidad del botón para que se eliminen  los mensajes
+        btnbloquerCliente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener dialogDesbloqueo = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        actualizarMensajes(databaseReference,cliente,vendedorGlobal);
+                    }
+                };
+                new Utilidades().cuadroDialogo(context,dialogDesbloqueo,"Eliminar Mensajes","¿Desea eliminar los mensajes del cliente?");
+            }
+        });
+
+        btnDesbloquearCliente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ingresarMensajeria(cliente);
+            }
+        });
+    }
+
+    private void cargarUsuario(Cliente cliente,ImageView imgPerfil) {
         Query queryUsuario = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(cliente.getUidUsuario());
         queryUsuario.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -112,12 +208,14 @@ public class AdapterListarClientes extends BaseAdapter {
                 if (snapshot.exists()){
                     Usuario usuario = null;
                     for (DataSnapshot ds: snapshot.getChildren()){
-                        usuario = ds.getValue(Usuario.class);
+                        Usuario usuarioAux =ds.getValue(Usuario.class);
+                        if (usuarioAux.getUidUser().equals(cliente.getUidUsuario())){
+                            usuario = usuarioAux;
+                        };
                     }
                     if (usuario != null){
                         if (usuario.getImagen() != null ){
                             try {
-
                                 if (!usuario.getImagen().equals("")) {
                                     Uri uri = Uri.parse(usuario.getImagen());
                                     Picasso.with(context).
@@ -139,114 +237,6 @@ public class AdapterListarClientes extends BaseAdapter {
                 }
             }
         });
-
-
-
-        if (esMensajeGlobal.equals("1")){
-            //btnbloquerCliente.setVisibility(View.GONE);
-            btnDesbloquearCliente.setVisibility(View.VISIBLE);
-            btnbloquerCliente.setVisibility(View.VISIBLE);
-            btnbloquerCliente.setText("Eliminar mensajes");//cambiamos a eliminar mensajes
-            btnDesbloquearCliente.setText("Iniciar conversación");
-
-            //cambiamos la funcionalidad del botón para que se eliminen  los mensajes
-            btnbloquerCliente.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogInterface.OnClickListener dialogDesbloqueo = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            actualizarMensajes(databaseReference,cliente);
-                        }
-                    };
-                    new Utilidades().cuadroDialogo(context,dialogDesbloqueo,"Eliminar Mensajes","¿Desea eliminar los mensajes del cliente?");
-                }
-            });
-
-            btnDesbloquearCliente.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ingresarMensajeria(cliente);
-                }
-            });
-
-
-
-
-        }
-        if (esMensajeGlobal.equals("0")){//en caso de que se desee listar al los clientes bloqueados
-            if (!cliente.getBloqueado()) {//seteamos el mensje y color del boton
-                btnDesbloquearCliente.setVisibility(View.GONE);
-                btnbloquerCliente.setVisibility(View.VISIBLE);
-
-                btnbloquerCliente.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DialogInterface.OnClickListener dialogDesbloqueo = new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Map<String,Object> bloqueo = new HashMap<>();
-                                bloqueo.put("bloqueado",true);//actualizamos el estado bloqueado del cliente
-                                databaseReference.child("Cliente").child(cliente.getIdCliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(context,"El cliente fue bloqueado con éxito",Toast.LENGTH_SHORT).show();
-
-                                        dialog.dismiss();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(context,"Error al bloquear el cliente",Toast.LENGTH_SHORT).show();
-
-                                        dialog.dismiss();
-                                    }
-                                });
-
-                            }
-                        };
-                        new Utilidades().cuadroDialogo(context,dialogDesbloqueo,"Bloquear cliente","¿Desea bloquearlo al cliente?");
-                    }
-                });
-
-            }else{
-                btnDesbloquearCliente.setVisibility(View.VISIBLE);
-                btnbloquerCliente.setVisibility(View.GONE);
-                btnDesbloquearCliente.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                DialogInterface.OnClickListener dialogBloqueo = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Map<String,Object> bloqueo = new HashMap<>();
-                        bloqueo.put("bloqueado",false);//actualizamos el estado bloqueado del cliente
-                        databaseReference.child("Cliente").child(cliente.getIdCliente()).updateChildren(bloqueo).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(context,"El cliente fue desbloqueado con éxito",Toast.LENGTH_LONG).show();
-                                dialog.dismiss();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context,"Error al Desbloquear el usuario",Toast.LENGTH_LONG).show();
-                                dialog.dismiss();
-                            }
-                        });
-
-                    }
-                };
-                new Utilidades().cuadroDialogo(context,dialogBloqueo,"Desbloquear cliente","¿Desea desbloquearlo al cliente?");
-
-                    }
-                });
-
-            }
-
-        }
-
-        return convertView;
     }
 
     public void actualizarActividad(){//actualiza el activity actual para evitar la dupicacion de los datos
@@ -260,9 +250,12 @@ public class AdapterListarClientes extends BaseAdapter {
     }
 
 
-    public void actualizarMensajes(DatabaseReference databaseReference,Cliente cliente){
+    public void actualizarMensajes(DatabaseReference databaseReference,Cliente cliente,Vendedor vendedor){
 
-        Query queryMensaje = databaseReference.child("Mensaje").orderByChild("idcliente").equalTo(cliente.getIdCliente());
+        Query queryMensaje = databaseReference.
+                child("Mensaje").
+                orderByChild("idCliente_idVendedor").
+                equalTo(cliente.getIdCliente()+"_"+vendedor.getIdVendedor());
         queryMensaje.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
             public void onSuccess(DataSnapshot snapshot) {
@@ -277,12 +270,12 @@ public class AdapterListarClientes extends BaseAdapter {
                         Mensaje mensaje = ds.getValue(Mensaje.class);
                         if(mensaje != null
                                 && mensaje.getEsEliminado() == false){
-                            map.put(mensaje.getIdMensaje()+"/esEliminado",true);//cargamos los datos de manera masiva
+                            map.put("Mensaje/"+mensaje.getIdMensaje()+"/esEliminado",true);//cargamos los datos de manera masiva
                         }
                     }
 
 
-                    databaseReference.child("Mensaje").updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    databaseReference.updateChildren(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             cargar.dismiss();
@@ -305,12 +298,17 @@ public class AdapterListarClientes extends BaseAdapter {
 
 
     public void ingresarMensajeria(Cliente cliente){
-        Bundle parametros = new Bundle();
-        parametros.putString("cliente", cliente.getIdCliente());
-        Intent streamingsIntent = new Intent(context,
-                MensajeriaGlobalVendedor.class);
-        streamingsIntent.putExtras(parametros);
-        ((Activity) context).startActivity(streamingsIntent);
+
+        ((MyFirebaseApp) fragmentActivity.getApplicationContext()).setCliente(cliente); //recogemos los datos del vendedor
+
+        Fragment fragment = new FragmentoMensajeriaGlobalVendedor();
+
+        fragmentActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                .replace(R.id.home_content_vendedor, fragment)
+                .commit();
+
     }
 
     public Dialog cargar(){
@@ -320,5 +318,47 @@ public class AdapterListarClientes extends BaseAdapter {
         //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
         dialog.setContentView(R.layout.cuadro_cargando); //le asisganos el layout
         return dialog;
+    }
+
+    public void bloquerDesbloquearCliente(Boolean estadoBloqueado,
+                                DialogInterface dialog,
+                                Cliente cliente){
+        Dialog cargando = new Utilidades().dialogCargar(context);
+        cargando.show();
+
+        Map<String,Object> bloqueoCli = new HashMap<>();
+        String idClient_idVendedor = cliente.getIdCliente() +"_"+vendedorGlobal.getIdVendedor();
+        Log.d("actualizar",cliente.getIdCliente()+"");
+        bloqueoCli.put("Cliente/"+cliente.getIdCliente()+"/bloqueado",estadoBloqueado);
+        bloqueoCli.put("Mensaje_Cliente_Vendedor/"+
+                idClient_idVendedor+
+                "/cliente/bloqueado",estadoBloqueado);
+        bloqueoCli.put("Mensaje_Cliente_Vendedor/"+
+                idClient_idVendedor+
+                "/elVendedorBloqueoCliente",estadoBloqueado);
+        bloquearCliente(cargando,bloqueoCli,estadoBloqueado);
+    }
+
+    private void bloquearCliente(Dialog cargando,Map<String,Object> bloqueoCli,Boolean estadoBloqueado){
+        databaseReference.
+                updateChildren(bloqueoCli).
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        String mensaje = "";
+                        if (estadoBloqueado){
+                            mensaje = "Cliente bloqueado con éxito";
+                        }else{
+                            mensaje = "Cliente desbloqueado con éxito";
+                        }
+                        Toast.makeText(context,mensaje,Toast.LENGTH_LONG).show();
+                        cargando.dismiss();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context,"A ocurrido un error al boquear el cliente",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

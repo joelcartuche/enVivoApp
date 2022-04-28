@@ -1,26 +1,37 @@
 package com.aplicacion.envivoapp.cuadroDialogo;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
+import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +39,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +64,7 @@ public class CuadroEditarStraming {
                                 FirebaseAuth firebaseAuth,
                                 FirebaseDatabase firebaseDatabase,
                                 DatabaseReference reference,
-                                resultadoDialogo result){
+                                resultadoDialogo result, Activity activity){
         interfaceResultadoDialogo = result;
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//el dialogo se presenta sin el titulo
@@ -70,6 +84,9 @@ public class CuadroEditarStraming {
         Button btnCancelarVideo = dialog.findViewById(R.id.btnCancelarCuadroStreamings);
         Button btnIrVideo = dialog.findViewById(R.id.btnIrStreamingCuadroStreraming);
 
+        Button btnEnviarLinkAcceso = dialog.findViewById(R.id.btnEnviarMensaje);
+        TextView txtLinkAcceso = dialog.findViewById(R.id.txtLinkAcceso);
+
         txtEditarUrlVideo.setHint("https://youtu.be/8wV32B34N_I");
 
         if (videoStreaming != null) {
@@ -86,18 +103,38 @@ public class CuadroEditarStraming {
             btnActualizarVideo.setVisibility(View.GONE);
             btnEliminarVideo.setVisibility(View.GONE);
             btnIrVideo.setVisibility(View.GONE);
-
+            txtLinkAcceso.setVisibility(View.GONE);
+            btnEnviarLinkAcceso.setVisibility(View.GONE);
         }else{
             btnGuardarVideo.setVisibility(View.GONE);
             btnActualizarVideo.setVisibility(View.VISIBLE);
             btnEliminarVideo.setVisibility(View.VISIBLE);
             btnIrVideo.setVisibility(View.VISIBLE);
-            txtEditarUrlVideo.setText(videoStreaming.getUrlVideoStreaming());
+            btnEnviarLinkAcceso.setVisibility(View.VISIBLE);
+
+
+            txtEditarUrlVideo.setText(videoStreaming.getUrlVideoStreaming());//editamos el cuadro de texto del link del video de youtube
+
+            txtLinkAcceso.setVisibility(View.VISIBLE);
+            if (videoStreaming.getLinkAcceso()!=null){ //en caso de que ya se creo un link de acceso
+                txtLinkAcceso.setText(videoStreaming.getLinkAcceso());
+            }
+
             txtEditarFechaVideo.setText(videoStreaming.getFechaTransmision().getDate()+
                     "/"+videoStreaming.getFechaTransmision().getMonth() +
                     "/"+videoStreaming.getFechaTransmision().getYear());
             txtEditarHoraVideo.setText(videoStreaming.getFechaTransmision().getHours()+":"+videoStreaming.getFechaTransmision().getMinutes());
         }
+
+
+        //le damos funcionalidad al link de accesso
+        btnEnviarLinkAcceso.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage(videoStreaming.getLinkAcceso(),context,activity);
+            }
+        });
+
 
         btnGuardarVideo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,19 +183,50 @@ public class CuadroEditarStraming {
                                             videoStreaming.setIdVideoStreaming(UUID.randomUUID().toString()); //seteamos el id
                                             videoStreaming.setIdVendedor(vendedor.getIdVendedor()); //seteamos el uid del vendedor
                                             videoStreaming.setIniciado(activarVideo.isChecked());
-                                            reference.child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).setValue(videoStreaming).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Toast.makeText(context, "Datos guardados con exito", Toast.LENGTH_LONG).show();
-                                                    dialog.dismiss();
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(context, "A ocurrido un error al guardar los datos", Toast.LENGTH_LONG).show();
-                                                    Log.w("Error guardar","A ocurrido un error",e);
-                                                }
-                                            });
+                                            //Creamos el link de acceso
+                                            Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                                                    .setLink(Uri.parse("https://envivoapp.tk/nuevaData/?idvendedor="+
+                                                            videoStreaming.getIdVendedor()+"&urlStreaming="+
+                                                            videoStreaming.getUrlVideoStreaming()+"&idStreaming="+
+                                                            videoStreaming.getIdVideoStreaming()))
+                                                    .setDomainUriPrefix("https://envivoapp.tk/")
+                                                    .buildShortDynamicLink()
+                                                    .addOnCompleteListener(activity, new OnCompleteListener<ShortDynamicLink>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                                                            if (task.isSuccessful()) {
+                                                                // Short link created
+                                                                Uri shortLink = task.getResult().getShortLink();
+                                                                Uri flowchartLink = task.getResult().getPreviewLink();
+                                                                //setiamos el link de acceso
+                                                                videoStreaming.setLinkAcceso(shortLink.toString());
+                                                                //iniciamos el guadado de los datos en la base
+                                                                reference.child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).setValue(videoStreaming).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        Toast.makeText(context, "Datos guardados con exito", Toast.LENGTH_LONG).show();
+                                                                        dialog.dismiss();
+                                                                    }
+                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Toast.makeText(context, "A ocurrido un error al guardar los datos", Toast.LENGTH_LONG).show();
+                                                                        Log.w("Error guardar","A ocurrido un error",e);
+                                                                        dialog.dismiss();
+                                                                    }
+                                                                });
+
+
+                                                            } else {
+                                                                Toast.makeText(context, "A ocurrido un error al guardar los datos", Toast.LENGTH_LONG).show();
+                                                                Log.w("Error guardar","A ocurrido un error");
+                                                                dialog.dismiss();
+                                                            }
+                                                        }
+                                                    });
+
+
+
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
@@ -276,6 +344,7 @@ public class CuadroEditarStraming {
                 btnActualizarVideo.setVisibility(View.GONE);
                 btnEliminarVideo.setVisibility(View.VISIBLE);
                 btnIrVideo.setVisibility(View.GONE);
+                btnEnviarLinkAcceso.setVisibility(View.GONE);
 
 
                 //no dejamos que se editen los datos si el video esta eliminado
@@ -300,55 +369,28 @@ public class CuadroEditarStraming {
                     public void onClick(View v) {
                         DialogInterface.OnClickListener confirmar = new DialogInterface.OnClickListener() {//creamos la accion de confirmacion para la eliminacion
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            public void onClick(DialogInterface dialog2, int which) {
+                                Map<String,Object> eliminacionCompletaVideo = new HashMap<>();
+                                eliminacionCompletaVideo.put("eliminadoCompleto",true);
+
+                                firebaseDatabase.getReference().child("VideoStreaming").child(videoStreaming.getIdVideoStreaming()).updateChildren(eliminacionCompletaVideo).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        //inicio de bloqueo de mensajes
-                                        reference.child("Mensaje").addValueEventListener(new ValueEventListener() {//bloqueamos los mensajes del cliente
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                if (snapshot.exists()){
-                                                    for (DataSnapshot ds: snapshot.getChildren()){
-                                                        Mensaje mensaje= ds.getValue(Mensaje.class);
-                                                        if (mensaje.getIdStreaming().equals(videoStreaming.getIdVideoStreaming())){
-                                                            Map<String,Object> bloqueoCliente = new HashMap<>();
-                                                            bloqueoCliente.put("esClienteBloqueado",true);//actualizamos el estado bloqueado de los mensajes del cliente
-                                                            reference.child("Mensaje").child(mensaje.getIdMensaje()).updateChildren(bloqueoCliente).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    Toast.makeText(context,"Bloqueando mensajes...",Toast.LENGTH_LONG).show();
-                                                                }
-                                                            }).addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception e) {
-                                                                    Toast.makeText(context,"Error al Bloquer los mensajes",Toast.LENGTH_LONG).show();
-
-                                                                }
-                                                            });
-                                                        }
-                                                    }
-                                                    Toast.makeText(context, "Datos borrados con exito", Toast.LENGTH_LONG).show();
-                                                    interfaceResultadoDialogo.resultado(true, false, null);
-                                                    dialog.dismiss();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-                                                Log.w("Error bloqueo","Error al bloquear los mensajes",error.toException());
-                                            }
-                                        });
-
-                                        //fin de bloqueo de mensajes
-
+                                        Toast.makeText(context, "Datos borrados con exito", Toast.LENGTH_LONG).show();
+                                        interfaceResultadoDialogo.resultado(true, false, null);
+                                        dialog.dismiss();
+                                        dialog2.dismiss();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(context, "No se pudo eliminar el dato intentelo de nuevo", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context, "Error al eliminar los datos", Toast.LENGTH_LONG).show();
+                                        dialog.dismiss();
+                                        dialog2.dismiss();
                                     }
                                 });
+
+
                             }
                         };
                         new Utilidades().cuadroDialogo(context, confirmar, "Eliminación total", "¿Desea eliminar por completo los datos?\nLos mensajes del streaming no se podran volver a visualizar pero los pedidos aceptados no seran alterados");
@@ -389,6 +431,7 @@ public class CuadroEditarStraming {
         });
 
         txtEditarFechaVideo.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 utilidades.abrirCalendario(v,dialog.getContext(),txtEditarFechaVideo);
@@ -406,6 +449,25 @@ public class CuadroEditarStraming {
                 dialog.dismiss();
             }
         });
+
+
+
         dialog.show();
+    }
+
+    private void sendMessage(String message,Context context,Activity activity)
+    {
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.setPackage("com.whatsapp");
+        intent.putExtra(Intent.EXTRA_TEXT, message);
+
+        try {
+            activity.startActivity(intent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            ex.printStackTrace();
+            Toast.makeText(context,"El dispositivo no tiene instalado WhatsApp",Toast.LENGTH_LONG).show();
+        }
     }
 }

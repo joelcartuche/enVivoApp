@@ -48,10 +48,32 @@
             android:textStyle="bold" />
 
 
+        <Button
+            android:id="@+id/btn_seleccionarUbicacionCuadroEditarLocal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar ubicación"
+            app:icon="@android:drawable/ic_menu_mylocation" />
+
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapSeleccionarEditarLocal"
             android:layout_width="match_parent"
             android:layout_height="300dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_minimizarEditarLocal"
+                android:layout_width="55dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_minimizar"
+                app:iconGravity="start"
+                app:iconPadding="20dp" />
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"

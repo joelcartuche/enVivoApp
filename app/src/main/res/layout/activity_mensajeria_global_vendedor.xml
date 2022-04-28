@@ -4,152 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activitysParaVendedores.MensajeriaGlobalVendedor">
-
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:contentInsetStart="0dp">
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout3"
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Theme.EnVivoApp.AppBarOverlay">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearLayout7"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/textView38"
-                        android:layout_width="300dp"
-                        android:layout_height="42dp"
-                        android:gravity="center"
-                        android:text="@string/app_name"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btnMensajeriaGlobalListarStremingsVendedor"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Button
-                        android:id="@+id/btnMensajeriaGlobalMensajeriaGlobalVendedor"
-                        android:layout_width="50sp"
-                        android:layout_height="40sp"
-                        app:icon="@drawable/ic_enviar_mensajes"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/textView38"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-
-                            <Button
-                                android:id="@+id/btnHomeVendedorMensajeriaGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_home"
-                                android:text="Home"
-                                android:textSize="8sp" />
+    android:orientation="vertical">
 
 
-
-                            <Button
-                                android:id="@+id/btnListarLocalMensajeriaGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_local_vendedor"
-                                android:text="Local"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnPerfilVendedorMensajeriaGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona"
-                                android:text="Perfil"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnPedidoMensajeriaGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_carrito_compra"
-                                android:text="Pedidos"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnVideosMensajeriaGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_videos_streaming"
-                                android:text="Videos"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnClientesGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_clientes"
-                                android:text="Clientes"
-                                android:textSize="8sp" />
-                            <Button
-                                android:id="@+id/btnReporteGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_reportes_vendedor"
-                                android:text="Reportes"
-                                android:textSize="8sp" />
-
-                            <Button
-                                android:id="@+id/btnSalirMensajeriaGlobalVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:drawableTop="@drawable/ic_persona_salir"
-                                android:text="Salir"
-                                android:textSize="8sp" />
-
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
-            </LinearLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-    </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -186,8 +43,15 @@
             android:layout_height="50dp"
             android:layout_marginBottom="2dp"
             android:ems="15"
-            android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
+
+            android:autoSizeTextType="uniform"
+            android:lines="5" android:minLines="1"
+            android:gravity="top|left"
+            android:maxLines="10"
+            android:scrollbars="none"
+            android:inputType="textMultiLine|textCapSentences"
+
             app:layout_constraintEnd_toStartOf="@+id/btnEnviarMensajeriaGlobalVendedor"
             app:layout_constraintStart_toEndOf="@+id/btnImagenGlobalVendedor"
             app:layout_constraintTop_toBottomOf="@+id/gridMensajeriaGlobalVendedor" />

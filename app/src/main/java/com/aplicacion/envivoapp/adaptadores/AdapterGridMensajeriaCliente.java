@@ -1,6 +1,7 @@
 package com.aplicacion.envivoapp.adaptadores;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aplicacion.envivoapp.R;
@@ -41,6 +43,7 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
         public TextView mensajeClienteMensaje;
         public ImageView imagenPedido;
         public ImageView imagenUsuario;
+        public CardView contenedorMensajeria;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -49,6 +52,7 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
             mensajeClienteMensaje = itemView.findViewById(R.id.txtItemMensajeCliente);
             imagenPedido = itemView.findViewById(R.id.bitmapCapturaPantallaMensajeriaVendedor);
             imagenUsuario = itemView.findViewById(R.id.imgItemMensajeCliente);
+            contenedorMensajeria = itemView.findViewById(R.id.cardContenedorMensaje);
         }
     }
 
@@ -98,75 +102,62 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
         TextView mensajeClienteMensaje = view.mensajeClienteMensaje;
         ImageView imagenPedido = view.imagenPedido;
         ImageView imagenUsuario = view.imagenUsuario;
+        CardView contenedorMensajeria = view.contenedorMensajeria;
+
         imagenPedido.setVisibility(View.GONE);
-
         if (mensaje.getEsVededor()){//En caso de que el mensaje sea departe del vendedor
-            databaseReference.child("Vendedor").child(mensaje.getIdvendedor()).addValueEventListener(new ValueEventListener() {
+            imagenPedido.setVisibility(View.GONE);
+            Vendedor vendedor = mensaje.getVendedor(); //instanciamos el cliente
+            try {
+                nombreClienteMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                    mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                    mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                    mensaje.getFecha().getSeconds());
+            mensajeClienteMensaje.setText(mensaje.getTexto());
+
+            contenedorMensajeria.setCardBackgroundColor(Color.parseColor("#47C1FF"));
+
+
+            //CArgamos la imagen del usuario
+            Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
+            query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        imagenPedido.setVisibility(View.GONE);
-                        Vendedor vendedor = snapshot.getValue(Vendedor.class); //instanciamos el cliente
-                        try {
-                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(vendedor.getNombre()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                public void onSuccess(DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        Usuario usuario = null;
+                        for (DataSnapshot ds: snapshot.getChildren()){
+                            usuario = ds.getValue(Usuario.class);
+
                         }
-                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
-                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
-                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
-                                mensaje.getFecha().getSeconds());
-                        mensajeClienteMensaje.setText(mensaje.getTexto());
-
-                        //CArgamos la imagen del usuario
-                        Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(vendedor.getUidUsuario());
-                        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                            @Override
-                            public void onSuccess(DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Usuario usuario = null;
-                                    for (DataSnapshot ds: snapshot.getChildren()){
-                                        usuario = ds.getValue(Usuario.class);
-
-                                    }
-                                    if (usuario != null){
-                                        if (usuario.getImagen()!= null) {
-                                            Uri uri = Uri.parse(usuario.getImagen());
-                                            Picasso.with(context).load(uri).into(imagenUsuario);
-                                        }
-                                    }
-
-                                }
+                        if (usuario != null){
+                            if (usuario.getImagen()!= null) {
+                                Uri uri = Uri.parse(usuario.getImagen());
+                                Picasso.with(context).load(uri).into(imagenUsuario);
                             }
-                        });
+                        }
 
-
-                    }else{
-                        Log.d("ERROR","error en encontrar el vendedor para AdapterMensajeriaCliente");
                     }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }else{//En caso de que elmensaje sea departe del cliente
-            databaseReference.child("Cliente").child(mensaje.getIdcliente()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        imagenPedido.setVisibility(View.GONE);
-                        Cliente cliente = snapshot.getValue(Cliente.class); //instanciamos el cliente
-                        try {
-                            nombreClienteMensaje.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
-                                mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
-                                mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
-                                mensaje.getFecha().getSeconds());
-                        mensajeClienteMensaje.setText(mensaje.getTexto());
+            imagenPedido.setVisibility(View.GONE);
+            Cliente cliente = mensaje.getCliente(); //instanciamos el cliente
+            try {
+                nombreClienteMensaje.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fechaClienteMensaje.setText(mensaje.getFecha().getDate() +"/"+
+                    mensaje.getFecha().getMonth()+"/"+mensaje.getFecha().getYear()+" "+
+                    mensaje.getFecha().getHours()+":"+mensaje.getFecha().getMinutes()+":"+
+                    mensaje.getFecha().getSeconds());
+            mensajeClienteMensaje.setText(mensaje.getTexto());
+            //contenedorMensajeria.setBackgroundColor();
+            contenedorMensajeria.setCardBackgroundColor(Color.parseColor("#556BFF"));
 
                         /*
                         if (mensaje.getImagen()!=null) {
@@ -180,39 +171,28 @@ public class AdapterGridMensajeriaCliente extends RecyclerView.Adapter<AdapterGr
                         }
                         */
 
-                        //CArgamos la imagen del usuario
-                        Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(cliente.getUidUsuario());
-                        query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                            @Override
-                            public void onSuccess(DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    Usuario usuario = null;
-                                    for (DataSnapshot ds: snapshot.getChildren()){
-                                        usuario = ds.getValue(Usuario.class);
+            //CArgamos la imagen del usuario
+            Query query = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(cliente.getUidUsuario());
+            query.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        Usuario usuario = null;
+                        for (DataSnapshot ds: snapshot.getChildren()){
+                            usuario = ds.getValue(Usuario.class);
 
-                                    }
-                                    if (usuario != null){
-                                        if (usuario.getImagen()!= null) {
-                                            Uri uri = Uri.parse(usuario.getImagen());
-                                            Picasso.with(context).load(uri).into(imagenUsuario);
-                                        }
-                                    }
-
-                                }
+                        }
+                        if (usuario != null){
+                            if (usuario.getImagen()!= null) {
+                                Uri uri = Uri.parse(usuario.getImagen());
+                                Picasso.with(context).load(uri).into(imagenUsuario);
                             }
-                        });
+                        }
 
-
-                    }else{
-                        Log.d("ERROR","error en encontrar el cliente para AdapterMensajeriaCliente");
                     }
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
             });
+
         }
 
     }

@@ -118,6 +118,38 @@ public class HomeClienteMain extends AppCompatActivity implements
         estadoNotificacion();//en caso de existir alguna notificacion
 
 
+        Uri linkAcceso = ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
+        if (linkAcceso==null) {
+            //inicio de recivimiento de datos a traves de link
+            FirebaseDynamicLinks.getInstance()
+                    .getDynamicLink(getIntent())
+                    .addOnSuccessListener(HomeClienteMain.this, new OnSuccessListener<PendingDynamicLinkData>() {
+                        @Override
+                        public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                            // Get deep link from result (may be null if no link is found)
+                            Uri deepLink = null;
+                            if (pendingDynamicLinkData != null) {
+                                deepLink = pendingDynamicLinkData.getLink();
+                                ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setLinkAcceso(deepLink);
+                                startActivity(new Intent(HomeClienteMain.this, MainActivity.class));
+                                finish();//para que el usuario no pueda regresar a activitys anteriores
+                                Log.d("DatosLink", deepLink.toString());
+                            } else {
+                                Log.d("DatosLink", "null");
+                                ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setLinkAcceso(null);
+
+                            }
+                        }
+                    })
+                    .addOnFailureListener(HomeClienteMain.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w("ERROR", "getDynamicLink:onFailure", e);
+
+                        }
+                    });
+            //fin de link
+        }
 
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED

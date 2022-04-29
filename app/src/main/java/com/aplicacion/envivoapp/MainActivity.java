@@ -1,5 +1,6 @@
 package com.aplicacion.envivoapp;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -64,6 +65,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
+import static android.content.Intent.ACTION_VIEW;
+import static android.content.Intent.CATEGORY_BROWSABLE;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -127,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         esNuevo = false;
 
-
+        /*
         //inicio de recivimiento de datos a traves de link
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
@@ -140,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.getLink();
                             ((MyFirebaseApp) MainActivity.this.getApplicationContext()).setLinkAcceso(deepLink);
-                            Log.d("DatosLink",deepLink.toString());
+
                         }else{
                             Log.d("DatosLink","null");
                             ((MyFirebaseApp) MainActivity.this.getApplicationContext()).setLinkAcceso(null);
@@ -154,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         //fin de link
+        */
 
         //para el inicio se sesion con google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -317,6 +324,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -461,10 +471,7 @@ public class MainActivity extends AppCompatActivity {
         AuthUI.getInstance().signOut(MainActivity.this).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
-                startActivity(new Intent(MainActivity.this, MainActivity.class));
-                finish();
-
+                Log.d("Success","salida satisfactoria");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

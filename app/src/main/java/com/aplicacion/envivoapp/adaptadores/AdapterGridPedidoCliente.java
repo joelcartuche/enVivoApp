@@ -107,7 +107,7 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
         Button btnConversarVendedor = convertView.findViewById(R.id.btnConvesarVendedor);
         ImageView imgPerfilVendedor = convertView.findViewById(R.id.imgPerfilVendedorPedidoCliente);
         ConstraintLayout contenedor = convertView.findViewById(R.id.contraintContendorPedidoCliente);
-
+        btnCancelarPedido.setVisibility(View.GONE);
         contenedor.setBackgroundColor(Color.parseColor("#FFFFFF"));//color defecto para actualizados
 
         Log.d("PedidoNotifi",codigoNotificacion+" id "+ idPedido);
@@ -209,7 +209,7 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
 
             }
         });
-
+        /*
         //Le damos funcionalidad a los botones
         btnCancelarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,7 +230,7 @@ public class AdapterGridPedidoCliente extends BaseAdapter implements CuadroCance
                 });
 
             }
-        });
+        });*/
 
         return convertView;
 

@@ -127,7 +127,6 @@ public class FragmentoPedidoCliente extends Fragment implements
                     }
 
                     if (cliente!= null){
-
                         Query queryPedido = databaseReference.child("Pedido").orderByChild("idCliente").equalTo(cliente.getIdCliente());
                         queryPedido.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -137,42 +136,40 @@ public class FragmentoPedidoCliente extends Fragment implements
                                     listPedido.clear();//borramos en caso de quedar algo en la cache
                                     for (final DataSnapshot ds : snapshot.getChildren()) {
                                         Pedido pedido = ds.getValue(Pedido.class);//obtenemos
+                                        if(!pedido.getCancelado() && !pedido.getEliminado()){
+                                            try {
+                                                pedido.setCodigoProducto(encriptacionDatos.desencriptar(pedido.getCodigoProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setDescripcionProducto(encriptacionDatos.desencriptar(pedido.getDescripcionProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            try {
+                                                pedido.setNombreProducto(encriptacionDatos.desencriptar(pedido.getNombreProducto()));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            //en caso de que el producto sufrio un cambio
+                                            if (listPedido.size()>0) {
+                                                if (codigo != 0) {
+                                                    if (pedido.getIdPedido().equals(idPedido)) {
+                                                        Pedido aux = listPedido.get(0);
+                                                        listPedido.set(0, pedido);
+                                                        pedido = aux;
 
-                                        try {
-                                            pedido.setCodigoProducto(encriptacionDatos.desencriptar(pedido.getCodigoProducto()));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        try {
-                                            pedido.setDescripcionProducto(encriptacionDatos.desencriptar(pedido.getDescripcionProducto()));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        try {
-                                            pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        try {
-                                            pedido.setNombreProducto(encriptacionDatos.desencriptar(pedido.getNombreProducto()));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        //en caso de que el producto sufrio un cambio
-                                        if (listPedido.size()>0) {
-                                            if (codigo != 0) {
-                                                if (pedido.getIdPedido().equals(idPedido)) {
-                                                    Pedido aux = listPedido.get(0);
-                                                    listPedido.set(0, pedido);
-                                                    pedido = aux;
-
+                                                    }
                                                 }
                                             }
+                                            listPedido.add(pedido);
                                         }
-
-
-                                        listPedido.add(pedido);
 
                                     }
                                     //Inicialisamos el adaptador

@@ -4,12 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedorMain;
 import com.aplicacion.envivoapp.modelos.Cliente;
+import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
@@ -453,6 +456,8 @@ public class FragmentoDataCliente extends Fragment {
                 && !callePrincipa.getText().toString().isEmpty()
                 && !referencia.getText().toString().isEmpty()
                 && !(telefono.getText().toString().isEmpty() && celular.getText().toString().isEmpty())) {
+
+
             //actualizamos los datos del cliente
             Cliente finalCliente = new Cliente();
             //editamos los datos del cliente
@@ -503,25 +508,82 @@ public class FragmentoDataCliente extends Fragment {
             clienteActualizar.put("nombre", finalCliente.getNombre());
             clienteActualizar.put("telefono", finalCliente.getTelefono());
 
-            //buscamos el cliente
-            databaseReference.child("Cliente").child(finalCliente.getIdCliente()).updateChildren(clienteActualizar).addOnSuccessListener(new OnSuccessListener<Void>() {
+            Log.d("idClienteFinal",finalCliente.getIdCliente());
+            Log.d("idCliente",clienteGlobal.getIdCliente());
+
+            Query consulta = databaseReference.
+                    child("Mensaje_Cliente_Vendedor").
+                    orderByChild("cliente/idCliente").
+                    equalTo(finalCliente.getIdCliente());
+            consulta.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onSuccess(Void aVoid) {
-                    FragmentoHomeCliente fragment = new FragmentoHomeCliente();
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
-                            .replace(R.id.home_content, fragment)
-                            .commit();
-                    Toast.makeText(getContext(), "Datos actualizados con éxito", Toast.LENGTH_LONG).show();
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        Mensaje_Cliente_Vendedor mensaje_cliente_vendedor = null;
+                        for (DataSnapshot ds:snapshot.getChildren()){
+                            Mensaje_Cliente_Vendedor mensaje_cliente_vendedorAux = ds.getValue(Mensaje_Cliente_Vendedor.class);
+                            if (mensaje_cliente_vendedorAux !=null){
+                                mensaje_cliente_vendedor = mensaje_cliente_vendedorAux;
+                            }
+                        }
+                        if (mensaje_cliente_vendedor!=null){
+                            String codigoActualizacion = "Mensaje_Cliente_Vendedor/"+
+                                    mensaje_cliente_vendedor.getIdCliente_idVendedor()+"/cliente/nombre";
+                            Map<String,Object> mensajeActualizar = new HashMap<>();
+                            mensajeActualizar.put(codigoActualizacion,finalCliente.getNombre());
+                            databaseReference.updateChildren(mensajeActualizar).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Error al guardar los datos del mensaje", Toast.LENGTH_LONG).show();
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    actualizarCliente(clienteActualizar);
+                                }
+                            });
+                        }else{
+                            actualizarCliente(clienteActualizar);
+                        }
+                    }else{
+                        actualizarCliente(clienteActualizar);
+                    }
                 }
-            }).addOnFailureListener(new OnFailureListener() {
+
                 @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), "Error al guardar los datos", Toast.LENGTH_LONG).show();
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getContext(), "Error al guardar los datos intentelo de nuevo", Toast.LENGTH_LONG).show();
                 }
             });
+
         }
+    }
+
+    public void actualizarCliente (Map<String,Object> clienteActualizar){
+        //buscamos el cliente
+        databaseReference.child("Cliente").child(clienteGlobal.getIdCliente()).updateChildren(clienteActualizar).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                DialogInterface.OnClickListener dialoOnClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                };
+                String titulo ="Atención";
+                String cuerpo = "Datos actualizados, los mensajes enviados al vendedor no seran actualizados";
+                new Utilidades().cuadroDialogo(getContext(),dialoOnClickListener,titulo,cuerpo);
+
+                //Toast.makeText(getContext(), "Datos actualizados con éxito", Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Error al guardar los datos", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public static boolean validarCedula(String x) {

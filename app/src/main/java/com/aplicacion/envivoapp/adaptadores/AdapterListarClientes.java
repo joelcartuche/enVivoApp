@@ -301,6 +301,7 @@ public class AdapterListarClientes extends BaseAdapter {
 
         ((MyFirebaseApp) fragmentActivity.getApplicationContext()).setCliente(cliente); //recogemos los datos del vendedor
 
+
         Fragment fragment = new FragmentoMensajeriaGlobalVendedor();
 
         fragmentActivity.getSupportFragmentManager()

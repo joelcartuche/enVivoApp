@@ -170,7 +170,7 @@ public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<Adap
             } else {//En caso de que elmensaje sea departe del cliente
 
 
-                Query queryCliente = databaseReference.child("Cliente").child(mensaje.getIdcliente());
+                Query queryCliente = databaseReference.child("Cliente").child(mensaje.getCliente().getIdCliente());
                 queryCliente.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                     @Override
                     public void onSuccess(DataSnapshot snapshot) {
@@ -191,6 +191,8 @@ public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<Adap
                                 mensajeGlobal.setTextDirection(View.TEXT_DIRECTION_RTL);
                                 contenedorMensajeria.setBackgroundColor(Color.parseColor("#47C1FF"));
 
+                                Log.d("usuario: ",cliente.getUidUsuario());
+                                Log.d("usuario: ",cliente.getNombre());
                                 Query queryC = databaseReference.child("Usuario").orderByChild("uidUser").equalTo(cliente.getUidUsuario());
                                 queryC.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                     @Override
@@ -198,12 +200,10 @@ public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<Adap
                                         if (snapshot.exists()) {
                                             Usuario usuario = null;
                                             for (DataSnapshot ds : snapshot.getChildren()) {
-                                                Usuario usuarioAux = ds.getValue(Usuario.class);
-                                                if (usuarioAux.getUidUser().equals(cliente.getUidUsuario())){
-                                                    usuario = usuarioAux;
-                                                }
+                                                usuario = ds.getValue(Usuario.class);
                                             }
-                                            if (usuario != null) {
+
+                                            if (usuario != null && usuario.getImagen()!=null) {
                                                 Uri uri = Uri.parse(usuario.getImagen());
                                                 Picasso.with(context).load(uri).into(imgUsuario);
                                             }

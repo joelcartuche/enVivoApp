@@ -117,7 +117,7 @@ public class AdapterListarLocal extends BaseAdapter implements CuadroSeleccionar
     public void abrirCuadroDialogo(Local local, FirebaseAuth firebaseAuth,Context context){
         Vendedor vendedorGlobal = ((MyFirebaseApp) context.getApplicationContext()).getVendedor();
         if (vendedorGlobal!=null){
-            new CuadroEditarLocal(context,local,vendedorGlobal,false,databaseReference,AdapterListarLocal.this::resultado);
+            new CuadroEditarLocal(context,local,vendedorGlobal.getIdVendedor(),false,databaseReference,AdapterListarLocal.this::resultado);
         }
 
 

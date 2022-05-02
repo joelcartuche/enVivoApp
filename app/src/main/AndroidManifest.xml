@@ -47,7 +47,8 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activityParaClientes.HomeClienteMain"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
@@ -62,7 +63,8 @@
         </activity>
 
         <activity android:name=".activitysParaVendedores.HomeVendedorMain"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
@@ -71,7 +73,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.EnVivoApp.NoActionBar">
+            android:theme="@style/Theme.EnVivoApp.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW"/>

@@ -1,7 +1,13 @@
 package com.aplicacion.envivoapp;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,6 +54,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -104,7 +112,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        verificarConexion();
+        quitarModoOscuro();//quitamos el modo oscuro
 
+        //iniciamos el servicio para la ejecución en segundo plano
         Intent intent = new Intent(this, Servicio.class);
         startService(intent);
 
@@ -132,35 +143,6 @@ public class MainActivity extends AppCompatActivity {
         btnCrearCuentaGoogle = findViewById(R.id.btnCrearCuentaGoogle);
 
         esNuevo = false;
-
-        /*
-        //inicio de recivimiento de datos a traves de link
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(MainActivity.this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                            ((MyFirebaseApp) MainActivity.this.getApplicationContext()).setLinkAcceso(deepLink);
-
-                        }else{
-                            Log.d("DatosLink","null");
-                            ((MyFirebaseApp) MainActivity.this.getApplicationContext()).setLinkAcceso(null);
-                        }
-                    }
-                })
-                .addOnFailureListener(MainActivity.this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("ERROR", "getDynamicLink:onFailure", e);
-                    }
-                });
-        //fin de link
-        */
 
         //para el inicio se sesion con google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -345,6 +327,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("Goolge inicio sesión", "Google sign in failed", e);
             }
         }
+    }
+
+    private void quitarModoOscuro(){
+        AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -535,5 +522,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(verificarConexion()){
+           // Toast.makeText(this, "Conectado", Toast.LENGTH_SHORT).show();
+        }else{
+            //Snackbar.make(this,"Sin  conexión",Snackbar.LENGTH_LONG);
+            Toast.makeText(this, "Sin conexión", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+
+    private Boolean verificarConexion(){
+       ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+       if(connectivityManager !=null){
+           NetworkInfo networkInfo  =connectivityManager.getActiveNetworkInfo();
+           if (networkInfo!=null){
+               return networkInfo.isConnected();
+           }
+       }
+       return  false;
+
+    }
 
 }

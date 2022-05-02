@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -40,6 +43,7 @@ import androidx.fragment.app.Fragment;
 import com.aplicacion.envivoapp.MainActivity;
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.Servicio;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoAyudaCliente;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoDataCliente;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoHomeCliente;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoListarVendedores;
@@ -116,6 +120,7 @@ public class HomeClienteMain extends AppCompatActivity implements
         storage = FirebaseStorage.getInstance();//inicializamos la variable storage}
 
         estadoNotificacion();//en caso de existir alguna notificacion
+        quitarModoOscuro();
 
 
         Uri linkAcceso = ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
@@ -202,8 +207,8 @@ public class HomeClienteMain extends AppCompatActivity implements
                 }
             });
 
-            cargarUsuario();
-            cargarCliente();
+            cargarUsuario(); //cargamos los datos del usuario
+            cargarCliente(); //cargamos los datos del cliente
 
             //Damos funcionalidad al menu
             btnListarVendedore = findViewById(R.id.btn_listar_vendedores_DataCliente);
@@ -220,6 +225,11 @@ public class HomeClienteMain extends AppCompatActivity implements
             btnMensje.setOnClickListener(this::onClick);
             btnHome.setOnClickListener(this::onClick);
 
+    }
+
+    private void quitarModoOscuro(){
+        AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     private void cargarCliente() {
@@ -271,6 +281,7 @@ public class HomeClienteMain extends AppCompatActivity implements
     }
 
     private void cerrarSecion() {
+        ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).resetearValores();
         FirebaseAuth.getInstance().signOut();
         AuthUI.getInstance().signOut(HomeClienteMain.this).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -374,6 +385,7 @@ public class HomeClienteMain extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        boolean salir = false;
         Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.home_cliente:
@@ -393,19 +405,24 @@ public class HomeClienteMain extends AppCompatActivity implements
                 ((MyFirebaseApp) this.getApplication()).setGlobal(false);
                 fragment = new FragmentoListarVendedores();
                 break;
+            case R.id.ayuda_cliente:
+                fragment = new FragmentoAyudaCliente();
+                break;
             case R.id.salir_cliente:
+                salir=true;
                 cerrarSecion();
                 break;
             default:
                 throw new IllegalArgumentException("menu option not implemented!!");
         }
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
-                .replace(R.id.home_content, fragment)
-                .commit();
-        drawerLayout.closeDrawer(GravityCompat.START);
+        if (!salir) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                    .replace(R.id.home_content, fragment)
+                    .commit();
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
@@ -427,6 +444,35 @@ public class HomeClienteMain extends AppCompatActivity implements
     @Override
     public void onDrawerStateChanged(int newState) {
         //cambio de estado, puede ser STATE_IDLE, STATE_DRAGGING or STATE_SETTLING
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        estadoNotificacion();
+        if(verificarConexion()){
+            //Toast.makeText(this, "Conectado", Toast.LENGTH_SHORT).show();
+        }else{
+            //Snackbar.make(this,"Sin  conexión",Snackbar.LENGTH_LONG);
+            Toast.makeText(this, "Sin conexión", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+
+    private Boolean verificarConexion(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if(connectivityManager !=null){
+            NetworkInfo networkInfo  =connectivityManager.getActiveNetworkInfo();
+            if (networkInfo!=null){
+                return networkInfo.isConnected();
+            }
+        }
+        return  false;
+
     }
 
 
@@ -512,11 +558,7 @@ public class HomeClienteMain extends AppCompatActivity implements
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        estadoNotificacion();
-    }
+
 
     @Override
     protected void onStart() {

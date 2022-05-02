@@ -30,6 +30,10 @@
             android:id="@+id/listar_vendedores_cliente"
             android:icon="@drawable/ic_clientes"
             android:title="@string/lista_vendedores" />
+        <item
+            android:id="@+id/ayuda_cliente"
+            android:icon="@drawable/ic_baseline_help_24"
+            android:title="Ayuda" />
 
         <item
             android:id="@+id/salir_cliente"

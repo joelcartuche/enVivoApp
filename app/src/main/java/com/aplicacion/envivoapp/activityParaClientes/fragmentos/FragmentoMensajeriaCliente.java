@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.nmd.screenshot.Screenshot;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.jetbrains.annotations.NotNull;
@@ -82,8 +84,10 @@ public class FragmentoMensajeriaCliente extends Fragment implements YouTubePlaye
     private Bitmap bitmapCapturaPantalla;
     private YouTubePlayerView reproductorYoutube;
     private  Boolean esPrimerMensajeVendedor ;
+    private TextView textoMensajeInfo;
     private Screenshot screenshot;
     private final int PICKER = 1;
+    Boolean full = false; //almaceda el full screen del video de youtube
 
     @Nullable
     @Override
@@ -101,6 +105,7 @@ public class FragmentoMensajeriaCliente extends Fragment implements YouTubePlaye
         textoMensaje = root.findViewById(R.id.txtMensajeCliente);
         gridViewMensaje = root.findViewById(R.id.gridMensajeCliente);
         quieroComprar = root.findViewById(R.id.btnQuieroComprarMensajeCliente);
+        textoMensajeInfo =root.findViewById(R.id.txtInfoMensaje);
 
         reproductorYoutube = root.findViewById(R.id.videoYoutubeMensajeriaCliente);
         getLifecycle().addObserver(reproductorYoutube);
@@ -110,6 +115,7 @@ public class FragmentoMensajeriaCliente extends Fragment implements YouTubePlaye
         clienteGlobal = ((MyFirebaseApp) getActivity().getApplicationContext()).getCliente();
         urlStreaming = ((MyFirebaseApp) getActivity().getApplicationContext()).getUrl(); //recogemos los datos del vendedor
         idStreaming = ((MyFirebaseApp) getActivity().getApplicationContext()).getIdStreaming();
+
 
         existeMensajeriaClienteVendedor();
 
@@ -121,6 +127,7 @@ public class FragmentoMensajeriaCliente extends Fragment implements YouTubePlaye
                 textoMensaje.setText("Quiero comprar: ");
             }
         });
+
 
         reproductorYoutube.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
@@ -156,6 +163,19 @@ public class FragmentoMensajeriaCliente extends Fragment implements YouTubePlaye
                         .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
                         .replace(R.id.home_content, fragment)
                         .commit();
+            }
+        });
+
+
+        reproductorYoutube.addFullScreenListener(new YouTubePlayerFullScreenListener() {
+            @Override
+            public void onYouTubePlayerEnterFullScreen() {
+               reproductorYoutube.exitFullScreen();
+            }
+
+            @Override
+            public void onYouTubePlayerExitFullScreen() {
+
             }
         });
 

@@ -62,15 +62,7 @@ public class FragmentoDataLocal extends Fragment implements
             agregarLocal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        vendedorGlobal.setCedula(encriptacionDatos.desencriptar(vendedorGlobal.getCedula()));
-                        vendedorGlobal.setCelular(encriptacionDatos.desencriptar(vendedorGlobal.getCelular()));
-                        vendedorGlobal.setNombre(encriptacionDatos.desencriptar(vendedorGlobal.getNombre()));
-                        new CuadroEditarLocal(getContext(),null,vendedorGlobal,true,databaseReference,FragmentoDataLocal.this::borrarGrid);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                    new CuadroEditarLocal(getContext(),null,vendedorGlobal.getIdVendedor(),true,databaseReference,FragmentoDataLocal.this::borrarGrid);
                 }
             });
 

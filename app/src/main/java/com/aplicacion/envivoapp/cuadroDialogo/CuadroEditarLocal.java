@@ -68,7 +68,7 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
 
     public CuadroEditarLocal(Context context,
                              @Nullable Local local,
-                             @Nullable Vendedor vendedor,
+                             @Nullable String idVendedor,
                              Boolean esNuevo,
                              DatabaseReference reference,
                              CuadroEditarLocal.resultadoDialogo result) {
@@ -281,7 +281,7 @@ public class CuadroEditarLocal implements CuadroSeleccionarUbicacion.resultadoDi
 
                     if (latLng != null) {
 
-                        local.setIdVendedor(vendedor.getIdVendedor());
+                        local.setIdVendedor(idVendedor);
                         local.setLatitud(latLng.latitude);
                         local.setLongitud(latLng.longitude);
 

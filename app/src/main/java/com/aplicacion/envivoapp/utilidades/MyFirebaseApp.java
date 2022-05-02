@@ -31,6 +31,18 @@ public class MyFirebaseApp extends Application {
         this.esPrimerMensajeClienteVendedor = esPrimerMensajeClienteVendedor;
     }
 
+    public  void resetearValores(){
+          this.global =null;
+        this.idStreaming=null;
+        this.idPedido=null;
+        this.url=null;
+        this.codigo=0;
+        this.idNotificacion=0;
+        this.vendedor=null;
+        this.cliente=null;
+        this.linkAcceso=null;
+        this.esPrimerMensajeClienteVendedor=null;
+    };
 
     public Uri getLinkAcceso() {
         return linkAcceso;

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -560,11 +561,23 @@ public class FragmentoDataCliente extends Fragment {
     }
 
     public void actualizarCliente (Map<String,Object> clienteActualizar){
+        Dialog dialog = new Utilidades().dialogCargar(getContext());
+        TextView txt = dialog.findViewById(R.id.txtCargando);
+        txt.setText("Guardando datos");
+
+        dialog.show();
         //buscamos el cliente
         databaseReference.child("Cliente").child(clienteGlobal.getIdCliente()).updateChildren(clienteActualizar).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
+                dialog.dismiss();
+                FragmentoHomeCliente fragment = new FragmentoHomeCliente();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                        .replace(R.id.home_content, fragment)
+                        .commit();
+                /*
                 DialogInterface.OnClickListener dialoOnClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -572,16 +585,18 @@ public class FragmentoDataCliente extends Fragment {
                         dialog.dismiss();
                     }
                 };
-                String titulo ="Atención";
-                String cuerpo = "Datos actualizados, los mensajes enviados al vendedor no seran actualizados";
-                new Utilidades().cuadroDialogo(getContext(),dialoOnClickListener,titulo,cuerpo);
+                */
+                //String titulo ="Atención";
+                //String cuerpo = "Datos actualizados, los mensajes enviados al vendedor no seran actualizados";
+                //new Utilidades().cuadroDialogo(getContext(),dialoOnClickListener,titulo,cuerpo);
 
-                //Toast.makeText(getContext(), "Datos actualizados con éxito", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Datos actualizados con éxito", Toast.LENGTH_LONG).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getContext(), "Error al guardar los datos", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         });
     }

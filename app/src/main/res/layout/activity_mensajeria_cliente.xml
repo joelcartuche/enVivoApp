@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView41"
+            android:id="@+id/txtInfoMensaje"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
@@ -50,8 +50,9 @@
             android:verticalSpacing="0dp"
             app:layout_constraintBottom_toTopOf="@+id/btnQuieroComprarMensajeCliente"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView41">
+            app:layout_constraintTop_toBottomOf="@+id/txtInfoMensaje">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -96,7 +97,7 @@
             android:id="@+id/videoYoutubeMensajeriaCliente"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView41"
+            app:layout_constraintBottom_toTopOf="@+id/txtInfoMensaje"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView40" />

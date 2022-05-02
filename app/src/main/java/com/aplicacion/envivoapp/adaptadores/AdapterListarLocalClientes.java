@@ -178,7 +178,7 @@ public class AdapterListarLocalClientes extends BaseAdapter implements CuadroSel
                     }
                     if (vendedor!= null){
                         LatLng aux = new LatLng(local.getLatitud(),local.getLongitud());
-                        new CuadroEditarLocal(context,local,vendedor,false,databaseReference, AdapterListarLocalClientes.this::resultado);
+                        new CuadroEditarLocal(context,local,vendedor.getIdVendedor(),false,databaseReference, AdapterListarLocalClientes.this::resultado);
                     }
                 }
             }

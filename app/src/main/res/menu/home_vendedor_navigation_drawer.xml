@@ -47,6 +47,11 @@
             android:title="Reporte" />
 
         <item
+            android:id="@+id/ayuda_vendedor"
+            android:icon="@drawable/ic_baseline_help_24"
+            android:title="Ayuda" />
+
+        <item
             android:id="@+id/salir_vendedor"
             android:icon="@drawable/ic_persona_salir"
             android:title="@string/salir" />

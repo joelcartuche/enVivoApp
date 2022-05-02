@@ -1,8 +1,11 @@
 package com.aplicacion.envivoapp.activitysParaVendedores;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -26,7 +30,9 @@ import androidx.fragment.app.Fragment;
 import com.aplicacion.envivoapp.MainActivity;
 import com.aplicacion.envivoapp.R;
 import com.aplicacion.envivoapp.activityParaClientes.HomeClienteMain;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoAyudaCliente;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoDataCliente;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoAyudaVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoDataLocal;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoDataVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoGestionVideos;
@@ -121,6 +127,8 @@ public class HomeVendedorMain extends AppCompatActivity implements
 
             pedirPermisos(); //pedimos permisos de almacenamiento y ubicacion
             //actualizarMensajes();
+
+        quitarModoOscuro();
 
             Toolbar toolbar = findViewById(R.id.toolbar); //cargamos el toolbar
             setSupportActionBar((Toolbar) findViewById(R.id.toolbar)); //
@@ -304,8 +312,13 @@ public class HomeVendedorMain extends AppCompatActivity implements
         }
 
     }
+    private void quitarModoOscuro(){
+        AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_NO);
+    }
 
     private void cerrarSecion() {
+        ((MyFirebaseApp) HomeVendedorMain.this.getApplicationContext()).resetearValores();
         FirebaseAuth.getInstance().signOut();
         AuthUI.getInstance().signOut(HomeVendedorMain.this).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -365,6 +378,9 @@ public class HomeVendedorMain extends AppCompatActivity implements
             case R.id.reporte:
                 fragment = new FragmentoReporte();
                 break;
+            case R.id.ayuda_vendedor:
+                fragment = new FragmentoAyudaVendedor();
+                break;
             case R.id.salir_vendedor:
                 esSalir = true;
                 cerrarSecion();
@@ -404,6 +420,31 @@ public class HomeVendedorMain extends AppCompatActivity implements
         //cambio de estado, puede ser STATE_IDLE, STATE_DRAGGING or STATE_SETTLING
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(verificarConexion()){
+            //Toast.makeText(this, "Conectado", Toast.LENGTH_SHORT).show();
+        }else{
+            //Snackbar.make(this,"Sin  conexión",Snackbar.LENGTH_LONG);
+            Toast.makeText(this, "Sin conexión", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private Boolean verificarConexion(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if(connectivityManager !=null){
+            NetworkInfo networkInfo  =connectivityManager.getActiveNetworkInfo();
+            if (networkInfo!=null){
+                return networkInfo.isConnected();
+            }
+        }
+        return  false;
+
+    }
 
     public void actualizarMensajes(){
 

@@ -195,7 +195,7 @@ public class FragmentoMensajeriaVendedor extends Fragment {
         gridViewMensaje.setAdapter(gridAdapterMensaje);
     }
 
-    List<Cliente> bloqueados = null;
+    List<String> bloqueados = null;
     public void cargarClientesBloqueados(){
         Query queryCli= databaseReference.child("Mensaje_Cliente_Vendedor").
                 orderByChild("vendedor/idVendedor").
@@ -203,6 +203,8 @@ public class FragmentoMensajeriaVendedor extends Fragment {
         Dialog cargando = new Utilidades().dialogCargar(getContext());
         bloqueados = new ArrayList<>();
         cargando.show();
+        filtrarTodos.setChecked(true);
+        filtrarPedido.setChecked(false);
         queryCli.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -210,13 +212,12 @@ public class FragmentoMensajeriaVendedor extends Fragment {
                     for (DataSnapshot ds: snapshot.getChildren()) {
                         Mensaje_Cliente_Vendedor ms = ds.getValue(Mensaje_Cliente_Vendedor.class);
                         if (ms.getCliente().getBloqueado()){
-                            bloqueados.add(ms.getCliente());
+                            bloqueados.add(ms.getCliente().getIdCliente());
                         }
                     }
                 }
                 cargando.dismiss();
-                filtrarTodos.setChecked(true);
-                filtrarPedido.setChecked(false);
+
                 listarMensajes();
 
             }
@@ -241,40 +242,12 @@ public class FragmentoMensajeriaVendedor extends Fragment {
                     for (DataSnapshot ds:snapshot.getChildren()){
                         Mensaje mensaje= ds.getValue(Mensaje.class);
                         if (mensaje!=null){
-                            if (bloqueados.isEmpty()) {
-                                if (bloqueados.indexOf(mensaje.getCliente()) == -1) {//filtramos los mensajes de los clientes bloqueados
-                                    if (filtrarPedido.isChecked()
-                                            && !mensaje.getPedidoAceptado()
-                                            && !mensaje.getPedidoCancelado()) {//filtramos por pedido
-
-                                        try {
-                                            mensaje.setTexto(encriptacionDatos.desencriptar(mensaje.getTexto()));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        if (mensaje.getTexto().indexOf("Quiero comprar:") == 0) {
-                                            try {
-                                                mensaje.setImagen(encriptacionDatos.desencriptar(mensaje.getImagen()));
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                            listMensaje.add(mensaje);
-                                        }
-                                    }
-                                    if (filtrarTodos.isChecked()) {//filtramos a todos los usuarios
-                                        try {
-                                            mensaje.setImagen(encriptacionDatos.desencriptar(mensaje.getImagen()));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        try {
-                                            mensaje.setTexto(encriptacionDatos.desencriptar(mensaje.getTexto()));
-                                            listMensaje.add(mensaje);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
+                            if (!bloqueados.isEmpty()) {
+                                if (!bloqueados.contains(mensaje.getCliente().getIdCliente())) {//filtramos los mensajes de los clientes bloqueados
+                                    filtrarMensajesPorCheckBox(mensaje);
                                 }
+                            }else{
+                                filtrarMensajesPorCheckBox(mensaje);
                             }
                         }
                     }
@@ -293,5 +266,39 @@ public class FragmentoMensajeriaVendedor extends Fragment {
 
             }
         });
+    }
+
+    private void filtrarMensajesPorCheckBox(Mensaje mensaje){
+        if (filtrarPedido.isChecked()
+                && !mensaje.getPedidoAceptado()
+                && !mensaje.getPedidoCancelado()) {//filtramos por pedido
+
+            try {
+                mensaje.setTexto(encriptacionDatos.desencriptar(mensaje.getTexto()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (mensaje.getTexto().indexOf("Quiero comprar:") == 0) {
+                try {
+                    mensaje.setImagen(encriptacionDatos.desencriptar(mensaje.getImagen()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                listMensaje.add(mensaje);
+            }
+        }
+        if (filtrarTodos.isChecked()) {//filtramos a todos los usuarios
+            try {
+                mensaje.setImagen(encriptacionDatos.desencriptar(mensaje.getImagen()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                mensaje.setTexto(encriptacionDatos.desencriptar(mensaje.getTexto()));
+                listMensaje.add(mensaje);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -73,6 +75,7 @@ public class HomeVendedorMain extends AppCompatActivity implements
         View.OnClickListener,
         DrawerLayout.DrawerListener,
         BuscarVendedorUid.resultadoBuscarVendedorUid{
+    private int REQUEST_CODE = 200;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private FirebaseDatabase firebaseDatabase;
@@ -102,11 +105,13 @@ public class HomeVendedorMain extends AppCompatActivity implements
             btnMensajeria;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_vendedor_main);
 
+        pedirPermisos();
             firebaseAuth = FirebaseAuth.getInstance(); //intanciamos el usuario logeado
             firebaseDatabase = FirebaseDatabase.getInstance(); //intanciamos la base de datos firebase
             databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
@@ -125,10 +130,10 @@ public class HomeVendedorMain extends AppCompatActivity implements
             btnMensajeria = findViewById(R.id.btnMensajeriaGlobalDataVendedor); //almacena el boton para acceder a la mensajeria del vendedor
 
 
-            pedirPermisos(); //pedimos permisos de almacenamiento y ubicacion
+           // pedirPermisos(); //pedimos permisos de almacenamiento y ubicacion
             //actualizarMensajes();
 
-        quitarModoOscuro();
+            quitarModoOscuro();
 
             Toolbar toolbar = findViewById(R.id.toolbar); //cargamos el toolbar
             setSupportActionBar((Toolbar) findViewById(R.id.toolbar)); //
@@ -180,7 +185,8 @@ public class HomeVendedorMain extends AppCompatActivity implements
 
     }
 
-    private void pedirPermisos() {
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private Boolean pedirPermisos() {
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
@@ -193,8 +199,7 @@ public class HomeVendedorMain extends AppCompatActivity implements
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(
-                    HomeVendedorMain.this,
+            requestPermissions(
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.CAMERA,
@@ -203,11 +208,43 @@ public class HomeVendedorMain extends AppCompatActivity implements
 
                     },
                     PERMISO_FINELOCATION);
-            return;
+
+        }else{
+            return true;
         }
 
+        return false;
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case  PERMISO_FINELOCATION:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0  ) {
+                    boolean permisosDados = true;
+                    for (int i =0;i<grantResults.length;i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            permisosDados = false;
+                            break;
+                        }
+                    }
+                    if (!permisosDados) {
+
+                    }else{
+                        Toast.makeText(this,"Se debe habilitar los permisos para la ejecucion de la app",Toast.LENGTH_LONG).show();
+                    }
+                }  else {
+                    Toast.makeText(this,"Se debe habilitar los permisos para la ejecucion de la app",Toast.LENGTH_LONG).show();
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
+
 
     public void cargarUsuario(){
         if (firebaseAuth.getCurrentUser()!=null) {

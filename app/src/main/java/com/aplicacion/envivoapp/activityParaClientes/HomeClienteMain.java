@@ -91,6 +91,7 @@ public class HomeClienteMain extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
         DrawerLayout.DrawerListener, BuscarClienteUid.resultadoBuscarClienteUid {
 
+    private static final int REQUEST_CODE = 200;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -108,66 +109,54 @@ public class HomeClienteMain extends AppCompatActivity implements
     //botones del menu
     private  Button btnListarVendedore ,btnPerfil,btnPedido, btnSalir,btnMensje,btnHome;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_cliente_main);
 
+        solicitarPermiso();
 
-        firebaseAuth = FirebaseAuth.getInstance(); //intanciamos el usuario logeado
-        firebaseDatabase = FirebaseDatabase.getInstance(); //intanciamos la base de datos firebase
-        databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
-        storage = FirebaseStorage.getInstance();//inicializamos la variable storage}
+            firebaseAuth = FirebaseAuth.getInstance(); //intanciamos el usuario logeado
+            firebaseDatabase = FirebaseDatabase.getInstance(); //intanciamos la base de datos firebase
+            databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos
+            storage = FirebaseStorage.getInstance();//inicializamos la variable storage}
 
-        estadoNotificacion();//en caso de existir alguna notificacion
-        quitarModoOscuro();
+            estadoNotificacion();//en caso de existir alguna notificacion
+            quitarModoOscuro();
 
 
-        Uri linkAcceso = ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
-        if (linkAcceso==null) {
-            //inicio de recivimiento de datos a traves de link
-            FirebaseDynamicLinks.getInstance()
-                    .getDynamicLink(getIntent())
-                    .addOnSuccessListener(HomeClienteMain.this, new OnSuccessListener<PendingDynamicLinkData>() {
-                        @Override
-                        public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                            // Get deep link from result (may be null if no link is found)
-                            Uri deepLink = null;
-                            if (pendingDynamicLinkData != null) {
-                                deepLink = pendingDynamicLinkData.getLink();
-                                ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setLinkAcceso(deepLink);
-                                startActivity(new Intent(HomeClienteMain.this, MainActivity.class));
-                                finish();//para que el usuario no pueda regresar a activitys anteriores
-                                Log.d("DatosLink", deepLink.toString());
-                            } else {
-                                Log.d("DatosLink", "null");
-                                ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setLinkAcceso(null);
+            Uri linkAcceso = ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
+            if (linkAcceso == null) {
+                //inicio de recivimiento de datos a traves de link
+                FirebaseDynamicLinks.getInstance()
+                        .getDynamicLink(getIntent())
+                        .addOnSuccessListener(HomeClienteMain.this, new OnSuccessListener<PendingDynamicLinkData>() {
+                            @Override
+                            public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                                // Get deep link from result (may be null if no link is found)
+                                Uri deepLink = null;
+                                if (pendingDynamicLinkData != null) {
+                                    deepLink = pendingDynamicLinkData.getLink();
+                                    ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setLinkAcceso(deepLink);
+                                    startActivity(new Intent(HomeClienteMain.this, MainActivity.class));
+                                    finish();//para que el usuario no pueda regresar a activitys anteriores
+                                    Log.d("DatosLink", deepLink.toString());
+                                } else {
+                                    Log.d("DatosLink", "null");
+                                    ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setLinkAcceso(null);
+
+                                }
+                            }
+                        })
+                        .addOnFailureListener(HomeClienteMain.this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("ERROR", "getDynamicLink:onFailure", e);
 
                             }
-                        }
-                    })
-                    .addOnFailureListener(HomeClienteMain.this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("ERROR", "getDynamicLink:onFailure", e);
-
-                        }
-                    });
-            //fin de link
-        }
-
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
+                        });
+                //fin de link
             }
 
 
@@ -225,12 +214,59 @@ public class HomeClienteMain extends AppCompatActivity implements
             btnMensje.setOnClickListener(this::onClick);
             btnHome.setOnClickListener(this::onClick);
 
+
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private Boolean solicitarPermiso(){
+        int access_fine_location =  ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION);
+        int access_coarse_location = ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if(access_fine_location != PackageManager.PERMISSION_GRANTED
+                &&access_coarse_location != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CODE);
+        }else{
+            return  true;
+        }
+        return  false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case  REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0  ) {
+                    boolean permisosDados = true;
+                    for (int i =0;i<grantResults.length;i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            permisosDados = false;
+                            break;
+                        }
+                    }
+                    if (!permisosDados) {
+
+                    }else{
+                        Toast.makeText(this,"Se debe habilitar los permisos para la ejecucion de la app",Toast.LENGTH_LONG).show();
+                    }
+                }  else {
+                    Toast.makeText(this,"Se debe habilitar los permisos para la ejecucion de la app",Toast.LENGTH_LONG).show();
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
+
 
     private void quitarModoOscuro(){
         AppCompatDelegate.setDefaultNightMode(
                 AppCompatDelegate.MODE_NIGHT_NO);
     }
+
 
     private void cargarCliente() {
         if (firebaseAuth.getCurrentUser()!=null) {
@@ -321,55 +357,6 @@ public class HomeClienteMain extends AppCompatActivity implements
                         }}
                     }
             });
-/*
-            eventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        cliente = null;
-
-                        for (final DataSnapshot ds : snapshot.getChildren()) {
-                            cliente = ds.getValue(Cliente.class);
-                        }
-
-                        if (cliente.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())) {
-                            if (cliente != null) {
-                                if (cliente.getBloqueado()) {
-                                    Dialog dialogBloqueo = new Utilidades().cuadroError(HomeClienteMain.this, "Usted ha sido bloqueado por un vendedor");
-                                    dialogBloqueo.show();
-                                } else {
-                                    //notificaciones();
-                                    if (cliente.getNombre() != null) {
-                                        try {
-                                            nombreUsuario.setText(encriptacionDatos.desencriptar(cliente.getNombre()));
-                                           // notificaciones();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                            } else {
-                                Toast.makeText(HomeClienteMain.this, "Ingrese sus datos personales", Toast.LENGTH_LONG).show();
-                                Fragment fragment = new FragmentoDataCliente();
-                                getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
-                                        .replace(R.id.home_content, fragment)
-                                        .commit();
-
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            };
-            databaseReference.child("Cliente").orderByChild("uidUsuario").equalTo(firebaseAuth.getCurrentUser().getUid()).addValueEventListener(eventListener);
-
-            */
         }
     }
 
@@ -459,6 +446,7 @@ public class HomeClienteMain extends AppCompatActivity implements
         }
 
     }
+
 
 
 

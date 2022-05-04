@@ -58,6 +58,7 @@ public class Servicio extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         firebaseAuth = FirebaseAuth.getInstance(); //intanciamos el usuario logeado
         firebaseDatabase = FirebaseDatabase.getInstance(); //intanciamos la base de datos firebase
         databaseReference = firebaseDatabase.getReference();//almacenamos la referrencia de la base de datos

@@ -317,17 +317,15 @@ public class HomeClienteMain extends AppCompatActivity implements
     }
 
     private void cerrarSecion() {
-        ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).resetearValores();
-        FirebaseAuth.getInstance().signOut();
+
         AuthUI.getInstance().signOut(HomeClienteMain.this).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
-
+                ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).resetearValores();
+                FirebaseAuth.getInstance().signOut();
                 Intent streamingsIntent = new Intent(HomeClienteMain.this, MainActivity.class);
                 startActivity(streamingsIntent);
                 finish();
-
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -564,38 +562,42 @@ public class HomeClienteMain extends AppCompatActivity implements
                     .replace(R.id.home_content, fragment)
                     .commit();
         } else {
-            if (cliente.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())) {
-                if(cliente.getBloqueado()) {
-                    databaseReference.
-                            child("Mensaje_Cliente_Vendedor").
-                            orderByChild("cliente/idCliente").
-                            equalTo(cliente.getIdCliente()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()) {
-                                bloquearCliente(snapshot);
+            if(firebaseAuth.getCurrentUser().getUid()!=null) {
+                if (cliente.getUidUsuario().equals(firebaseAuth.getCurrentUser().getUid())) {
+                    if (cliente.getBloqueado()) {
+                        databaseReference.
+                                child("Mensaje_Cliente_Vendedor").
+                                orderByChild("cliente/idCliente").
+                                equalTo(cliente.getIdCliente()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    bloquearCliente(snapshot);
+                                }
                             }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(HomeClienteMain.this, "Error al cargar datos", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        if (dialogBloqueo != null) {
+                            dialogBloqueo.dismiss();
+
                         }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(HomeClienteMain.this, "Error al cargar datos", Toast.LENGTH_LONG).show();
+                        ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setCliente(cliente);
+                        Uri linkAcceso = ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
+                        if (linkAcceso != null) {
+                            ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
+                            ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setGlobal(false);
+                            Fragment fragment = new FragmentoStreamigsVendedor();
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                                    .replace(R.id.home_content, fragment)
+                                    .commit();
                         }
-                    });
-                }else{
-                    if (dialogBloqueo !=null){
-                        dialogBloqueo.dismiss();
-                    }
-                    ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setCliente(cliente);
-                    Uri linkAcceso = ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
-                    if (linkAcceso!=null) {
-                        ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
-                        ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setGlobal(false);
-                        Fragment fragment = new FragmentoStreamigsVendedor();
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
-                                .replace(R.id.home_content, fragment)
-                                .commit();
                     }
                 }
             }
@@ -606,46 +608,48 @@ public class HomeClienteMain extends AppCompatActivity implements
         Mensaje_Cliente_Vendedor msCliVen = null;
         for (DataSnapshot ds:snapshot.getChildren()){
             Mensaje_Cliente_Vendedor msCliVenAux = ds.getValue(Mensaje_Cliente_Vendedor.class);
-            if (msCliVenAux.getElVendedorBloqueoCliente()){
+            if (msCliVenAux!=null){
                 msCliVen =msCliVenAux;
             }
         }
-        if (msCliVen == null){//El cliente no esta bloqueado
+        if (!msCliVen.getElVendedorBloqueoCliente()){//El cliente no esta bloqueado
             if (dialogBloqueo!=null){
                 dialogBloqueo.dismiss();
+                dialogBloqueo = null;
+                cerrarSecion();
             }
             ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setCliente(cliente);
         }else{// el cliente esta bloqueado por algun vendedor
 
-            String mensajeDialogo = "";
-            String mensajeDialogoTelefonoCelular = "";
+                String mensajeDialogo = "";
+                String mensajeDialogoTelefonoCelular = "";
 
-            mensajeDialogo = "Usted ha sido bloqueado por un vendedor para ser desbloqueado:" +
-                    "comuniquese con el vendedor: ";
-            try {
-                msCliVen.getVendedor().setTelefono(encriptacionDatos.desencriptar(msCliVen.getVendedor().getTelefono()));
-                mensajeDialogoTelefonoCelular = mensajeDialogoTelefonoCelular+"\n Teléfono: "+ msCliVen.getVendedor().getTelefono();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                msCliVen.getVendedor().setCelular(encriptacionDatos.desencriptar(msCliVen.getVendedor().getCelular()));
-                mensajeDialogoTelefonoCelular = mensajeDialogoTelefonoCelular+"\n Célular: "+ msCliVen.getVendedor().getCelular();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                mensajeDialogo = "Usted ha sido bloqueado por un vendedor para ser desbloqueado:" +
+                        "comuniquese con el vendedor: ";
+                try {
+                    msCliVen.getVendedor().setTelefono(encriptacionDatos.desencriptar(msCliVen.getVendedor().getTelefono()));
+                    mensajeDialogoTelefonoCelular = mensajeDialogoTelefonoCelular + "\n Teléfono: " + msCliVen.getVendedor().getTelefono();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    msCliVen.getVendedor().setCelular(encriptacionDatos.desencriptar(msCliVen.getVendedor().getCelular()));
+                    mensajeDialogoTelefonoCelular = mensajeDialogoTelefonoCelular + "\n Célular: " + msCliVen.getVendedor().getCelular();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
-            try {
-                msCliVen.getVendedor().setNombre(encriptacionDatos.desencriptar(msCliVen.getVendedor().getNombre()));
-                mensajeDialogo = mensajeDialogo+"\n Nombre: "+ msCliVen.getVendedor().getNombre()+mensajeDialogoTelefonoCelular;
-                dialogBloqueo = new Utilidades().
-                        cuadroError(HomeClienteMain.this,
-                                mensajeDialogo);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            dialogBloqueo.show();
+                try {
+                    msCliVen.getVendedor().setNombre(encriptacionDatos.desencriptar(msCliVen.getVendedor().getNombre()));
+                    mensajeDialogo = mensajeDialogo + "\n Nombre: " + msCliVen.getVendedor().getNombre() + mensajeDialogoTelefonoCelular;
+                    dialogBloqueo = new Utilidades().
+                            cuadroError(HomeClienteMain.this,
+                                    mensajeDialogo);
+                    dialogBloqueo.show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
     }
 }
 }

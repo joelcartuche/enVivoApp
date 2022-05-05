@@ -115,9 +115,12 @@ public class AdapterMensajeriaGlobalVendedores extends RecyclerView.Adapter<Adap
         ImageView imgUsuario = convertView.imgUsuario;
 
         imgMensajeriaGlobal.setVisibility(View.GONE);
-
+        Log.d("Entree ","************************");
+        Log.d("Entree ",mensaje.getIdMensaje());
+        Log.d("Entree ","***********************");
         if (mensaje.getImagen()!= null) {
-            storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            Log.d("Entree ",mensaje.getImagen());
+            storage.getReference().child(mensaje.getImagen()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
                     imgMensajeriaGlobal.setVisibility(View.VISIBLE);

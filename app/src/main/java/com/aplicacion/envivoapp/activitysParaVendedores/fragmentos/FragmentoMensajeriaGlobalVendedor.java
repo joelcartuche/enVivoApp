@@ -198,15 +198,20 @@ public class FragmentoMensajeriaGlobalVendedor extends Fragment {
                             Log.d("Entree","-----------");
                             try {
                                 mensajeAux.setImagen(encriptacionDatos.desencriptar(mensajeAux.getImagen()));
+                                Log.d("Entree","-----------");
+                                Log.d("Entree",mensajeAux.getIdMensaje());
+                                Log.d("Entree",mensajeAux.getImagen());
+                                Log.d("Entree","-----------");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             try {
                                 mensajeAux.setTexto(encriptacionDatos.desencriptar(mensajeAux.getTexto()));
-                                listMensaje.add(mensajeAux);
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                            listMensaje.add(mensajeAux);
 
                         }else{
                             Log.e("Error","Mensajeria global null 266");

@@ -220,6 +220,7 @@ private void existeMensajeriaClienteVendedor(){
     private void crearMensajeriaClienteVendedor() throws Exception {
         //encriptamos los datos del vendedor
         Vendedor vendeorAux = vendedorGlobal;
+        vendeorAux.setIdVendedor(vendeorAux.getIdVendedor());
         vendeorAux.setCelular(encrip.encriptar(vendeorAux.getCelular()));
         vendeorAux.setTelefono(encrip.encriptar(vendeorAux.getTelefono()));
         vendeorAux.setNombre(encrip.encriptar(vendeorAux.getNombre()));
@@ -330,6 +331,34 @@ private void existeMensajeriaClienteVendedor(){
                     Uri pathArchivo = data.getData(); //Obtenemos el uri de la imagen seleccionada
                     //cargamos el bitmap
                     if (clienteGlobal!=null){
+
+                        //ecnriptamos los datos del vendedor
+                        Vendedor vendedorAux = new Vendedor();
+                        try {
+                            vendedorAux.setTelefono( encrip.encriptar(vendedorGlobal.getTelefono()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            vendedorAux.setCelular(encrip.encriptar(vendedorGlobal.getCelular()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            vendedorAux.setCedula(encrip.encriptar(vendedorGlobal.getCedula()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        vendedorAux.setDiasEperaCancelacion(vendedorGlobal.getDiasEperaCancelacion());
+                        vendedorAux.setIdVendedor(vendedorGlobal.getIdVendedor());
+                        try {
+                            vendedorAux.setNombre( encrip.encriptar(vendedorGlobal.getNombre()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        vendedorAux.setUidUsuario(vendedorGlobal.getUidUsuario());
+
+                        //fin de encriptacion
                         // creamos el mensaje
                         Mensaje mensaje = new Mensaje(); //instanciamos el mensaje
                         Dialog cargando = new Utilidades().dialogCargar(getContext());
@@ -351,7 +380,7 @@ private void existeMensajeriaClienteVendedor(){
                         mensaje.setIdMensaje(idMensaje);
                         mensaje.setTexto("");
                         mensaje.setCliente(clienteGlobal);
-                        mensaje.setVendedor(vendedorGlobal);
+                        mensaje.setVendedor(vendedorAux);
                         mensaje.setIdStreaming(null);
                         mensaje.setEsGlobal(true);
                         mensaje.setEsVededor(false);
@@ -360,7 +389,7 @@ private void existeMensajeriaClienteVendedor(){
                         if (!pathArchivo.equals("")){
                             try {
                                 StorageReference storageRef = storage.getReference().child(idMensaje);//creamos la referencia para subir datos
-                                mensaje.setImagen(storageRef.getPath());
+                                mensaje.setImagen(encrip.encriptar(storageRef.getPath()));
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                 Bitmap bitImagen = getBitmapFromUri(pathArchivo);
                                 bitImagen.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -393,6 +422,9 @@ private void existeMensajeriaClienteVendedor(){
                                 e.printStackTrace();
                                 cargando.dismiss();
                             } catch (IOException e) {
+                                e.printStackTrace();
+                                cargando.dismiss();
+                            } catch (Exception e) {
                                 e.printStackTrace();
                                 cargando.dismiss();
                             }

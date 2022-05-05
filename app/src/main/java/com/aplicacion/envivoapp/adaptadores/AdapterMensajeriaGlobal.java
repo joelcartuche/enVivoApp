@@ -96,6 +96,7 @@ public class AdapterMensajeriaGlobal extends RecyclerView.Adapter<AdapterMensaje
             imgMensajeriaGlobal.setVisibility(View.GONE);
         }else{
             imgMensajeriaGlobal.setVisibility(View.VISIBLE);
+//            mensaje.getImagen()
             storage.getReference().child(mensaje.getIdMensaje()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {

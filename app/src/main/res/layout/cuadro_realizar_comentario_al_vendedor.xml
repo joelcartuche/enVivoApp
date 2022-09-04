@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:minWidth="300dp"
+        android:minHeight="200dp">
+
+        <TextView
+            android:id="@+id/tvTituloComentario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00C853"
+            android:gravity="center"
+            android:text="Comentario"
+            android:textColor="#FFFFFF"
+            android:textSize="30dp" />
+
+        <EditText
+            android:id="@+id/txtComentarioAlVendedor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="Ingrese comentario"
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/btnEnviarComentarioAlVendedor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cornerRadius="20dp"
+            android:text="Enviar"
+            app:icon="@drawable/ic_enviar_mensajes" />
+
+        <Button
+            android:id="@+id/btnCancelarComentarioAlVendedor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            app:backgroundTint="#D50000"
+            app:cornerRadius="20dp"
+            app:icon="@drawable/com_facebook_tooltip_black_xout" />
+
+
+
+    </LinearLayout>
+
+    </androidx.cardview.widget.CardView>

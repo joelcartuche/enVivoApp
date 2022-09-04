@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".activitysParaVendedores.fragmentos.GestionProducto.FragmentoIngresarProducto">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:padding="5dp">
+            <EditText
+                android:id="@+id/txtCantidadIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Ingrese la cantidad"
+                android:inputType="numberSigned"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvCantidadIngresarProducto"
+                app:layout_constraintTop_toBottomOf="@+id/txtNombreIngresarProducto" />
+
+            <TextView
+                android:id="@+id/tvDescripcionIngresarProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción:"
+                tools:layout_editor_absoluteX="49dp"
+                tools:layout_editor_absoluteY="515dp"
+                app:layout_constraintTop_toBottomOf="@+id/txtPrecioIngresarProducto"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtDescripcionIngresarProducto"/>
+
+            <TextView
+                android:id="@+id/tvTituloIngresarProducto"
+                android:layout_width="0dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="Ingresar producto"
+                tools:layout_editor_absoluteX="151dp"
+                tools:layout_editor_absoluteY="201dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvCodigoIngresarProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Código:"
+                tools:layout_editor_absoluteX="19dp"
+                tools:layout_editor_absoluteY="269dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvTituloIngresarProducto"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtCodigoIngresarProducto"
+
+                />
+
+            <TextView
+                android:id="@+id/tvNombreIngresarProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre:"
+                tools:layout_editor_absoluteX="28dp"
+                tools:layout_editor_absoluteY="327dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtCodigoIngresarProducto"
+                app:layout_constraintEnd_toStartOf="@+id/txtNombreIngresarProducto"
+                />
+
+            <TextView
+                android:id="@+id/tvCantidadIngresarProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad:"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="390dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtNombreIngresarProducto"
+                app:layout_constraintEnd_toStartOf="@+id/txtCantidadIngresarProducto"
+                />
+
+            <TextView
+                android:id="@+id/tvPrecioIngresarProducto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio:"
+                tools:layout_editor_absoluteX="29dp"
+                tools:layout_editor_absoluteY="446dp"
+                app:layout_constraintTop_toBottomOf="@+id/txtCantidadIngresarProducto"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txtPrecioIngresarProducto"
+                />
+
+            <Button
+                android:id="@+id/btnTomarFotoIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Tomar foto"
+                app:cornerRadius="20dp"
+                app:icon="@drawable/ic_camara"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSeleccionarImagenIngresarProducto" />
+
+            <Button
+                android:id="@+id/btnSeleccionarImagenIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar imagen"
+                app:cornerRadius="20dp"
+                app:icon="@drawable/ic_archivo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnTomarFotoIngresarProducto" />
+            <ImageView
+                android:id="@+id/imgProductoIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnSeleccionarImagenIngresarProducto"/>
+
+            <Button
+                android:id="@+id/btnGuardarIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+                app:backgroundTint="#00C853"
+                app:cornerRadius="20dp"
+                app:icon="@android:drawable/ic_menu_save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnAtrasIngresarProducto"
+                app:layout_constraintTop_toBottomOf="@+id/imgProductoIngresarProducto"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="15dp"
+                />
+
+
+
+            <Button
+                android:id="@+id/btnAtrasIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Atrás"
+                app:backgroundTint="#D50000"
+                app:cornerRadius="20dp"
+                app:icon="@drawable/abc_vector_test"
+                app:layout_constraintEnd_toStartOf="@+id/btnGuardarIngresarProducto"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgProductoIngresarProducto"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="15dp"/>
+
+            <EditText
+                android:id="@+id/txtCodigoIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="Ingrese el código"
+                tools:layout_editor_absoluteX="116dp"
+                tools:layout_editor_absoluteY="265dp"
+                app:layout_constraintStart_toEndOf="@+id/tvCodigoIngresarProducto"
+                app:layout_constraintTop_toBottomOf="@+id/tvTituloIngresarProducto"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <EditText
+                android:id="@+id/txtNombreIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="Ingrese el nombre"
+                tools:layout_editor_absoluteX="122dp"
+                tools:layout_editor_absoluteY="326dp"
+                app:layout_constraintTop_toBottomOf="@+id/txtCodigoIngresarProducto"
+                app:layout_constraintStart_toEndOf="@+id/tvNombreIngresarProducto"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <EditText
+                android:id="@+id/txtPrecioIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Ingrese el precio"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvPrecioIngresarProducto"
+                app:layout_constraintTop_toBottomOf="@id/txtCantidadIngresarProducto" />
+
+            <EditText
+                android:id="@+id/txtDescripcionIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+
+                android:hint="Ingrese la descripción"
+
+                android:autoSizeTextType="uniform"
+                android:gravity="top|left"
+                android:inputType="textMultiLine|textCapSentences"
+                android:lines="5"
+                android:maxLines="10"
+                android:minLines="1"
+
+                android:scrollbars="none"
+
+                tools:layout_editor_absoluteX="171dp"
+                tools:layout_editor_absoluteY="516dp"
+                app:layout_constraintStart_toEndOf="@+id/tvDescripcionIngresarProducto"
+                app:layout_constraintTop_toBottomOf="@+id/txtPrecioIngresarProducto"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvSeleccionarImagenIngresarProducto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Seleccionar imagen"
+                android:gravity="center"
+                tools:layout_editor_absoluteX="34dp"
+                tools:layout_editor_absoluteY="573dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtDescripcionIngresarProducto"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

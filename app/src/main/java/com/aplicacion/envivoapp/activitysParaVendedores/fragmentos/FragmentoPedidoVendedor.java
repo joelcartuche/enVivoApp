@@ -149,7 +149,7 @@ public class FragmentoPedidoVendedor extends Fragment {
                 listPedido,
                 databaseReference,
                 storage,
-                getActivity(),vendedorGlobal);
+                getActivity(),vendedorGlobal,null,null);
         gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
     }
     private void listarPedidos() {
@@ -174,9 +174,13 @@ public class FragmentoPedidoVendedor extends Fragment {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()){
+                                    List<String> clientesMasDeUnPedido = new ArrayList<>();
+                                    List<Integer> contadorClientesMasDeUnPedido = new ArrayList<>();
                                     listPedido.clear();
                                     for (DataSnapshot ds:snapshot.getChildren()){
                                         Pedido pedido = ds.getValue(Pedido.class);
+
+                                        //transformamos los datos encriptados
                                         try {
                                             pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
                                         } catch (Exception e) {
@@ -199,16 +203,14 @@ public class FragmentoPedidoVendedor extends Fragment {
                                         }
 
 
-
-
-
+                                        //filtramos acorde al radio seleccionado
                                         if (!pedido.getEliminado()
                                                 && filtrarTodos.isChecked()){
                                             listPedido.add(pedido);
                                             //Toast.makeText(getActivity().getBaseContext(),"todos",Toast.LENGTH_LONG).show();
                                         }
 
-
+                                        //fultro para pedidos eliminados
                                         if (filtrarEliminados.isChecked()
                                                 && !pedido.getAceptado()
                                                 && pedido.getCancelado()
@@ -216,11 +218,23 @@ public class FragmentoPedidoVendedor extends Fragment {
                                             listPedido.add(pedido);
                                             //Toast.makeText(getActivity().getBaseContext(),"cancelados",Toast.LENGTH_LONG).show();
                                         }
+
+                                        //filtro para pedidos aceptados
                                         if (filtrarAceptados.isChecked()
                                                 &&  pedido.getAceptado()
                                                 && !pedido.getCancelado()
                                                 && !pedido.getEliminado()){
                                             listPedido.add(pedido);
+                                            if (clientesMasDeUnPedido!=null){
+                                                if (!clientesMasDeUnPedido.contains(pedido.getIdCliente())) {
+                                                    clientesMasDeUnPedido.add(pedido.getIdCliente());
+                                                    contadorClientesMasDeUnPedido.add(1);
+                                                }else{
+                                                    int indiceCliente = clientesMasDeUnPedido.indexOf(pedido.getIdCliente());
+                                                    contadorClientesMasDeUnPedido.set(indiceCliente,
+                                                            contadorClientesMasDeUnPedido.get(indiceCliente)+1);
+                                                }
+                                            }
                                             //Toast.makeText(getActivity().getBaseContext(),"aceptados",Toast.LENGTH_LONG).show();
                                         }
                                         if (filtrarPagados.isChecked()
@@ -260,12 +274,17 @@ public class FragmentoPedidoVendedor extends Fragment {
                                         }
 
                                     }
+
+                                    //fin de los filtros
                                     //Inicialisamos el adaptador
                                     gridAdapterPedido = new AdapterGridPedidoVendedor(getContext(),
                                             listPedido,
                                             databaseReference,
                                             storage,
-                                            getActivity(),vendedorGlobal);
+                                            getActivity(),
+                                            vendedorGlobal,clientesMasDeUnPedido,
+                                            contadorClientesMasDeUnPedido
+                                            );
                                     gridViewPedido.setAdapter(gridAdapterPedido); //configuramos el view
 
 

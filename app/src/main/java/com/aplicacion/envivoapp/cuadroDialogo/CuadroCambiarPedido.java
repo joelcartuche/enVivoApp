@@ -67,6 +67,7 @@ public class CuadroCambiarPedido extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     String currentPhotoPath;
+
     private EncriptacionDatos encrypt= new EncriptacionDatos();
     private final int PICKER = 1; //variable para seleccionador de imagenes
     static final int REQUEST_IMAGE_CAPTURE = 2; //variable para foto tomada con la camara
@@ -117,9 +118,6 @@ public class CuadroCambiarPedido extends Fragment {
 
         idPedido = ((MyFirebaseApp) getActivity().getApplicationContext()).getIdPedido();
         vendedorGlobal =  ((MyFirebaseApp) getActivity().getApplicationContext()).getVendedor();
-
-        Log.d("datosPedido","idPedido "+idPedido);
-
 
         databaseReference.child("Pedido").child(idPedido).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
@@ -383,7 +381,7 @@ public class CuadroCambiarPedido extends Fragment {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         try {
 
-            startActivityForResult(Intent.createChooser(intent,"Seleccione la captura de pantalla"),1);
+            startActivityForResult(Intent.createChooser(intent,"Seleccione la imagen"),1);
         }catch (android.content.ActivityNotFoundException ex){
             Toast.makeText(getContext(),"Por favor instale un administrados de archivos",Toast.LENGTH_SHORT).show();
         }

@@ -2,15 +2,9 @@ package com.aplicacion.envivoapp.activityParaClientes;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -34,7 +28,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -42,54 +35,42 @@ import androidx.fragment.app.Fragment;
 
 import com.aplicacion.envivoapp.MainActivity;
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.Servicio;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoAyudaCliente;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoDataCliente;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoHomeCliente;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoListarVendedores;
 import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoPedidoCliente;
-import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoStreamigsVendedor;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.navDataVendedor.FragmentoStreamigsVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedorMain;
+import com.aplicacion.envivoapp.cuadroDialogo.CuadroCalificarVendedor;
+import com.aplicacion.envivoapp.modelos.Calificaciones;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
-import com.aplicacion.envivoapp.modelos.Notificacion;
 import com.aplicacion.envivoapp.modelos.Usuario;
-import com.aplicacion.envivoapp.modelos.Vendedor;
-import com.aplicacion.envivoapp.utilidades.BuscadorPedidoCliente;
 import com.aplicacion.envivoapp.utilidades.BuscarClienteUid;
-import com.aplicacion.envivoapp.utilidades.BuscarVendedorUid;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.aplicacion.envivoapp.utilidades.Utilidades;
-import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
-import java.util.EventListener;
-import java.util.HashMap;
-import java.util.Map;
-
 public class HomeClienteMain extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        DrawerLayout.DrawerListener, BuscarClienteUid.resultadoBuscarClienteUid {
+        DrawerLayout.DrawerListener,
+        BuscarClienteUid.resultadoBuscarClienteUid,
+CuadroCalificarVendedor.resultadoCuadroCalificarVendedor{
 
     private static final int REQUEST_CODE = 200;
     private FirebaseAuth firebaseAuth;
@@ -360,6 +341,8 @@ public class HomeClienteMain extends AppCompatActivity implements
                         }}
                     }
             });
+
+
         }
     }
 
@@ -591,6 +574,9 @@ public class HomeClienteMain extends AppCompatActivity implements
                             dialogBloqueo.dismiss();
 
                         }
+
+                        buscarCalificacionNueva(cliente.getIdCliente());//buscamos si existe un nuevo vendedor por calificar
+
                         ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).setCliente(cliente);
                         Uri linkAcceso = ((MyFirebaseApp) HomeClienteMain.this.getApplicationContext()).getLinkAcceso();
                         if (linkAcceso != null) {
@@ -608,6 +594,39 @@ public class HomeClienteMain extends AppCompatActivity implements
             }
         }
     }
+
+    private void buscarCalificacionNueva(String idCliente) {
+        //buscamos si existe una calificacion nueva
+        Log.d("SSSSS","-------------ZZ "+idCliente);
+        databaseReference.child("Calificaciones").orderByChild("idCliente_esNuevo").equalTo(idCliente+"_true").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("SSSSS","-----------------000000000");
+                if (snapshot.exists()){
+                    Log.d("SSSSS","-----------------1111111111111");
+                    for (DataSnapshot ds: snapshot.getChildren()){
+                        Calificaciones calificaciones = ds.getValue(Calificaciones.class);
+                        if (calificaciones!=null){
+                            Log.d("SSSSS","-----------------2222222");
+                            new CuadroCalificarVendedor(HomeClienteMain.this,
+                                    databaseReference,
+                                    HomeClienteMain.this::resultadoCuadroCalificarVendedor,
+                                    calificaciones);
+                        }
+                    }
+                }else{
+                    Log.d("SSSSS","-----------------3333333333333");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ERROR","error en la calificacion",error.toException());
+                Log.d("SSSSS","-----------------000000000");
+            }
+        });
+    }
+
     Dialog dialogBloqueo = null;
     private void bloquearCliente(DataSnapshot snapshot){
         Mensaje_Cliente_Vendedor msCliVen = null;
@@ -657,4 +676,9 @@ public class HomeClienteMain extends AppCompatActivity implements
                 }
     }
 }
+
+    @Override
+    public void resultadoCuadroCalificarVendedor(Boolean isAcepatado, Boolean isCancelado, int position) {
+
+    }
 }

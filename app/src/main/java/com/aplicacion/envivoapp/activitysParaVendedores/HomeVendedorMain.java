@@ -31,9 +31,6 @@ import androidx.fragment.app.Fragment;
 
 import com.aplicacion.envivoapp.MainActivity;
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activityParaClientes.HomeClienteMain;
-import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoAyudaCliente;
-import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoDataCliente;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoAyudaVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoDataLocal;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoDataVendedor;
@@ -41,33 +38,30 @@ import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoGest
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoHomeVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoListarClientes;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoPedidoVendedor;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.GestionProducto.FragmentoIngresarProducto;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.GestionProducto.FragmentoIngresarProductoMasivo;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.GestionProducto.FragmentoListarProductos;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoReporte;
-import com.aplicacion.envivoapp.modelos.Cliente;
-import com.aplicacion.envivoapp.modelos.Mensaje;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.GestionProducto.FragmentoListarProductosSinImagne;
 import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
 import com.aplicacion.envivoapp.modelos.Usuario;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.BuscarVendedorUid;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
-import com.facebook.login.LoginManager;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HomeVendedorMain extends AppCompatActivity implements
@@ -102,7 +96,8 @@ public class HomeVendedorMain extends AppCompatActivity implements
             btnClientes,
             btnReportes,
             btnSalir,
-            btnMensajeria;
+            btnMensajeria,
+    btnProductos;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -118,15 +113,6 @@ public class HomeVendedorMain extends AppCompatActivity implements
             storage = FirebaseStorage.getInstance();//inicializamos la variable storage}
 
             //intanciamos los componentes de la vista
-            btnHomeVendedor = findViewById(R.id.btnHomeVendedor); //almacena el boton del home para el vendedor
-            btnListarLocal = findViewById(R.id.btnListarLocalHomeVendedor); //almacena el boton listar local
-            btnPerfil = findViewById(R.id.btnPerfilVendedorHomeVendedor); //almacena el boton perfil del vendedor
-            btnPedido = findViewById(R.id.btnPedidoHomeVendedor);// almacena el boton pedido del vendedor
-            btnVideos = findViewById(R.id.btnVideosHomeVendedor); // almacena el boton para acceder a  los videos creados por el vendedor
-            btnClientes = findViewById(R.id.btnClientesHomeVendedor); // almacena el boton para el listado de los clientes
-            btnReportes = findViewById(R.id.btnReporteHomeVendedor); // almacena el boton para la generacion de reportes
-
-            btnSalir = findViewById(R.id.btnSalirHomeVendedor); //almacena el boton para salir del sistema
             btnMensajeria = findViewById(R.id.btnMensajeriaGlobalDataVendedor); //almacena el boton para acceder a la mensajeria del vendedor
 
 
@@ -173,14 +159,7 @@ public class HomeVendedorMain extends AppCompatActivity implements
 
             cargarUsuario();
 
-            btnHomeVendedor.setOnClickListener(this::onClick);
-            btnListarLocal.setOnClickListener(this::onClick);
-            btnPerfil.setOnClickListener(this::onClick);
-            btnPedido.setOnClickListener(this::onClick);
-            btnVideos.setOnClickListener(this::onClick);
-            btnClientes.setOnClickListener(this::onClick);
-            btnReportes.setOnClickListener(this::onClick);
-            btnSalir.setOnClickListener(this::onClick);
+
             btnMensajeria.setOnClickListener(this::onClick);
 
     }
@@ -304,38 +283,12 @@ public class HomeVendedorMain extends AppCompatActivity implements
         Fragment fragment = null;
         Boolean esSalir = false;
         switch (button.getId()){
-            case R.id.btnHomeVendedor:
-                fragment = new FragmentoHomeVendedor();
-                break;
-            case R.id.btnListarLocalHomeVendedor:
-                fragment = new FragmentoDataLocal();
-                break;
-            case R.id.btnPerfilVendedorHomeVendedor:
-                fragment = new FragmentoDataVendedor();
-                break;
-            case R.id.btnPedidoHomeVendedor:
-                fragment = new FragmentoPedidoVendedor();
-                break;
-            case R.id.btnVideosHomeVendedor:
-                fragment = new FragmentoGestionVideos();
-                break;
-            case R.id.btnClientesHomeVendedor:
-                ((MyFirebaseApp) this.getApplication()).setGlobal(false);
-                fragment = new FragmentoListarClientes();
 
-                break;
-            case R.id.btnReporteHomeVendedor:
-                fragment = new FragmentoReporte();
-                break;
             case R.id.btnMensajeriaGlobalDataVendedor:
                 ((MyFirebaseApp) this.getApplication()).setGlobal(true);
                 fragment = new FragmentoListarClientes();
                 break;
-            case R.id.btnSalirHomeVendedor:
-                esSalir =true;
-                cerrarSecion();
 
-                break;
             default:
                 throw new IllegalArgumentException("menu option not implemented!!");
         }
@@ -398,12 +351,25 @@ public class HomeVendedorMain extends AppCompatActivity implements
             case R.id.local:
                 fragment = new FragmentoDataLocal();
                 break;
+            case R.id.ListarProductos:
+                fragment = new FragmentoListarProductos();
+                break;
+            case R.id.ListarProductosSinImagen:
+                fragment = new FragmentoListarProductosSinImagne();
+                break;
+            case R.id.CrearProductoIndividual:
+                fragment = new FragmentoIngresarProducto();
+                break;
+            case R.id.CargarProductoCsv:
+                fragment = new FragmentoIngresarProductoMasivo();
+                break;
             case R.id.videos:
                 fragment = new FragmentoGestionVideos();
                 break;
             case R.id.pedido_vendedor:
                 fragment = new FragmentoPedidoVendedor();
                 break;
+
             case R.id.mensajeria_global_vendedor:
                 ((MyFirebaseApp) this.getApplication()).setGlobal(true);
                 fragment = new FragmentoListarClientes();

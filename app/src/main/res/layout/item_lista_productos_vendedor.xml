@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardItemPedidoVendor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:id="@+id/scrollListPedidoVendedor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp">
+
+
+
+                        <TextView
+                            android:id="@+id/txtPrecioItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtDescripcionItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView72"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCantidadItemProductosVendedor" />
+
+                        <TextView
+                            android:id="@+id/txtCantidadItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtPrecioItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView71"
+                            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoItemProductosVendedor" />
+
+                        <TextView
+                            android:id="@+id/txtNombreProductoItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtCantidadItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView69"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCodigoItemProductosVendedor" />
+
+                        <TextView
+                            android:id="@+id/txtCodigoItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/txtNombreProductoItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView70"
+                            app:layout_constraintTop_toBottomOf="@+id/textView68" />
+
+                        <TextView
+                            android:id="@+id/txtDescripcionItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            app:layout_constraintBottom_toTopOf="@+id/imgItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textView73"
+                            app:layout_constraintTop_toBottomOf="@+id/txtPrecioItemProductosVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView68"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:text="Datos producto"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/txtCodigoItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/textView69"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView71"
+                            app:layout_constraintEnd_toStartOf="@+id/txtNombreProductoItemProductosVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCodigoItemProductosVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView70"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="Código: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView69"
+                            app:layout_constraintEnd_toStartOf="@+id/txtCodigoItemProductosVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView68" />
+
+                        <TextView
+                            android:id="@+id/textView71"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cantidad: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView72"
+                            app:layout_constraintEnd_toStartOf="@+id/txtCantidadItemProductosVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtNombreProductoItemProductosVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView72"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Precio: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/textView73"
+                            app:layout_constraintEnd_toStartOf="@+id/txtPrecioItemProductosVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtCantidadItemProductosVendedor" />
+
+                        <TextView
+                            android:id="@+id/textView73"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="17dp"
+                            android:text="Descripción: "
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toTopOf="@+id/imgListPedidoVendedor"
+                            app:layout_constraintEnd_toStartOf="@+id/txtDescripcionItemProductosVendedor"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtPrecioItemProductosVendedor" />
+
+                        <ImageView
+                            android:id="@+id/imgItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="300dp"
+                            android:layout_marginBottom="1dp"
+                            app:layout_constraintBottom_toTopOf="@+id/btnEditarProductoItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/txtDescripcionItemProductosVendedor" />
+                        <Button
+                            android:id="@+id/btnEditarProductoItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="Editar producto"
+                            app:cornerRadius="20dp"
+                            app:icon="@drawable/ic_menu_manage"
+                            app:iconGravity="start"
+                            app:layout_constraintBottom_toTopOf="@+id/btnEliminarProductoItemProductosVendedor"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.533"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/imgItemProductosVendedor" />
+
+                        <Button
+                            android:id="@+id/btnEliminarProductoItemProductosVendedor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="Eliminar Producto"
+                            app:backgroundTint="#D50000"
+                            app:cornerRadius="20dp"
+                            app:icon="@android:drawable/ic_menu_delete"
+                            app:iconGravity="start"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btnEditarProductoItemProductosVendedor">
+
+                        </Button>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.cardview.widget.CardView>

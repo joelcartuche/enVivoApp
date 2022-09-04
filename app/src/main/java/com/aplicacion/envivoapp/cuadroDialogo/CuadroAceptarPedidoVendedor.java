@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
 import com.aplicacion.envivoapp.modelos.Notificacion;
 import com.aplicacion.envivoapp.modelos.Pedido;
+import com.aplicacion.envivoapp.modelos.Producto;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
@@ -39,6 +41,20 @@ public class CuadroAceptarPedidoVendedor {
     EncriptacionDatos encrypt  = new EncriptacionDatos();
     DatabaseReference reference ;
     Mensaje mensajeDado;
+    Context context;
+    Producto productoBuscado;
+    EditText nombreProducto,
+            cantidadProducto,
+            codigoProducto,
+            precioProducto,
+            descripcionProducto;
+
+    TextView tvInfoCantidadProducto;
+
+    Button aceptarProducto,
+            cancelarProducto,
+            btnBuscarProductoCuadroAceptarPedido;
+
     public interface resultadoCuadroAceptarPedidoVendedor{
         void resultadoCuadroAceptarPedidoVendedor(Boolean isAcepatado,Boolean isCancelado, int position);
     }
@@ -54,20 +70,46 @@ public class CuadroAceptarPedidoVendedor {
         this.reference = reference;
         this.mensajeDado = mensajeDado;
         interfaceResultadoDialogo = result;
+        this.context = context;
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//el dialogo se presenta sin el titulo
         dialog.setCancelable(false); //impedimos el cancelamiento del dialogo
         //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
         dialog.setContentView(R.layout.cuadro_aceptar_pedido_vendedor_mensajeria_vendedor); //le asisganos el layout
 
+
         //incializamos las variables
-        EditText nombreProducto = dialog.findViewById(R.id.txtNombreProductoCuadroAceptar);
-        EditText cantidadProducto = dialog.findViewById(R.id.txtCantidadCuadroAceptarPedido);
-        EditText codigoProducto = dialog.findViewById(R.id.txtCodigoPedidoCuadroAceptar);
-        EditText precioProducto = dialog.findViewById(R.id.txtPrecioCuadroAceptarPedido);
-        EditText descripcionProducto = dialog.findViewById(R.id.txtDescripcionCuadroAceptarPedido);
-        Button aceptarProducto = dialog.findViewById(R.id.btnAceptarPedidoCuadroAceptarPedido);
-        Button cancelarProducto = dialog.findViewById(R.id.btnCancelarCuadroAceptarPedido);
+         nombreProducto = dialog.findViewById(R.id.txtNombreProductoCuadroAceptar);
+         cantidadProducto = dialog.findViewById(R.id.txtCantidadCuadroAceptarPedido);
+         codigoProducto = dialog.findViewById(R.id.txtCodigoPedidoCuadroAceptar);
+         precioProducto = dialog.findViewById(R.id.txtPrecioCuadroAceptarPedido);
+         descripcionProducto = dialog.findViewById(R.id.txtDescripcionCuadroAceptarPedido);
+         aceptarProducto = dialog.findViewById(R.id.btnAceptarPedidoCuadroAceptarPedido);
+         cancelarProducto = dialog.findViewById(R.id.btnCancelarCuadroAceptarPedido);
+         btnBuscarProductoCuadroAceptarPedido = dialog.findViewById(R.id.btnBuscarProductoCuadroAceptarPedido);
+        tvInfoCantidadProducto= dialog.findViewById(R.id.tvInfoCantidadProducto);
+
+         nombreProducto.setEnabled(false);
+        cantidadProducto.setEnabled(false);
+
+        precioProducto.setEnabled(false);
+        descripcionProducto.setEnabled(false);
+
+
+        btnBuscarProductoCuadroAceptarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (codigoProducto.getText().toString().equals("")){
+                    codigoProducto.setError("Ingrese un código");
+                }else{
+                    buscarProducto(codigoProducto.getText().toString());
+                }
+
+            }
+        });
+
+
+
         if(nombreProducto == null){
             nombreProducto.setText("");
         }
@@ -90,15 +132,18 @@ public class CuadroAceptarPedidoVendedor {
             public void onClick(View v) {
                 //obtenemos el numero de dias de espera para la cancelacion del pedido
 
-                if (codigoProducto.getText().toString().equals("")&&nombreProducto.getText().toString().equals("")){
-                    Toast.makeText(context,"Ingrese al menos el código y nombre del producto",Toast.LENGTH_LONG).show();
-                    if (codigoProducto.getText().toString().equals("")){
-                        codigoProducto.setError("Ingrese código");
-                    }
-                    if(nombreProducto.getText().toString().equals("")){
-                        nombreProducto.setError("Ingrese nombre");
-                    }
-
+                if (codigoProducto.getText().toString().equals("")){
+                     codigoProducto.setError("Ingrese código");
+                }else if(nombreProducto.getText().toString().equals("")){
+                    nombreProducto.setError("Ingrese nombre");
+                }else if(cantidadProducto.getText().toString().equals("")){
+                    cantidadProducto.setError("Ingrese cantidad");
+                }else if(Integer.parseInt(cantidadProducto.getText().toString())>productoBuscado.getCantidadProducto()){
+                    cantidadProducto.setError("Usted no cuenta con esa cantidad");
+                }else if(precioProducto.getText().toString().equals("")){
+                    precioProducto.setError("Ingrese precio");
+                }else if(descripcionProducto.getText().toString().equals("")){
+                    descripcionProducto.setError("Ingrese descripción");
                 }else {
                     //creamos el pedido
                     Pedido pedido = new Pedido();
@@ -139,6 +184,10 @@ public class CuadroAceptarPedidoVendedor {
                     pedido.setCancelado(false);
                     pedido.setAceptado(true);
                     pedido.setImagen(null);
+                    pedido.setProducto(productoBuscado);
+                    pedido.setIdCliente_idVendedor(mensajeDado.getCliente().getIdCliente()+"_"+mensajeDado.getVendedor().getIdVendedor());
+
+
                     //fin de la creacion del pedido
 
                     //creamos el mensaje
@@ -188,29 +237,56 @@ public class CuadroAceptarPedidoVendedor {
 
                     pedido.setFechaFinalPedido(fechaFinal);/// asiganamos la fecha final al pedido
 
+
+                    Map<String,Object> mensajeActualizacion= new HashMap<>();
+                    mensajeActualizacion.put("pedidoAceptado",true);//cargamos la variable pedido aceptado como true
+                    mensajeActualizacion.put("pedidoCancelado",false);//cargamos la variable pedido cancelado como true
+
+                    //map para el producto
+                    Map<String,Object> productoActualizacion= new HashMap<>();
+                    productoActualizacion.put("Producto/"+
+                            pedido.getProducto().getIdProducto()+
+                            "/cantidadProducto",(productoBuscado.getCantidadProducto()-pedido.getCantidadProducto()));//bajamos la cantidad del producto
+
+
                     reference.child("Pedido").child(idPedido).setValue(pedido).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Map<String,Object> mensajeActualizacion= new HashMap<>();
-                            mensajeActualizacion.put("pedidoAceptado",true);//cargamos la variable pedido aceptado como true
-                            mensajeActualizacion.put("pedidoCancelado",false);//cargamos la variable pedido cancelado como true
+
+
+                            //enviamos el mensaje
                             reference.child("Mensaje").child(mensajeDado.getIdMensaje()).updateChildren(mensajeActualizacion).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    reference.child("Mensaje").child(idMensaje).setValue(mensaje);//creamos el mensaje que sera enviado al cliente
-                                    Toast.makeText(context, "Pedido guardado", Toast.LENGTH_LONG).show();
-                                    interfaceResultadoDialogo.resultadoCuadroAceptarPedidoVendedor(true, false, position);
+
+                                    //actualizamos el producto
+                                    reference.updateChildren(productoActualizacion).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(context, "Producto Actualizado", Toast.LENGTH_LONG).show();
+                                            reference.child("Mensaje").child(idMensaje).setValue(mensaje);//creamos el mensaje que sera enviado al cliente
+                                            Toast.makeText(context, "Pedido guardado", Toast.LENGTH_LONG).show();
+
+                                            //creamos la notificacion correspondiente
+                                            crearNotificacionPedidoCreado(pedido,1);
+                                            interfaceResultadoDialogo.resultadoCuadroAceptarPedidoVendedor(true, false, position);
+
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(context, "Error al actualizar", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                                 }
                             });//actualizamo el estado del mensaje
-                            //creamos la notificacion correspondiente
-                            crearNotificacionPedidoCreado(pedido,1);
                         }
-                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    }).addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onSuccess(Void aVoid) {
+                        public void onFailure(@NonNull Exception e) {
                             Toast.makeText(context, "Error al guardar el pedido revise sus pedidos", Toast.LENGTH_LONG).show();
                         }
-                    });//creamos el pedido para el vendedor y el clietne
+                    });
                     dialog.dismiss();
                 }
             }
@@ -228,7 +304,57 @@ public class CuadroAceptarPedidoVendedor {
         dialog.show();
     }
 
+    private void borrarCampos(){
+        nombreProducto.setText("");
+        cantidadProducto.setText("");
+        cantidadProducto.setEnabled(false);
+        cantidadProducto.setHint("");
+        tvInfoCantidadProducto.setText("");
+        precioProducto.setText("");
+        descripcionProducto.setText("");
+        productoBuscado = null;
+    }
+    private void buscarProducto(String codigoProducto) {
+        //buscamos el producto
+        reference.child("Producto").child(mensajeDado.getVendedor().getIdVendedor()
+                +"_"+codigoProducto).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    //le damos valor al producto recivido de la base de datos
+                    Producto producto = snapshot.getValue(Producto.class);
+                    if (producto!=null){
+                        productoBuscado = producto;
+                        try {//ingresamos los datos del producto en el edit text correspondiente
+                            nombreProducto.setText(encrypt.desencriptar(producto.getNombreProducto()));
+                            cantidadProducto.setHint("Ingrese cantidad");
+                            tvInfoCantidadProducto.setText("Ingrese cantidad no mayor a "+producto.getCantidadProducto()+" unidades");
+                            precioProducto.setText(producto.getPrecioProducto()+"");
+                            descripcionProducto.setText(encrypt.desencriptar(producto.getDescripcionProducto()));
+                            cantidadProducto.setEnabled(true);
+                        } catch (Exception e) {
+                            Toast.makeText( context,"No existe el producto",Toast.LENGTH_LONG).show();
+                            borrarCampos();
+                            e.printStackTrace();
+                        }
 
+                    }else{
+                        Toast.makeText( context,"No existe el producto",Toast.LENGTH_LONG).show();
+                        borrarCampos();
+                    }
+                }else{
+                    Toast.makeText( context,"No existe el producto",Toast.LENGTH_LONG).show();
+                   borrarCampos();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Error","Error producto",error.toException());
+                borrarCampos();
+            }
+        });
+    }
 
 
     private void crearNotificacionPedidoCreado( Pedido pedido,int codigoNotificacion){

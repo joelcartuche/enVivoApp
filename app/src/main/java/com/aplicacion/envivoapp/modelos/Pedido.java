@@ -18,6 +18,9 @@ public class Pedido {
     private String idCliente;
     private String idStreaming;
     private String imagen;
+    private Producto producto;
+    private String idCliente_idVendedor;
+
 
     private  Date fechaFinalPedido;
 
@@ -27,6 +30,22 @@ public class Pedido {
         this.pagado = false;
         this.eliminado=false;
         this.imagen = null;
+    }
+
+    public String getIdCliente_idVendedor() {
+        return idCliente_idVendedor;
+    }
+
+    public void setIdCliente_idVendedor(String idCliente_idVendedor) {
+        this.idCliente_idVendedor = idCliente_idVendedor;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public String getImagen() {

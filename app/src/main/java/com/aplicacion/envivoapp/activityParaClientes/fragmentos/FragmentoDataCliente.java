@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -25,7 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activitysParaVendedores.HomeVendedorMain;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.navDataVendedor.FragmentoStreamigsVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;

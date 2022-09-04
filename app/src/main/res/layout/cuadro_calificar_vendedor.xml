@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Cómo calificaria al vendedor?"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnCalificarBienVendedor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="40dp"
+            android:tint="#00C853"
+            app:srcCompat="@drawable/ic_baseline_thumb_up_alt_24" />
+
+        <ImageButton
+            android:id="@+id/btnCalificarMalVendedor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="40dp"
+            android:tint="#D50000"
+            app:srcCompat="@drawable/ic_baseline_thumb_down_24" />
+    </LinearLayout>
+</LinearLayout>

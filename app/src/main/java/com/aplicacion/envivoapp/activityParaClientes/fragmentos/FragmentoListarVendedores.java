@@ -1,10 +1,6 @@
 package com.aplicacion.envivoapp.activityParaClientes.fragmentos;
 
-import android.app.Dialog;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,34 +17,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.adaptadores.AdapterGridPedidoCliente;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.navDataVendedor.FragmentoStreamigsVendedor;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.navDataVendedor.Fragmento_principal;
 import com.aplicacion.envivoapp.adaptadores.AdapterListarVendedores;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroListarVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
-import com.aplicacion.envivoapp.modelos.Mensaje_Cliente_Vendedor;
-import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.BuscadorVendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
-import com.aplicacion.envivoapp.utilidades.Utilidades;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentoListarVendedores extends Fragment implements CuadroListarVendedor.resultadoDialogo, BuscadorVendedor.resultadoBuscadorVendedor {
 
+    /*
+    * fragmento necesario para el listado de vendedores.
+    * */
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -97,12 +86,18 @@ public class FragmentoListarVendedores extends Fragment implements CuadroListarV
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         ((MyFirebaseApp) getActivity().getApplicationContext()).setVendedor(listVendedor.get(position));
-                        Log.d("DATA2", listVendedor.get(position).getIdVendedor());
-                        new CuadroListarVendedor(getContext(),
-                                listVendedor.get(position),
-                                databaseReference,
-                                firebaseAuth,
-                                FragmentoListarVendedores.this::resultado);
+
+                        Fragment fragment = new Fragmento_principal();
+                        getActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                                .replace(R.id.home_content, fragment)
+                                .commit();
+                        //new CuadroListarVendedor(getContext(),
+                         //       listVendedor.get(position),
+                         //       databaseReference,
+                          //      firebaseAuth,
+                          //      FragmentoListarVendedores.this::resultado);
                     }
                 });
 
@@ -140,6 +135,10 @@ public class FragmentoListarVendedores extends Fragment implements CuadroListarV
 
     @Override
     public void resultado(Boolean isVerStreamings, Vendedor vendedor) {
+        /*
+        * @param isVerStreamings para ves si selecciono ver streaming
+        * @param vendedor recive los datos del vendedor
+        * recibe el resultado de la busque del vendedor*/
         if(isVerStreamings){
             if (clienteGlobal !=null){
                 ((MyFirebaseApp) getActivity().getApplicationContext()).setVendedor(vendedor);
@@ -176,6 +175,10 @@ public class FragmentoListarVendedores extends Fragment implements CuadroListarV
 
 
     private void cargarFragment( ) {
+        /*
+        * carga el fragmento dependiendo de si es o
+        * no un mensaje global
+        * */
         if (esMensajeGlobal){
             Fragment fragment = new FragmentoMensajeriaGlobal();
             getActivity().getSupportFragmentManager()

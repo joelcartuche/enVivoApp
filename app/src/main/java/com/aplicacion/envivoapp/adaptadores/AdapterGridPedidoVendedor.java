@@ -1,11 +1,9 @@
 package com.aplicacion.envivoapp.adaptadores;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +20,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoStreamigsVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoMensajeriaGlobalVendedor;
+import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoPedidosCliente;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCambiarPedido;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroCancelarPedidoCliente;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroSeleccionarUbicacion;
+import com.aplicacion.envivoapp.modelos.Calificaciones;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Vendedor;
@@ -52,6 +51,8 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
 
     private Context context;
     private List<Pedido> listaPedidoVendedor;
+    private List<String> clientesMasDeUnPedido;
+    private List<Integer> contadorClientesMasDeUnPedido;
     private DatabaseReference databaseReference;
     private  Boolean eliminado;
     private  FirebaseStorage storage;
@@ -65,7 +66,9 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
                                      DatabaseReference databaseReference,
                                      FirebaseStorage storage,
                                      FragmentActivity fragmentActivity,
-                                     Vendedor vendedorGlobal){
+                                     Vendedor vendedorGlobal,
+                                     List<String> clientesMasDeUnPedido,
+                                     List<Integer> contadorClientesMasDeUnPedido){
         this.context = context;
         this.listaPedidoVendedor = listaPedidoVendedor;
         this.databaseReference = databaseReference;
@@ -73,6 +76,8 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
         this.storage = storage;
         this.fragmentActivity = fragmentActivity;
         this.vendedorGlobal = vendedorGlobal;
+        this.clientesMasDeUnPedido= clientesMasDeUnPedido;
+        this.contadorClientesMasDeUnPedido = contadorClientesMasDeUnPedido;
     }
 
     @Override
@@ -207,7 +212,10 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
         btnCancelarPedido.setVisibility(View.GONE);
         imagenPedido.setVisibility(View.GONE);
 
-        if (pedido.getAceptado()&& !pedido.getPagado() && !pedido.getCancelado()) {//en caso de ser aceptado el pedido mostramos el boton de pagado
+        if (pedido.getAceptado()
+                && !pedido.getPagado()
+                && !pedido.getCancelado()) {//en caso de ser aceptado el pedido mostramos el boton de pagado
+
             btnCambiarPedido.setVisibility(View.VISIBLE);
             btnPagado.setVisibility(View.VISIBLE);
             btnCancelarPedido.setVisibility(View.VISIBLE);
@@ -216,7 +224,24 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
 
             btnCancelarPedido.setText("Cancelar pedido");
             //fucion de pedido aceptado
-            pedidoAceptado(btnPagado,btnCancelarPedido,btnCambiarPedido,pedido);
+
+            if (contadorClientesMasDeUnPedido.isEmpty()){
+                btnPagado.setVisibility(View.GONE);
+            }else{
+                //obtenemos la cantidad de pedidos del cliente
+                int numeroPedidos = contadorClientesMasDeUnPedido.get(clientesMasDeUnPedido.indexOf(pedido.getIdCliente()));
+
+                if (numeroPedidos==1){
+
+                    pedidoAceptado(btnPagado,btnCancelarPedido,btnCambiarPedido,pedido);
+                }else{
+                    btnPagado.setText("Ver pedidos");
+                    irPedidosCliente(btnPagado,pedido.getIdCliente());
+                }
+            }
+
+
+
 
         }
         if(pedido.getPagado() && !pedido.getCancelado() && !pedido.getAceptado()){ //en caso de que el pedido ya este pagado
@@ -256,6 +281,39 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
 
     }
 
+    private void irPedidosCliente(Button btnPagado,String idCliente) {
+        btnPagado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                databaseReference.child("Cliente").child(idCliente).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            Cliente cliente = snapshot.getValue(Cliente.class);
+
+                            if (cliente!= null){
+                                ((MyFirebaseApp) context.getApplicationContext()).setCliente(cliente);
+                                Fragment fragment = new FragmentoPedidosCliente();
+                                fragmentActivity.getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .setCustomAnimations(R.anim.nav_default_enter_anim, R.anim.nav_default_exit_anim)
+                                        .replace(R.id.home_content_vendedor, fragment)
+                                        .commit();
+
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
+    }
+
 
     @Override
     public void resultado(Boolean isAcepatado, Boolean isCancelado) {
@@ -281,6 +339,24 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(context, "El pedido a sido cambiado a pagado exitosamente", Toast.LENGTH_LONG).show();
+                                Calificaciones calificaciones = new Calificaciones();
+                                calificaciones.setIdCliente(pedido.getIdCliente());
+                                calificaciones.setEsNuevo(true);
+                                calificaciones.setIdCalificaciones(databaseReference.push().getKey());
+                                calificaciones.setVendedor(vendedorGlobal);
+                                calificaciones.setIdCliente_esNuevo(pedido.getIdCliente()+"_true");
+
+                                //subimos las calificaciones para que el cliente inicie su calificacion
+                                databaseReference.child("Calificaciones").child(calificaciones.getIdCalificaciones()).setValue(calificaciones).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+                                            Log.d("Success", "calificacion subida");
+                                        }else{
+                                            Log.d("Success", "error en subir calificacion");
+                                        }
+                                    }
+                                });
                             } else {
                                 Toast.makeText(context, "A ocurrido un error al cambiar a pagado  el pedido", Toast.LENGTH_LONG).show();
                             }

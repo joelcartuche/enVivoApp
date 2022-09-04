@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitysParaVendedores.fragmentos.GestionProducto.FragmentoIngresarProductoMasivo">
+
+    <Button
+        android:id="@+id/btnSeleccionarCsvIngresarProductoMasivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar archivo csv"
+        tools:layout_editor_absoluteX="208dp"
+        tools:layout_editor_absoluteY="203dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <Button
+        android:id="@+id/btnSubirCsvIngresarProductoMasivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subir archivo csv"
+        tools:layout_editor_absoluteX="208dp"
+        tools:layout_editor_absoluteY="203dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvConfirmacionCsvIngresarProductoMasivo"
+        />
+
+    <TextView
+        android:id="@+id/tvConfirmacionCsvIngresarProductoMasivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="827dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnSeleccionarCsvIngresarProductoMasivo"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

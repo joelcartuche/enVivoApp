@@ -1,4 +1,4 @@
-package com.aplicacion.envivoapp.activityParaClientes.fragmentos;
+package com.aplicacion.envivoapp.activityParaClientes.fragmentos.navDataVendedor;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,16 +12,15 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.aplicacion.envivoapp.R;
-import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoHomeVendedor;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoHomeCliente;
+import com.aplicacion.envivoapp.activityParaClientes.fragmentos.FragmentoMensajeriaCliente;
 import com.aplicacion.envivoapp.adaptadores.AdapterVideoStreaming;
 import com.aplicacion.envivoapp.cuadroDialogo.CuadroDatosStreaming;
-import com.aplicacion.envivoapp.cuadroDialogo.CuadroListarVendedor;
 import com.aplicacion.envivoapp.modelos.Cliente;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.modelos.VideoStreaming;
@@ -29,7 +28,6 @@ import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.aplicacion.envivoapp.utilidades.MyFirebaseApp;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

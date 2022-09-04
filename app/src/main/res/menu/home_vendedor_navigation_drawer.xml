@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <item
+        android:id="@+id/home_vendedor"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home_cliente" />
+<item android:title="opciones">
+    <menu>
 
-        <item
-            android:id="@+id/home_vendedor"
-            android:icon="@drawable/ic_home"
-            android:title="@string/home_cliente" />
 
         <item
             android:id="@+id/data_vendedor"
@@ -51,11 +52,42 @@
             android:icon="@drawable/ic_baseline_help_24"
             android:title="Ayuda" />
 
+    </menu>
+</item>
+
+        <item
+            android:id="@+id/Productos"
+            android:title="Productos"
+            >
+            <menu>
+                <item
+                    android:id="@+id/ListarProductos"
+                    android:icon="@drawable/ic_listar_vendedores"
+                    android:title="Ver productos"/>
+                <item
+                    android:id="@+id/ListarProductosSinImagen"
+                    android:icon="@drawable/ic_listar_vendedores"
+                    android:title="Ver productos sin imagen"/>
+                <item
+                    android:id="@+id/CrearProductoIndividual"
+                    android:icon="@android:drawable/ic_input_add"
+                    android:title="Crear producto individualmente"/>
+
+                <item
+                    android:id="@+id/CargarProductoCsv"
+                    android:icon="@drawable/ic_archivo"
+                    android:title="Cargar productos con CSV"/>
+            </menu>
+        </item>
+
+
+
+
+
         <item
             android:id="@+id/salir_vendedor"
             android:icon="@drawable/ic_persona_salir"
             android:title="@string/salir" />
 
-    </group>
 
 </menu>

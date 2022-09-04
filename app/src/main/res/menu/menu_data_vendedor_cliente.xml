@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/fragmento_listar_locales_vendedor"
+        android:icon="@drawable/ic_local_vendedor"
+        android:title="Locales" />
+    <item
+        android:id="@+id/fragmento_listar_productos_vendedor"
+        android:icon="@drawable/ic_productos"
+        android:title="Productos" />
+    <item
+        android:id="@+id/streamings_vendedor"
+        android:icon="@drawable/ic_videos_streaming"
+        android:title="Streamings" />
+    <item
+        android:id="@+id/calificaciones_vendedor"
+        android:icon="@drawable/com_facebook_button_like_icon_selected"
+        android:title="Calificaciones" />
+    <item
+        android:id="@+id/cometarios_vendedor"
+        android:icon="@drawable/com_facebook_button_send_icon_white"
+        android:title="Comentarios" />
+</menu>

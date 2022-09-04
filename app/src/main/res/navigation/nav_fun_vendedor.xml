@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_fun_vendedor"
+    app:startDestination="@id/fragmento_listar_locales_vendedor">
+
+    <fragment
+        android:id="@+id/fragmento_listar_locales_vendedor"
+        android:name="com.aplicacion.envivoapp.activityParaClientes.fragmentos.navDataVendedor.Fragmento_listar_locales_vendedor"
+        android:label="fragmento_listar_locales_vendedor"
+        tools:layout="@layout/fragmento_listar_locales_vendedor" />
+    <fragment
+        android:id="@+id/fragmento_listar_productos_vendedor"
+        android:name="com.aplicacion.envivoapp.activityParaClientes.fragmentos.navDataVendedor.Fragmento_listar_productos_vendedor"
+        android:label="fragment_fragmento_listar_productos_vendedor"
+        tools:layout="@layout/fragment_fragmento_listar_productos_vendedor" />
+</navigation>

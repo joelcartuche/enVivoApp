@@ -4,10 +4,13 @@ import android.app.Application;
 import android.net.Uri;
 
 import com.aplicacion.envivoapp.modelos.Cliente;
+import com.aplicacion.envivoapp.modelos.Producto;
 import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
 
 public class MyFirebaseApp extends Application {
 
@@ -21,7 +24,9 @@ public class MyFirebaseApp extends Application {
     private Vendedor vendedor;
     private Cliente cliente;
     private Uri linkAcceso;
+    private String idProducto;
     private Boolean esPrimerMensajeClienteVendedor;
+    private Producto producto;
 
     public Boolean getEsPrimerMensajeClienteVendedor() {
         return esPrimerMensajeClienteVendedor;
@@ -39,10 +44,29 @@ public class MyFirebaseApp extends Application {
         this.codigo=0;
         this.idNotificacion=0;
         this.vendedor=null;
+        this.idProducto = null;
         this.cliente=null;
         this.linkAcceso=null;
         this.esPrimerMensajeClienteVendedor=null;
+        this.producto= null;
     };
+
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
+    public String getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
+    }
 
     public Uri getLinkAcceso() {
         return linkAcceso;

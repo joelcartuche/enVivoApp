@@ -8,12 +8,17 @@ android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
+    buildFeatures{
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.aplicacion.envivoapp"
         minSdkVersion 19
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -62,18 +67,20 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
     implementation 'com.opencsv:opencsv:4.6'
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-storage:20.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.github.Mika-89:Screenshot:master-SNAPSHOT'
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
     implementation 'com.google.firebase:firebase-messaging:15.0.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
 
     // Declare the dependencies for the Dynamic Links and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-dynamic-links'
+
 
 
 

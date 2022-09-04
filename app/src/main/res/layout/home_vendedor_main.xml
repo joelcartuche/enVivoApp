@@ -52,86 +52,6 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/quinto">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/btnHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_home"
-                    android:text="Home"
-                    android:textSize="8sp" />
-
-                <Button
-                    android:id="@+id/btnListarLocalHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_local_vendedor"
-                    android:text="Local"
-
-                    android:textSize="8sp" />
-
-                <Button
-                    android:id="@+id/btnPerfilVendedorHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_persona"
-                    android:text="Perfil"
-                    android:textSize="8sp" />
-
-                <Button
-                    android:id="@+id/btnPedidoHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_carrito_compra"
-                    android:text="Pedidos"
-                    android:textSize="8sp" />
-
-                <Button
-                    android:id="@+id/btnVideosHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_videos_streaming"
-                    android:text="Videos"
-                    android:textSize="8sp" />
-
-                <Button
-                    android:id="@+id/btnClientesHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_clientes"
-                    android:text="Clientes"
-                    android:textSize="8sp" />
-
-                <Button
-                    android:id="@+id/btnReporteHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_reportes_vendedor"
-                    android:text="Reportes"
-                    android:textSize="8sp" />
-
-
-                <Button
-                    android:id="@+id/btnSalirHomeVendedor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_persona_salir"
-                    android:text="Salir"
-                    android:textSize="8sp" />
-
-
-            </LinearLayout>
-        </HorizontalScrollView>
-
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout3"
             android:layout_width="match_parent"
@@ -180,6 +100,7 @@
         app:headerLayout="@layout/cabecera_home_vendedor"
         app:itemIconTint="@color/quinto"
         app:itemTextColor="#000000"
-        app:menu="@menu/home_vendedor_navigation_drawer" />
+        app:menu="@menu/home_vendedor_navigation_drawer"
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>

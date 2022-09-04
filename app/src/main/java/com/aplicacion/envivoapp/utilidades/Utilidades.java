@@ -776,6 +776,15 @@ public class Utilidades extends Application {
         return dialog;
     }
 
+    public Dialog dialogSuccess(Context context){
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//el dialogo se presenta sin el titulo
+        dialog.setCancelable(false); //impedimos el cancelamiento del dialogo
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
+        dialog.setContentView(R.layout.cuadro_satisfactorio); //le asisganos el layout
+        return dialog;
+    }
+
 
 
 

@@ -186,33 +186,26 @@ public class FragmentoPedidosCliente extends Fragment {
                     Double sumaTotal = 0.0;
                     for (DataSnapshot ds:snapshot.getChildren()){
                         Pedido pedido = ds.getValue(Pedido.class);
-
-                        if(pedido !=null){
-                            //filtramos solo los pedidos aceptados que tiene el cliente
-                            if(pedido.getAceptado()&&
-                                    !pedido.getEliminado()&&
-                                    !pedido.getCancelado()&&
-                                    !pedido.getPagado()){
-                                //transformamos los datos encriptados
-                                try {
-                                    pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    pedido.setCodigoProducto(encriptacionDatos.desencriptar(pedido.getCodigoProducto()));
-                                    pedido.setDescripcionProducto(encriptacionDatos.desencriptar(pedido.getDescripcionProducto()));
-                                    pedido.setNombreProducto(encriptacionDatos.desencriptar(pedido.getNombreProducto()));
-
-                                    sumaTotal += pedido.getPrecioProducto()*pedido.getCantidadProducto();
-                                    tvTotalPagarPedidosCliente.setText("Total: "+sumaTotal);
-                                    listPedido.add(pedido);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                        //transformamos los datos encriptados
+                        try {
+                            pedido.setImagen(encriptacionDatos.desencriptar(pedido.getImagen()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+                        try {
 
+
+
+                            pedido.setCodigoProducto(encriptacionDatos.desencriptar(pedido.getCodigoProducto()));
+                            pedido.setDescripcionProducto(encriptacionDatos.desencriptar(pedido.getDescripcionProducto()));
+                            pedido.setNombreProducto(encriptacionDatos.desencriptar(pedido.getNombreProducto()));
+
+                            sumaTotal += pedido.getPrecioProducto()*pedido.getCantidadProducto();
+                            tvTotalPagarPedidosCliente.setText("Total: "+sumaTotal);
+                            listPedido.add(pedido);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     btnPagarPedidosCliente.setVisibility(View.VISIBLE);
                     dialogCargando.dismiss();

@@ -38,8 +38,6 @@ import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoGest
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoHomeVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoListarClientes;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoPedidoVendedor;
-import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoVerCalificacionVendedor;
-import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.FragmentoVerComentariosVendedor;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.GestionProducto.FragmentoIngresarProducto;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.GestionProducto.FragmentoIngresarProductoMasivo;
 import com.aplicacion.envivoapp.activitysParaVendedores.fragmentos.GestionProducto.FragmentoListarProductos;
@@ -90,7 +88,16 @@ public class HomeVendedorMain extends AppCompatActivity implements
 
 
     //botones del menu
-    private Button btnMensajeria;
+    private Button btnHomeVendedor,
+            btnListarLocal,
+            btnPerfil,
+            btnPedido,
+            btnVideos,
+            btnClientes,
+            btnReportes,
+            btnSalir,
+            btnMensajeria,
+    btnProductos;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -344,13 +351,6 @@ public class HomeVendedorMain extends AppCompatActivity implements
             case R.id.local:
                 fragment = new FragmentoDataLocal();
                 break;
-            case R.id.ver_calificaciones_vendedor:
-                fragment = new FragmentoVerCalificacionVendedor();
-                break;
-            case R.id.ver_comentarios_vendedor:
-                fragment =new FragmentoVerComentariosVendedor();
-                break;
-
             case R.id.ListarProductos:
                 fragment = new FragmentoListarProductos();
                 break;

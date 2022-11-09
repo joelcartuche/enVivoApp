@@ -8,7 +8,6 @@ public class Calificaciones {
     private Boolean esNuevo;
     private String idCliente_esNuevo;
 
-
     public Calificaciones() {
     }
 

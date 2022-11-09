@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,8 +75,6 @@ public class Fragmento_calificaciones_vendedor extends Fragment {
         queryProductos.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                calificacionesBuenas =0;
-                totalCalificaciones =0;
                 if (snapshot.exists()){
 
                     for (DataSnapshot ds:snapshot.getChildren()){

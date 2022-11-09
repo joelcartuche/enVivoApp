@@ -5,7 +5,9 @@
     android:id="@+id/frameLayout8"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".activityParaClientes.fragmentos.navDataVendedor.Fragmento_comentarios_vendedor">
+
 
     <ScrollView
         android:id="@+id/scrollContenedorGrid"
@@ -33,7 +35,7 @@
                     android:text="Comentar"
                     app:backgroundTint="#00C853"
                     app:cornerRadius="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/hsvGrupoRadioFragmentoComentariosVendedor"
+                    app:layout_constraintBottom_toTopOf="@+id/gurpoRadioFiltroComentario"
                     app:layout_constraintEnd_toStartOf="@+id/btnRealizarDenunciaFragmentoComentarioVendedor"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +47,7 @@
                     android:text="Denunciar"
                     app:backgroundTint="#D50000"
                     app:cornerRadius="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/hsvGrupoRadioFragmentoComentariosVendedor"
+                    app:layout_constraintBottom_toTopOf="@+id/gurpoRadioFiltroComentario"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btnRealizarComentarioFragmentoComentarioVendedor"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -56,55 +58,35 @@
                     android:layout_height="wrap_content"
                     android:text="Filtrar por: "
                     app:layout_constraintBottom_toTopOf="@+id/gridComentariosVendedorFragmentoComentarioVendedor"
-                    app:layout_constraintEnd_toStartOf="@+id/hsvGrupoRadioFragmentoComentariosVendedor"
+                    app:layout_constraintEnd_toStartOf="@+id/gurpoRadioFiltroComentario"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnRealizarDenunciaFragmentoComentarioVendedor" />
 
-
-                <HorizontalScrollView
-                    android:id="@+id/hsvGrupoRadioFragmentoComentariosVendedor"
+                <RadioGroup
+                    android:id="@+id/gurpoRadioFiltroComentario"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toTopOf="@+id/gridComentariosVendedorFragmentoComentarioVendedor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tvTituloFiltro"
                     app:layout_constraintTop_toBottomOf="@+id/btnRealizarDenunciaFragmentoComentarioVendedor">
 
-                    <LinearLayout
+
+                    <RadioButton
+                        android:id="@+id/radioComentariosComentariosVendedor"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" >
-                        <RadioGroup
-                            android:id="@+id/gurpoRadioFiltroComentario"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
+                        android:layout_height="wrap_content"
+                        android:text="Comentarios" />
+
+                    <RadioButton
+                        android:id="@+id/radioDenunciasComentarioVendedor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Denuncias" />
 
 
-                            <RadioButton
-                                android:id="@+id/radioComentariosComentariosVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Comentarios" />
-
-                            <RadioButton
-                                android:id="@+id/radioDenunciasComentarioVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Denuncias" />
-                            <RadioButton
-                                android:id="@+id/radioGraficoComentarioVendedor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Gráfico" />
-
-
-                        </RadioGroup>
-                    </LinearLayout>
-                </HorizontalScrollView>
-
-
+                </RadioGroup>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/gridComentariosVendedorFragmentoComentarioVendedor"
@@ -113,7 +95,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/lineChartComentariosVendedor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/hsvGrupoRadioFragmentoComentariosVendedor" />
+                    app:layout_constraintTop_toBottomOf="@+id/gurpoRadioFiltroComentario" />
 
 
                 <com.github.mikephil.charting.charts.PieChart

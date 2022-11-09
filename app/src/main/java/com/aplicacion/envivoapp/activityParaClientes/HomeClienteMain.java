@@ -597,17 +597,17 @@ CuadroCalificarVendedor.resultadoCuadroCalificarVendedor{
 
     private void buscarCalificacionNueva(String idCliente) {
         //buscamos si existe una calificacion nueva
-
+        Log.d("SSSSS","-------------ZZ "+idCliente);
         databaseReference.child("Calificaciones").orderByChild("idCliente_esNuevo").equalTo(idCliente+"_true").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                Log.d("SSSSS","-----------------000000000");
                 if (snapshot.exists()){
-
+                    Log.d("SSSSS","-----------------1111111111111");
                     for (DataSnapshot ds: snapshot.getChildren()){
                         Calificaciones calificaciones = ds.getValue(Calificaciones.class);
                         if (calificaciones!=null){
-
+                            Log.d("SSSSS","-----------------2222222");
                             new CuadroCalificarVendedor(HomeClienteMain.this,
                                     databaseReference,
                                     HomeClienteMain.this::resultadoCuadroCalificarVendedor,
@@ -615,14 +615,14 @@ CuadroCalificarVendedor.resultadoCuadroCalificarVendedor{
                         }
                     }
                 }else{
-                    Log.e("ERROR","No tiene para calificar");
+                    Log.d("SSSSS","-----------------3333333333333");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("ERROR","error en la calificacion",error.toException());
-
+                Log.d("SSSSS","-----------------000000000");
             }
         });
     }

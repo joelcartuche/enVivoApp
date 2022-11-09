@@ -13,32 +13,12 @@ public class Vendedor {
     private String telefono;
     private Integer diasEperaCancelacion;
     private String uidUsuario;
-    private int numCalificacionesBuenas;
-    private int numCalificacionesMalas;
-
 
 
     public Vendedor() {
-        this.numCalificacionesBuenas =0;
-        this.numCalificacionesMalas =0;
     }
 
 
-    public int getNumCalificacionesBuenas() {
-        return numCalificacionesBuenas;
-    }
-
-    public void setNumCalificacionesBuenas(int numCalificacionesBuenas) {
-        this.numCalificacionesBuenas = numCalificacionesBuenas;
-    }
-
-    public int getNumCalificacionesMalas() {
-        return numCalificacionesMalas;
-    }
-
-    public void setNumCalificacionesMalas(int numCalificacionesMalas) {
-        this.numCalificacionesMalas = numCalificacionesMalas;
-    }
 
     public String getIdVendedor() {
         return idVendedor;

@@ -27,6 +27,7 @@ public class MyFirebaseApp extends Application {
     private String idProducto;
     private Boolean esPrimerMensajeClienteVendedor;
     private Producto producto;
+    private  String actividadDeLaQueViene;
 
     public Boolean getEsPrimerMensajeClienteVendedor() {
         return esPrimerMensajeClienteVendedor;
@@ -49,8 +50,17 @@ public class MyFirebaseApp extends Application {
         this.linkAcceso=null;
         this.esPrimerMensajeClienteVendedor=null;
         this.producto= null;
+        this.actividadDeLaQueViene = null;
     };
 
+
+    public String getActividadDeLaQueViene() {
+        return actividadDeLaQueViene;
+    }
+
+    public void setActividadDeLaQueViene(String actividadDeLaQueViene) {
+        this.actividadDeLaQueViene = actividadDeLaQueViene;
+    }
 
     public Producto getProducto() {
         return producto;

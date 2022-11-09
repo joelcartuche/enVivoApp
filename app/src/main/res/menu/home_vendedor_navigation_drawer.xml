@@ -43,6 +43,16 @@
             android:title="@string/listar_clientes" />
 
         <item
+            android:id="@+id/ver_calificaciones_vendedor"
+            android:icon="@drawable/ic_baseline_thumb_up_alt_24"
+            android:title="Calificaciones" />
+
+        <item
+            android:id="@+id/ver_comentarios_vendedor"
+            android:icon="@drawable/com_facebook_button_send_icon_white"
+            android:title="Comentarios" />
+
+        <item
             android:id="@+id/reporte"
             android:icon="@drawable/ic_reportes_vendedor"
             android:title="Reporte" />

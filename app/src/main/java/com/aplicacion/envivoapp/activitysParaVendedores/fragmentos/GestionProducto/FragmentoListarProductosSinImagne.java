@@ -70,7 +70,8 @@ public class FragmentoListarProductosSinImagne extends Fragment {
         //Inicialisamos el adaptador
         adapterGridProductosVendedor = new AdapterGridProductosVendedor(getContext(),
                 listProduct,
-                storage);
+                storage,getActivity(),
+                "listaProductosImagen",databaseReference);
         gridProductosSinImagen.setAdapter(adapterGridProductosVendedor); //configuramos el view
     }
 
@@ -88,25 +89,29 @@ public class FragmentoListarProductosSinImagne extends Fragment {
                         Producto producto = ds.getValue(Producto.class);
 
                         if (producto!=null){
-                            if (producto.getImagen() == null) {//filtramos los productos que no tienen iimagne
-                                try {
-                                    producto.setNombreProducto(encrypt.desencriptar(producto.getNombreProducto()));
-                                    producto.setCodigoProducto(encrypt.desencriptar(producto.getCodigoProducto()));
-                                    producto.setDescripcionProducto(encrypt.desencriptar(producto.getDescripcionProducto()));
+                            if (!producto.getEsEliminado()) {
+                                if (producto.getImagen() == null) {//filtramos los productos que no tienen iimagne
+                                    try {
+                                        producto.setNombreProducto(encrypt.desencriptar(producto.getNombreProducto()));
+                                        producto.setCodigoProducto(encrypt.desencriptar(producto.getCodigoProducto()));
+                                        producto.setDescripcionProducto(encrypt.desencriptar(producto.getDescripcionProducto()));
 
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(getContext(), "Error al cargar el producto", Toast.LENGTH_LONG).show();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(getContext(), "Error al cargar el producto", Toast.LENGTH_LONG).show();
+                                    }
+
+                                    listProduct.add(producto);
+
                                 }
-
-                                listProduct.add(producto);
                             }
                         }
                     }
 
                     adapterGridProductosVendedor = new AdapterGridProductosVendedor(getContext(),
                             listProduct,
-                            storage);
+                            storage,getActivity(),
+                            "listaProductosImagen",databaseReference);
                     gridProductosSinImagen.setAdapter(adapterGridProductosVendedor); //configuramos el view
                     gridProductosSinImagen.setLayoutManager(new LinearLayoutManager(getContext()));
 

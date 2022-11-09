@@ -225,20 +225,10 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
             btnCancelarPedido.setText("Cancelar pedido");
             //fucion de pedido aceptado
 
-            if (contadorClientesMasDeUnPedido.isEmpty()){
-                btnPagado.setVisibility(View.GONE);
-            }else{
-                //obtenemos la cantidad de pedidos del cliente
-                int numeroPedidos = contadorClientesMasDeUnPedido.get(clientesMasDeUnPedido.indexOf(pedido.getIdCliente()));
 
-                if (numeroPedidos==1){
-
-                    pedidoAceptado(btnPagado,btnCancelarPedido,btnCambiarPedido,pedido);
-                }else{
-                    btnPagado.setText("Ver pedidos");
-                    irPedidosCliente(btnPagado,pedido.getIdCliente());
-                }
-            }
+            pedidoAceptado(btnCancelarPedido,btnCambiarPedido,pedido);
+            btnPagado.setText("Ver todos los productos");
+            irPedidosCliente(btnPagado,pedido.getIdCliente());
 
 
 
@@ -322,49 +312,7 @@ public class AdapterGridPedidoVendedor extends BaseAdapter implements CuadroCanc
 
     //funcionalidad del boton pagado cuando el pedido esta aceptado
 
-    private void pedidoAceptado(Button btnPagado,Button btnCancelarPedido,Button btnCambiarPedido,Pedido pedido){
-
-        //damos funcionalidad al boton y cambiamos a pagado el pedido
-        btnPagado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pedido.getAceptado()) {
-                    Map<String, Object> pedidoActualizacion = new HashMap<>();
-                    pedidoActualizacion.put("pagado", true);
-                    pedidoActualizacion.put("cancelado", false);
-                    pedidoActualizacion.put("aceptado", false);
-                    pedidoActualizacion.put("eliminado", false);
-                    databaseReference.child("Pedido").child(pedido.getIdPedido()).updateChildren(pedidoActualizacion).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(context, "El pedido a sido cambiado a pagado exitosamente", Toast.LENGTH_LONG).show();
-                                Calificaciones calificaciones = new Calificaciones();
-                                calificaciones.setIdCliente(pedido.getIdCliente());
-                                calificaciones.setEsNuevo(true);
-                                calificaciones.setIdCalificaciones(databaseReference.push().getKey());
-                                calificaciones.setVendedor(vendedorGlobal);
-                                calificaciones.setIdCliente_esNuevo(pedido.getIdCliente()+"_true");
-
-                                //subimos las calificaciones para que el cliente inicie su calificacion
-                                databaseReference.child("Calificaciones").child(calificaciones.getIdCalificaciones()).setValue(calificaciones).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()){
-                                            Log.d("Success", "calificacion subida");
-                                        }else{
-                                            Log.d("Success", "error en subir calificacion");
-                                        }
-                                    }
-                                });
-                            } else {
-                                Toast.makeText(context, "A ocurrido un error al cambiar a pagado  el pedido", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-            }
-        });
+    private void pedidoAceptado(Button btnCancelarPedido,Button btnCambiarPedido,Pedido pedido){
 
 
         //Le damos funcionalidad a los botones

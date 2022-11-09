@@ -68,7 +68,7 @@ public class Fragmento_comentarios_vendedor extends Fragment
     private Cliente clienteGlobal;
     private Vendedor vendedorGlobal;
     private RadioButton radioComentariosComentariosVendedor;
-    private RadioButton radioDenunciasComentarioVendedor;
+    private RadioButton radioDenunciasComentarioVendedor,radioGraficoComentarioVendedor;
     private Dialog dialogCargando;
     private Integer numeroComentarios=0,totalComentarios =0;
 
@@ -87,6 +87,9 @@ public class Fragmento_comentarios_vendedor extends Fragment
         lineChartComentariosVendedor = root.findViewById(R.id.lineChartComentariosVendedor);
         radioComentariosComentariosVendedor = root.findViewById(R.id.radioComentariosComentariosVendedor);
         radioDenunciasComentarioVendedor = root.findViewById(R.id.radioDenunciasComentarioVendedor);
+        radioGraficoComentarioVendedor = root.findViewById(R.id.radioGraficoComentarioVendedor);
+
+        lineChartComentariosVendedor.setVisibility(View.GONE);
 
         radioComentariosComentariosVendedor.setChecked(true);
 
@@ -123,15 +126,29 @@ public class Fragmento_comentarios_vendedor extends Fragment
         radioComentariosComentariosVendedor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                gridComentariosVendedorFragmentoComentarioVendedor.setVisibility(View.VISIBLE);
+                lineChartComentariosVendedor.setVisibility(View.GONE);
                 cargarComentarios();
             }
         });
         radioDenunciasComentarioVendedor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                gridComentariosVendedorFragmentoComentarioVendedor.setVisibility(View.VISIBLE);
+                lineChartComentariosVendedor.setVisibility(View.GONE);
                 cargarComentarios();
             }
         });
+
+        radioGraficoComentarioVendedor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gridComentariosVendedorFragmentoComentarioVendedor.setVisibility(View.GONE);
+                lineChartComentariosVendedor.setVisibility(View.VISIBLE);
+                cargarComentarios();
+            }
+        });
+
 
         return root;
     }
@@ -142,13 +159,9 @@ public class Fragmento_comentarios_vendedor extends Fragment
         Integer porcentajeComentarios = 0;
 
         //calculamos los porcentajos
-        if (radioDenunciasComentarioVendedor.isChecked()){
-            porcentajeDenuncias = (listComentario.size()*100)/totalComentarios;
-            porcentajeComentarios = 100-porcentajeDenuncias;
-        }else if(radioComentariosComentariosVendedor.isChecked()) {
-            porcentajeComentarios = (listComentario.size()*100)/totalComentarios;
-            porcentajeDenuncias = 100-porcentajeComentarios;
-        }
+
+        porcentajeDenuncias = (listComentario.size()*100)/totalComentarios;
+        porcentajeComentarios = 100-porcentajeDenuncias;
 
         ArrayList<PieEntry> valoresY = new ArrayList<>();
         ArrayList<Integer> colores = new ArrayList<>();
@@ -210,7 +223,11 @@ public class Fragmento_comentarios_vendedor extends Fragment
                                 if (!comentario.getEsDenuncia()){
                                     listComentario.add(comentario);
                                 }
-                            }else{
+                            }else if(radioDenunciasComentarioVendedor.isChecked()){
+                                if (comentario.getEsDenuncia()){
+                                    listComentario.add(comentario);
+                                }
+                            }else if(radioGraficoComentarioVendedor.isChecked()){
                                 if (comentario.getEsDenuncia()){
                                     listComentario.add(comentario);
                                 }
@@ -219,7 +236,10 @@ public class Fragmento_comentarios_vendedor extends Fragment
                         }
                     }
 
-                    cargarGrafico();
+                    if (radioGraficoComentarioVendedor.isChecked()){
+                        cargarGrafico();
+                    }
+
 
                     adapteGridComentariosVendedor = new AdapteGridComentariosVendedor(getContext(),
                             listComentario);

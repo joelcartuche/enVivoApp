@@ -3,6 +3,7 @@ package com.aplicacion.envivoapp.cuadroDialogo;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -19,10 +20,14 @@ import com.aplicacion.envivoapp.modelos.Calificaciones;
 import com.aplicacion.envivoapp.modelos.Mensaje;
 import com.aplicacion.envivoapp.modelos.Pedido;
 import com.aplicacion.envivoapp.modelos.Producto;
+import com.aplicacion.envivoapp.modelos.Vendedor;
 import com.aplicacion.envivoapp.utilidades.EncriptacionDatos;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -34,8 +39,11 @@ public class CuadroCalificarVendedor {
     EncriptacionDatos encrypt  = new EncriptacionDatos();
     DatabaseReference reference ;
     Context context;
+    Vendedor vendedorGlobal;
+    Calificaciones calificaciones;
     ImageButton btnCalificarBienVendedor,
             btnCalificarMalVendedor;
+    Dialog dialogoGlobal ;
 
 
 
@@ -53,14 +61,16 @@ public class CuadroCalificarVendedor {
         this.reference = reference;
         interfaceResultadoDialogo = result;
         this.context = context;
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);//el dialogo se presenta sin el titulo
-        dialog.setCancelable(false); //impedimos el cancelamiento del dialogo
+        dialogoGlobal= new Dialog(context);
+        dialogoGlobal.requestWindowFeature(Window.FEATURE_NO_TITLE);//el dialogo se presenta sin el titulo
+        dialogoGlobal.setCancelable(false); //impedimos el cancelamiento del dialogo
         //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.));//le damos un color de fondo transparente
-        dialog.setContentView(R.layout.cuadro_calificar_vendedor); //le asisganos el layout
+        dialogoGlobal.setContentView(R.layout.cuadro_calificar_vendedor); //le asisganos el layout
 
-        btnCalificarBienVendedor= dialog.findViewById(R.id.btnCalificarBienVendedor);
-        btnCalificarMalVendedor= dialog.findViewById(R.id.btnCalificarMalVendedor);
+
+        this.calificaciones = calificaciones;
+        btnCalificarBienVendedor= dialogoGlobal.findViewById(R.id.btnCalificarBienVendedor);
+        btnCalificarMalVendedor= dialogoGlobal.findViewById(R.id.btnCalificarMalVendedor);
 
 
         Map<String,Object> actualizacionCalificacion = new HashMap<>();
@@ -70,6 +80,7 @@ public class CuadroCalificarVendedor {
         actualizacionCalificacion.put("Calificaciones/"
                 +calificaciones.getIdCalificaciones()
                 +"/idCliente_esNuevo",calificaciones.getIdCliente()+"_false");
+
         btnCalificarBienVendedor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,9 +88,12 @@ public class CuadroCalificarVendedor {
                 actualizacionCalificacion.put("Calificaciones/"
                         +calificaciones.getIdCalificaciones()
                         +"/esCalificacionBuena",true);
+                actualizacionCalificacion.put("Vendedor/"
+                        +vendedorGlobal.getIdVendedor()
+                        +"/numCalificacionesBuenas",vendedorGlobal.getNumCalificacionesBuenas()+1);
 
                 reference.updateChildren(actualizacionCalificacion);
-                dialog.dismiss();
+                dialogoGlobal.dismiss();
             }
         });
 
@@ -89,13 +103,44 @@ public class CuadroCalificarVendedor {
                 actualizacionCalificacion.put("Calificaciones/"
                         +calificaciones.getIdCalificaciones()
                         +"/esCalificacionBuena",false);
+                actualizacionCalificacion.put("Vendedor/"
+                        +vendedorGlobal.getIdVendedor()
+                        +"/numCalificacionesMalas",vendedorGlobal.getNumCalificacionesMalas()+1);
+
                 reference.updateChildren(actualizacionCalificacion);
-                dialog.dismiss();
+                dialogoGlobal.dismiss();
 
             }
         });
 
+        obtenerVendedorGlobal();
 
-        dialog.show();
     }
+
+
+
+    /**
+     * ***Suma el numero de calificaciones en la clase vendedor
+     * */
+    private void obtenerVendedorGlobal() {
+        reference.child("Vendedor").child(calificaciones.getVendedor().getIdVendedor()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    Vendedor vendedor = snapshot.getValue(Vendedor.class);
+                    if (vendedor != null){
+                        vendedorGlobal =vendedor;
+                        dialogoGlobal.show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ERROR","Error al encontrar vendedor",error.toException());
+            }
+        });
+    }
+
+
 }

@@ -50,7 +50,7 @@
                             android:layout_marginTop="4dp"
                             android:text="Pedido pagado"
                             app:cornerRadius="20dp"
-                            app:icon="@drawable/com_facebook_button_like_icon_selected"
+                            app:icon="@drawable/ic_listar_vendedores"
                             app:layout_constraintBottom_toTopOf="@+id/btnCambiarPedidoVendedor"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

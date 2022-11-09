@@ -1,5 +1,6 @@
 package com.aplicacion.envivoapp.activityParaClientes.fragmentos;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.aplicacion.envivoapp.R;
@@ -31,11 +33,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class FragmentoListarVendedores extends Fragment implements CuadroListarVendedor.resultadoDialogo, BuscadorVendedor.resultadoBuscadorVendedor {
 
-    /*
+    /**
     * fragmento necesario para el listado de vendedores.
     * */
     private FirebaseAuth firebaseAuth;
@@ -149,6 +152,7 @@ public class FragmentoListarVendedores extends Fragment implements CuadroListarV
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void resultadoBuscadorVendedor(List<Vendedor> vendedorList) {
         Log.d("tamanio",vendedorList.size()+"");
@@ -161,8 +165,10 @@ public class FragmentoListarVendedores extends Fragment implements CuadroListarV
             listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
 
             listVendedor=vendedorList;
+            listVendedor.sort(Comparator.comparing(Vendedor::getNumCalificacionesBuenas).reversed());
+
             //Inicialisamos el adaptador con los datos recividos
-            adapterListVendedor = new AdapterListarVendedores(getContext(),vendedorList,databaseReference);
+            adapterListVendedor = new AdapterListarVendedores(getContext(),listVendedor,databaseReference);
             listaVendedorView.setAdapter(adapterListVendedor); //configuramos el view
 
         }else{

@@ -77,7 +77,9 @@ public class FragmentoListarProductos extends Fragment {
         //Inicialisamos el adaptador
         adapterGridProductosVendedor = new AdapterGridProductosVendedor(getContext(),
                 listProduct,
-                storage);
+                storage,getActivity(),
+                "listaProductos",
+                databaseReference);
         gridProductosVendedor.setAdapter(adapterGridProductosVendedor); //configuramos el view
     }
 
@@ -96,23 +98,27 @@ public class FragmentoListarProductos extends Fragment {
                         Producto producto = ds.getValue(Producto.class);
 
                         if (producto!=null){
-                            try {
-                                producto.setNombreProducto(encrypt.desencriptar(producto.getNombreProducto()));
-                                producto.setCodigoProducto(encrypt.desencriptar(producto.getCodigoProducto()));
-                                producto.setDescripcionProducto(encrypt.desencriptar(producto.getDescripcionProducto()));
+                            if (!producto.getEsEliminado()) {
+                                try {
+                                    producto.setNombreProducto(encrypt.desencriptar(producto.getNombreProducto()));
+                                    producto.setCodigoProducto(encrypt.desencriptar(producto.getCodigoProducto()));
+                                    producto.setDescripcionProducto(encrypt.desencriptar(producto.getDescripcionProducto()));
 
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Toast.makeText(getContext(),"Error al cargar el producto",Toast.LENGTH_LONG).show();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(getContext(), "Error al cargar el producto", Toast.LENGTH_LONG).show();
+                                }
+
+                                listProduct.add(producto);
                             }
-
-                            listProduct.add(producto);
                         }
                     }
 
                     adapterGridProductosVendedor = new AdapterGridProductosVendedor(getContext(),
                             listProduct,
-                            storage);
+                            storage,
+                            getActivity(),
+                            "listaProductos",databaseReference);
                     gridProductosVendedor.setAdapter(adapterGridProductosVendedor); //configuramos el view
                     gridProductosVendedor.setLayoutManager(new LinearLayoutManager(getContext()));
 

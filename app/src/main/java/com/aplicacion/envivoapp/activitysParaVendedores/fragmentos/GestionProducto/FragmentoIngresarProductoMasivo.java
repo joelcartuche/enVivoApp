@@ -58,7 +58,7 @@ public class FragmentoIngresarProductoMasivo extends Fragment {
     private DatabaseReference databaseReference;
     private FirebaseStorage storage ; //para la insersion de archivos
 
-    Button btnSubirCsvIngresarProductoMasivo;
+    Button btnSubirCsvIngresarProductoMasivo,btnLinkAccesoCsv;
     TextView tvConfirmacionCsvIngresarProductoMasivo;
     Button btnSeleccionarCsvIngresarProductoMasivo;
     Uri archivoSeleccionado;
@@ -86,6 +86,7 @@ public class FragmentoIngresarProductoMasivo extends Fragment {
         btnSubirCsvIngresarProductoMasivo = root.findViewById(R.id.btnSubirCsvIngresarProductoMasivo);
         tvConfirmacionCsvIngresarProductoMasivo = root.findViewById(R.id.tvConfirmacionCsvIngresarProductoMasivo);
         btnSeleccionarCsvIngresarProductoMasivo = root.findViewById(R.id.btnSeleccionarCsvIngresarProductoMasivo);
+        btnLinkAccesoCsv  = root.findViewById(R.id.btnLinkAccesoCsv);
 
         Utilidades util = new Utilidades();
         dialogCargando = util.dialogCargar(getContext()); //cargamos el cuadro de dialogo
@@ -113,7 +114,15 @@ public class FragmentoIngresarProductoMasivo extends Fragment {
                 }
             }
         });
-
+        btnLinkAccesoCsv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://joelcartuche.github.io/documentacionEnvivoApp/ArticulosDelLocal.csv";
+                Uri uri = Uri.parse(url);
+                Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                startActivity(intent);
+            }
+        });
 
         return root;
     }
